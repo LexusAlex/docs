@@ -1,0 +1,3 @@
+docker compose run --rm node-cli npx vitepress init
+npm add -D vitepress@next
+docker compose run --rm node-cli npm run docs:dev
