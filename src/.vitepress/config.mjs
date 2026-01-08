@@ -26,7 +26,13 @@ export default defineConfig({
       { text: 'Home', link: '/' },
       { text: 'База знаний', link: '/base/' }
     ],
-    //lastUpdated: true,
+    lastUpdated: {
+      text: 'Обновлено',
+      formatOptions: {
+        dateStyle: 'full',
+        timeStyle: 'medium'
+      }
+    },
     search: {
       provider: 'local',
       options: {

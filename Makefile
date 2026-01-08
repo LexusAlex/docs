@@ -8,5 +8,7 @@ docker-down:
 	docker image prune -f
 npm-install:
 	docker compose run --rm node-cli npm install
+npm-build:
+	docker compose run --rm node-cli npm run docs:build
 npm-be-updated-all:
 	docker compose run --rm node-cli npm outdated --depth=9999
