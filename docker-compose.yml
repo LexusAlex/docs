@@ -4,7 +4,7 @@ services:
       context: docker
       dockerfile: node/Dockerfile
     volumes:
-      - ./:/docs
+      - ./:/app
   nginx:
     build:
       context: docker
@@ -20,6 +20,6 @@ services:
     environment:
       WDS_SOCKET_PORT: 0
     volumes:
-      - ./:/docs
+      - ./:/app
     command: npm run docs:dev -- --host 0.0.0.0
     tty: true
