@@ -13,6 +13,15 @@ export default defineConfig({
       chunkSizeWarningLimit: 1000
     }
   },
+  head: [
+    [
+      'meta',
+      {
+        name: 'robots',
+        content: 'noindex, nofollow'
+      }
+    ]
+  ],
   markdown: {
     lineNumbers: true,
     image: {
