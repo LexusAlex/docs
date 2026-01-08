@@ -23,7 +23,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v6
         with:
-          #fetch-depth: 0 # Не требуется, если функция lastUpdated не включена
+          fetch-depth: 0 # Не требуется, если функция lastUpdated не включена
       # - uses: pnpm/action-setup@v4 # Раскомментируйте, если вы используете pnpm
       #   with:
       #     version: 9
