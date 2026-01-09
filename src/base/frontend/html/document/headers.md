@@ -43,3 +43,8 @@
 </body>
 </html>
 ````
+
+## Ссылки
+
+- [Outline в спецификации html](https://html.spec.whatwg.org/multipage/sections.html#outline)
+- [Валидатор w3c](https://validator.w3.org/)
