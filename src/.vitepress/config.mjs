@@ -100,7 +100,17 @@ export default defineConfig({
                     ]},
                   { text: 'jquery', link: '/base/frontend/javascript/jquery/' },
                   { text: 'typescript', link: '/base/frontend/javascript/typescript/' },
-                ] },
+                ]
+              },
+              { text: 'Браузеры',collapsed: true, link: '/base/frontend/browsers/',
+                items: [
+                  { text: 'Firefox',collapsed: true, link: '/base/frontend/browsers/firefox/',
+                    items: [
+                      { text: 'Расширения',link: '/base/frontend/browsers/firefox/extensions/'},
+                    ]
+                  },
+                ]
+              },
             ]
           },
           {
