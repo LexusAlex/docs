@@ -10,6 +10,21 @@ hero:
     - theme: brand
       text: Начать
       link: /base/
+    - theme: alt
+      text: frontend (Клиент)
+      link: /base/frontend/
+    - theme: alt
+      text: backend (Сервер)
+      link: /base/backend/
+    - theme: alt
+      text: Базы данных
+      link: /base/db/
+    - theme: alt
+      text: Протоколы
+      link: /base/protocols/
+    - theme: alt
+      text: Инфраструктура
+      link: /base/infrastructure/
 
 features:
   - title: Документация

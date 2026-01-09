@@ -7,6 +7,8 @@ export default defineConfig({
   lang: 'ru-RU',
   description: "Modern documentation",
   titleTemplate: 'Lexusalex Docs',
+  metaChunk: true,
+  cleanUrls: true,
   ignoreDeadLinks: true,
   vite: {
     build: {
@@ -77,6 +79,7 @@ export default defineConfig({
         '/base/' : [
           {
             text: 'frontend (Клиент)',
+            link: '/base/frontend/',
             collapsed: true,
             items: [
               { text: 'HTML', link: '/base/frontend/html/' },
@@ -94,6 +97,7 @@ export default defineConfig({
           },
           {
             text: 'backend (Сервер)',
+            link: '/base/backend/',
             collapsed: true,
             items: [
               { text: 'PHP', link: '/base/backend/php/' },
@@ -101,6 +105,7 @@ export default defineConfig({
           },
           {
             text: 'Базы данных',
+            link: '/base/db/',
             collapsed: true,
             items: [
               { text: 'SQL', collapsed: true,link: '/base/db/sql/',
@@ -114,17 +119,23 @@ export default defineConfig({
           },
           {
             text: 'Протоколы',
+            link: '/base/protocols/',
             collapsed: true,
             items: [
               { text: 'HTTP', collapsed: true, link: '/base/protocols/http/',
                 items: [
-                  { text: 'Методы запроса', link: '/base/protocols/http/methods' },
+                  { text: 'Методы запроса',collapsed: true, link: '/base/protocols/http/methods',
+                    items:[
+                      { text: 'GET', link: '/base/protocols/http/methods/get'}
+                    ]
+                  },
                 ]
               },
             ]
           },
           {
             text: 'Инфраструктура',
+            link: '/base/infrastructure/',
             collapsed: true,
             items: [
               { text: 'Linux', link: '/base/infrastructure/linux/' },
