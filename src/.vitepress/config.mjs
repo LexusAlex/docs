@@ -82,7 +82,15 @@ export default defineConfig({
             link: '/base/frontend/',
             collapsed: true,
             items: [
-              { text: 'HTML', link: '/base/frontend/html/' },
+              { text: 'HTML',collapsed: true, link: '/base/frontend/html/',
+                items: [
+                  { text: 'Структура документа',collapsed: true, link: '/base/frontend/html/document/',
+                    items: [
+                      { text: 'Заголовки',link: '/base/frontend/html/document/headers',}
+                    ]
+                  }
+                ]
+              },
               { text: 'CSS', link: '/base/frontend/css/' },
               { text: 'Javascript',collapsed: true, link: '/base/frontend/javascript/',
                 items:[
