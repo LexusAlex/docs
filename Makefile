@@ -12,3 +12,5 @@ npm-build:
 	docker compose run --rm node-cli npm run docs:build
 npm-be-updated-all:
 	docker compose run --rm node-cli npm outdated --depth=9999
+npm-update:
+	docker compose run --rm node-cli npx npm-check-updates -u

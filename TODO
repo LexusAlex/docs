@@ -1,4 +1,5 @@
 docker compose run --rm node-cli npx vitepress init
 npm add -D vitepress@next
+docker compose run --rm node-cli npm add -D npm-check-updates
 docker compose run --rm node-cli npm run docs:dev
 git add . && git commit -m "added deploy config" && git push origin main && git push gitlab main
