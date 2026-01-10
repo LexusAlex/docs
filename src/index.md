@@ -11,6 +11,9 @@ hero:
       text: Начать
       link: /base/
     - theme: alt
+      text: Инструменты
+      link: /base/tools/  
+    - theme: alt
       text: frontend (Клиент)
       link: /base/frontend/
     - theme: alt

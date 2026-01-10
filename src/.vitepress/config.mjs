@@ -78,7 +78,28 @@ export default defineConfig({
       {
         '/base/' : [
           {
-            text: 'frontend (Клиент)',
+            text: 'Инструменты',
+            link: '/base/tools/',
+            collapsed: true,
+            items: [
+              { text: 'VCS',collapsed: true, link: '/base/tools/vcs/',
+                items: [
+                  { text: 'git',link: '/base/tools/vcs/git/',}
+                ]
+              },
+              { text: 'Браузеры',collapsed: true, link: '/base/tools/browsers/',
+                items: [
+                  { text: 'Firefox',collapsed: true, link: '/base/tools/browsers/firefox/',
+                    items: [
+                      { text: 'Расширения',link: '/base/tools/browsers/firefox/extensions/'},
+                    ]
+                  },
+                ]
+              },
+            ],
+          },
+          {
+            text: 'Frontend (Клиент)',
             link: '/base/frontend/',
             collapsed: true,
             items: [
@@ -102,19 +123,10 @@ export default defineConfig({
                   { text: 'typescript', link: '/base/frontend/javascript/typescript/' },
                 ]
               },
-              { text: 'Браузеры',collapsed: true, link: '/base/frontend/browsers/',
-                items: [
-                  { text: 'Firefox',collapsed: true, link: '/base/frontend/browsers/firefox/',
-                    items: [
-                      { text: 'Расширения',link: '/base/frontend/browsers/firefox/extensions/'},
-                    ]
-                  },
-                ]
-              },
             ]
           },
           {
-            text: 'backend (Сервер)',
+            text: 'Backend (Сервер)',
             link: '/base/backend/',
             collapsed: true,
             items: [
@@ -149,6 +161,7 @@ export default defineConfig({
                   },
                 ]
               },
+              { text: 'SSH', collapsed: true, link: '/base/protocols/ssh/'}
             ]
           },
           {
