@@ -184,7 +184,10 @@ export default defineConfig({
               { text: 'Ansible', link: '/base/infrastructure/ansible/' },
               { text: 'Серверы', collapsed: true, link: '/base/infrastructure/server/',
                 items: [
-                  { text: 'Nginx', link: '/base/infrastructure/server/nginx/' },
+                  { text: 'Nginx', collapsed: true, link: '/base/infrastructure/server/nginx/',
+                    items: [
+                      { text: 'Версии', link: '/base/infrastructure/server/nginx/versions' },
+                    ] },
                   { text: 'Apache', link: '/base/infrastructure/server/apache/' },
                 ]
               },
