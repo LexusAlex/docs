@@ -91,7 +91,7 @@ export default defineConfig({
                 items: [
                   { text: 'Firefox',collapsed: true, link: '/base/tools/browsers/firefox/',
                     items: [
-                      { text: 'Расширения',link: '/base/tools/browsers/firefox/extensions/'},
+                      { text: 'Расширения',link: '/base/tools/browsers/firefox/extensions'},
                     ]
                   },
                 ]
@@ -108,6 +108,16 @@ export default defineConfig({
                   { text: 'Структура документа',collapsed: true, link: '/base/frontend/html/document/',
                     items: [
                       { text: 'Заголовки',link: '/base/frontend/html/document/headers',}
+                    ]
+                  },
+                  { text: 'Элементы',collapsed: true,link: '/base/frontend/html/elements/',
+                    items: [
+                      { text: 'Теория',collapsed: true,link: '/base/frontend/html/elements/theory/',
+                        items: [
+                          { text: 'Блочные и строчные элементы',link: '/base/frontend/html/elements/theory/block-and-inline'}
+                        ]
+                      },
+                      { text: 'Базовые',collapsed: true,link: '/base/frontend/html/elements/basics/',}
                     ]
                   }
                 ]
@@ -154,7 +164,7 @@ export default defineConfig({
             items: [
               { text: 'HTTP', collapsed: true, link: '/base/protocols/http/',
                 items: [
-                  { text: 'Методы запроса',collapsed: true, link: '/base/protocols/http/methods',
+                  { text: 'Методы запроса',collapsed: true, link: '/base/protocols/http/methods/',
                     items:[
                       { text: 'GET', link: '/base/protocols/http/methods/get'}
                     ]
