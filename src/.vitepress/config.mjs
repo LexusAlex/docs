@@ -179,7 +179,32 @@ export default defineConfig({
             link: '/base/infrastructure/',
             collapsed: true,
             items: [
-              { text: 'Linux', link: '/base/infrastructure/linux/' },
+              { text: 'Linux',collapsed: true, link: '/base/infrastructure/linux/',
+                items: [
+                  { text: 'Команды',collapsed: true, link: '/base/infrastructure/linux/commands/',
+                    items: [
+                      { text: 'Файлы и каталоги',collapsed: true, link: '/base/infrastructure/linux/commands/files-and-directories/' },
+                      { text: 'Просмотр и обработка текста',collapsed: true, link: '/base/infrastructure/linux/commands/viewing-and-processing-text/',
+                        items: [
+                          { text: 'grep', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/grep'}
+                        ]
+                      },
+                      { text: 'Получение информации о системе и мониторинг',collapsed: true, link: '/base/infrastructure/linux/commands/monitoring/' },
+                      { text: 'Управление пользователями и правами доступа',collapsed: true, link: '/base/infrastructure/linux/commands/user-and-access/' },
+                      { text: 'Управление процессами',collapsed: true, link: '/base/infrastructure/linux/commands/processes/' },
+                      { text: 'Сеть',collapsed: true, link: '/base/infrastructure/linux/commands/network/' },
+                      { text: 'Архивы и сжатие',collapsed: true, link: '/base/infrastructure/linux/commands/archives-and-compression/' },
+                      { text: 'Управление пакетами',collapsed: true, link: '/base/infrastructure/linux/commands/package-management/',
+                        items: [
+                          { text: 'Debian/Ubuntu',collapsed: true, link: '/base/infrastructure/linux/commands/package-management/debian-ubuntu/'}
+                        ]
+                      },
+                      { text: 'Поиск файлов и команд',collapsed: true, link: '/base/infrastructure/linux/commands/search-files-and-commands/'},
+                      { text: 'Справка и документация',collapsed: true, link: '/base/infrastructure/linux/commands/reference/'}
+                    ]
+                  },
+                ]
+              },
               { text: 'Docker', link: '/base/infrastructure/docker/' },
               { text: 'Ansible', link: '/base/infrastructure/ansible/' },
               { text: 'Серверы', collapsed: true, link: '/base/infrastructure/server/',
