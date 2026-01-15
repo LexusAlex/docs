@@ -5,29 +5,11 @@ layout: home
 hero:
   name: "Docs"
   text: "Lexusalex Docs"
-  tagline: База знаний
+  tagline: База знаний, где нет ничего лишнего
   actions:
     - theme: brand
       text: Начать
-      link: /base/
-    - theme: alt
-      text: Инструменты
-      link: /base/tools/  
-    - theme: alt
-      text: frontend (Клиент)
-      link: /base/frontend/
-    - theme: alt
-      text: backend (Сервер)
-      link: /base/backend/
-    - theme: alt
-      text: Базы данных
-      link: /base/db/
-    - theme: alt
-      text: Протоколы
-      link: /base/protocols/
-    - theme: alt
-      text: Инфраструктура
-      link: /base/infrastructure/
+      link: /base/ 
 
 features:
   - title: Документация

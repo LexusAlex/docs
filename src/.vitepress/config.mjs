@@ -109,6 +109,11 @@ export default defineConfig({
                   { text: 'git',link: '/base/tools/vcs/git/',}
                 ]
               },
+              { text: 'Платформы',collapsed: true, link: '/base/tools/platform/',
+                items: [
+                  { text: 'gitlab',link: '/base/tools/platform/gitlab',}
+                ]
+              },
               { text: 'Браузеры',collapsed: true, link: '/base/tools/browsers/',
                 items: [
                   { text: 'Firefox',collapsed: true, link: '/base/tools/browsers/firefox/',
@@ -240,6 +245,22 @@ export default defineConfig({
               },
             ]
           },
+          {
+            text: 'Мои решения',
+            link: '/base/my-solutions/',
+            collapsed: true,
+            items: [
+              { text: 'Скрипты',collapsed: true, link: '/base/my-solutions/scripts/',
+                items: [
+                  { text: 'Bash',collapsed: true, link: '/base/my-solutions/scripts/bash/',
+                    items: [
+                      { text: 'gitlab бэкап', link: '/base/my-solutions/scripts/bash/gitlab-backup'}
+                    ]
+                  }
+                ]
+              },
+            ]
+          }
         ],
         '/': [
           { text: 'База знаний', link: '/base/' },
