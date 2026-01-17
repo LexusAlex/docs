@@ -188,9 +188,17 @@ export default defineConfig({
             items: [
               { text: 'SQL', collapsed: true,link: '/base/db/sql/',
                 items: [
-                  { text: 'Mysql', link: '/base/db/sql/mysql/' },
-                  { text: 'Mariadb', link: '/base/db/sql/mariadb/' },
-                  { text: 'Postgresql', link: '/base/db/sql/postgresql/' },
+                  { text: 'Mysql',collapsed: true, link: '/base/db/sql/mysql/' },
+                  { text: 'Mariadb',collapsed: true, link: '/base/db/sql/mariadb/',
+                    items: [
+                      { text: 'Установка',collapsed: true, link: '/base/db/sql/mariadb/install/',
+                        items: [
+                          { text: 'Ubuntu 24.04 LTS', link: '/base/db/sql/mariadb/install/ubuntu-24-04-lts',}
+                        ]
+                      },
+                    ]
+                  },
+                  { text: 'Postgresql',collapsed: true, link: '/base/db/sql/postgresql/' },
                 ]
               },
             ]
