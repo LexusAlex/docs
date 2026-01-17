@@ -149,7 +149,18 @@ export default defineConfig({
                   }
                 ]
               },
-              { text: 'CSS', link: '/base/frontend/css/' },
+              { text: 'CSS',collapsed: true, link: '/base/frontend/css/',
+                items: [
+                  { text: 'Селекторы',collapsed: true,link: '/base/frontend/css/selectors/',
+                    items: [
+                      { text: 'Базовые',collapsed: true,link: '/base/frontend/css/selectors/basics/'},
+                      { text: 'Комбинаторы',collapsed: true,link: '/base/frontend/css/selectors/combined/'},
+                      { text: 'Псевдоклассы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-classes/'},
+                      { text: 'Псевдоэлементы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-elements/'}
+                    ]
+                  }
+                ]
+              },
               { text: 'Javascript',collapsed: true, link: '/base/frontend/javascript/',
                 items:[
                   { text: 'vanilla',collapsed: true, link: '/base/frontend/javascript/vanilla/',
