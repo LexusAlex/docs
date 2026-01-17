@@ -265,6 +265,11 @@ export default defineConfig({
                 items: [
                   { text: 'Bash',collapsed: true, link: '/base/my-solutions/scripts/bash/',
                     items: [
+                      { text: 'Первая настройка чистой системы',collapsed: true, link: '/base/my-solutions/scripts/bash/first-start-fresh-installation/',
+                        items: [
+                          { text: 'Ubuntu 24.04 LTS', link: '/base/my-solutions/scripts/bash/first-start-fresh-installation/ubuntu-24-04-lts',}
+                        ]
+                      },
                       { text: 'gitlab бэкап', link: '/base/my-solutions/scripts/bash/gitlab-backup'}
                     ]
                   }
