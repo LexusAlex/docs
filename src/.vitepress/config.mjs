@@ -196,6 +196,11 @@ export default defineConfig({
                           { text: 'Ubuntu 24.04 LTS', link: '/base/db/sql/mariadb/install/ubuntu-24-04-lts',}
                         ]
                       },
+                      { text: 'Удаление',collapsed: true, link: '/base/db/sql/mariadb/remove/',
+                        items: [
+                          { text: 'Ubuntu 24.04 LTS', link: '/base/db/sql/mariadb/remove/ubuntu-24-04-lts',}
+                        ]
+                      },
                     ]
                   },
                   { text: 'Postgresql',collapsed: true, link: '/base/db/sql/postgresql/' },
@@ -273,7 +278,7 @@ export default defineConfig({
                 items: [
                   { text: 'Bash',collapsed: true, link: '/base/my-solutions/scripts/bash/',
                     items: [
-                      { text: 'Первая настройка чистой системы',collapsed: true, link: '/base/my-solutions/scripts/bash/first-start-fresh-installation/',
+                      { text: 'Первая настройка чистой серверной системы',collapsed: true, link: '/base/my-solutions/scripts/bash/first-start-fresh-installation/',
                         items: [
                           { text: 'Ubuntu 24.04 LTS', link: '/base/my-solutions/scripts/bash/first-start-fresh-installation/ubuntu-24-04-lts',}
                         ]

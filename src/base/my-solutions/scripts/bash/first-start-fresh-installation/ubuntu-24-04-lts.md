@@ -78,6 +78,8 @@ sudo ufw allow 60022/tcp
 sudo ufw allow ssh
 # Включаем
 sudo ufw enable
+# Все одной командой
+sudo apt install ufw && sudo ufw default deny incoming && sudo ufw default allow outgoing && sudo ufw allow 60022/tcp && sudo ufw allow ssh && sudo ufw enable
 # Показать правила с номерами
 sudo ufw status numbered
 # Проверка состояния
