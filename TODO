@@ -6,4 +6,9 @@ git add . && git commit -m "added deploy config" && git push origin main && git 
 
 - Добавить в каждый из языков раздел Инструменты и Библиотеки где писать о них
 
+docker
+
 https://sysadminium.ru/docker-optimize-images/
+
+Прикольный дизайн сайта
+https://devtrends.ru/php/zabbix-zabbix
