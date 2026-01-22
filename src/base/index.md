@@ -1,9 +1,10 @@
 # База знаний
 
-1. [Инструменты](./tools)
-2. [Frontend (Клиент)](./frontend)
-3. [Backend (Сервер)](./backend)
-4. [Базы данных](./db)
-5. [Протоколы](./protocols)
-6. [Инфраструктура](./infrastructure)
-7. [Мои решения](./my-solutions)
+1. [Принципы и практики](./principles)
+2. [Инструменты](./tools)
+3. [Frontend (Клиент)](./frontend)
+4. [Backend (Сервер)](./backend)
+5. [Базы данных](./db)
+6. [Протоколы](./protocols)
+7. [Инфраструктура](./infrastructure)
+8. [Мои решения](./my-solutions)

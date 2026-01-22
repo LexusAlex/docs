@@ -100,6 +100,12 @@ export default defineConfig({
       {
         '/base/' : [
           {
+            text: 'Принципы и практики',
+            link: '/base/principles/',
+            collapsed: true,
+            items: []
+          },
+          {
             text: 'Инструменты',
             link: '/base/tools/',
             collapsed: true,
