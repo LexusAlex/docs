@@ -122,6 +122,11 @@ export default defineConfig({
               },
               { text: 'Браузеры',collapsed: true, link: '/base/tools/browsers/',
                 items: [
+                  {text: 'Теория и Архитектура',collapsed: true, link: '/base/tools/browsers/theory/',
+                    items: [
+                      {text: 'Режимы рендеринга',link: '/base/tools/browsers/theory/rendering-modes'}
+                    ]
+                  },
                   { text: 'Firefox',collapsed: true, link: '/base/tools/browsers/firefox/',
                     items: [
                       { text: 'Расширения',link: '/base/tools/browsers/firefox/extensions'},
