@@ -26,3 +26,7 @@ https://habr.com/ru/companies/timeweb/articles/881972/
 
 Режимы браузеров
 https://developer.mozilla.org/ru/docs/Web/HTML/Guides/Quirks_mode_and_standards_mode
+
+Загрузка файла с винды в одной сети
+
+scp /c/tmp/msi.log ukcradm@10.122.121.37:/tmp/custom.log
