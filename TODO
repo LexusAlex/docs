@@ -29,3 +29,6 @@ https://developer.mozilla.org/ru/docs/Web/HTML/Guides/Quirks_mode_and_standards_
 
 Как работают современные браузеры
 https://habr.com/ru/companies/timeweb/articles/969508/
+
+Загрузка файла с винды в одной сети
+scp /c/tmp/msi.log ukcradm@10.122.121.37:/tmp/custom.log
