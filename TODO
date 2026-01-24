@@ -29,6 +29,34 @@ https://developer.mozilla.org/ru/docs/Web/HTML/Guides/Quirks_mode_and_standards_
 
 Как работают современные браузеры
 https://habr.com/ru/companies/timeweb/articles/969508/
+https://web.dev/articles/critical-rendering-path/constructing-the-object-model?hl=ru#css_object_model_cssom
+
+1. HTML -> Парсинг -> DOM
+                                    |
+2. CSS  -> Парсинг -> CSSOM ---------+--> 3. DOM + CSSOM -> Render Tree
+                                                                |
+                                                                v
+                                                      4. Layout (Reflow)
+                                                                |
+                                                                v
+                                                         5. Paint (Rasterize)
+                                                                |
+                                                                v
+                                                        6. Composite Layers
+                                                                |
+                                                                v
+                                                        Отображение на экране
+
+https://developer.chrome.com/blog/inside-browser-part1
+https://developer.chrome.com/blog/inside-browser-part2?hl=ru
+https://developer.chrome.com/blog/inside-browser-part3?hl=ru
+https://developer.chrome.com/blog/inside-browser-part4?hl=ru
+https://doka.guide/tools/how-the-browser-creates-pages/
 
 Загрузка файла с винды в одной сети
 scp /c/tmp/msi.log ukcradm@10.122.121.37:/tmp/custom.log
+
+тесты js
+
+https://playwright.dev/
+https://jestjs.io/
