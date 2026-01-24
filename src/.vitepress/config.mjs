@@ -207,6 +207,7 @@ export default defineConfig({
                           { text: 'Ubuntu 24.04 LTS', link: '/base/db/sql/mariadb/install/ubuntu-24-04-lts',}
                         ]
                       },
+                      { text: 'Пользователи', link: '/base/db/sql/mariadb/users'},
                       { text: 'Удаление',collapsed: true, link: '/base/db/sql/mariadb/remove/',
                         items: [
                           { text: 'Ubuntu 24.04 LTS', link: '/base/db/sql/mariadb/remove/ubuntu-24-04-lts',}
@@ -214,6 +215,7 @@ export default defineConfig({
                       },
                     ]
                   },
+                  { text: 'Percona',collapsed: true, link: '/base/db/sql/percona/'},
                   { text: 'Postgresql',collapsed: true, link: '/base/db/sql/postgresql/' },
                 ]
               },

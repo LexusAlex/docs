@@ -1,6 +1,6 @@
 # Ubuntu 24.04 LTS
 
-Установка `mariadb` на `Ubuntu 24.04 LTS`. Так же произведем базовую настройку
+Установка `mariaDb` на `Ubuntu 24.04 LTS`. Так же произведем базовую настройку
 
 ## Пакеты нужные для установки
 
@@ -124,7 +124,7 @@ sudo mysql_secure_installation
 Пробуем заходить
 
 ````shell
-mariadb -u root -p
+mariadb -u root -p или # просто mariadb
 #Welcome to the MariaDB monitor.  Commands end with ; or \g.
 #Your MariaDB connection id is 44
 #Server version: 11.8.5-MariaDB-ubu2404 mariadb.org binary distribution

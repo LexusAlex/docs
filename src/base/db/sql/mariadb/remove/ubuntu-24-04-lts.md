@@ -18,6 +18,8 @@ sudo systemctl status mariadb
 
 ## Удаление
 
+Внимание будет удалено все полностью вместе с данными
+
 ````shell
 # Удаляем основной пакет
 sudo apt purge "mariadb-*"

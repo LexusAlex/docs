@@ -1,0 +1,4 @@
+- Более широкий выбор движков
+- Формат данных несовместим с `mysql`
+- Отдельная траектория развитие после `mysql 5.7`
+- Имена столбцов https://mariadb.com/docs/server/reference/sql-structure/sql-language-structure/identifier-names#multiple-identifiers
