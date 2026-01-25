@@ -124,6 +124,10 @@ export default defineConfig({
                 items: [
                   {text: 'Теория и Архитектура',collapsed: true, link: '/base/tools/browsers/theory/',
                     items: [
+                      {text: 'Как работает браузер',collapsed: true,link: '/base/tools/browsers/theory/how-the-browser-works/',
+                        items: [
+                          {text: 'Сетевые операции', link: '/base/tools/browsers/theory/how-the-browser-works/network-operations',}
+                        ]},
                       {text: 'Режимы рендеринга',link: '/base/tools/browsers/theory/rendering-modes'}
                     ]
                   },
