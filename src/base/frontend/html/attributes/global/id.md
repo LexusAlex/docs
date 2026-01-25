@@ -65,7 +65,7 @@ button.addEventListener('click', function () {
 Данное использование не рекомендовано, лучше использовать `document.getElementById('')` или `document.querySelector()`.
 :::
 
-::: danger
+::: info
 Метод `getElementById` есть только у объекта `document`, он ищет `id` по всему документу.
 :::
 
