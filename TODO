@@ -60,3 +60,6 @@ scp /c/tmp/msi.log ukcradm@10.122.121.37:/tmp/custom.log
 
 https://playwright.dev/
 https://jestjs.io/
+
+Считаем статьи
+find src/base/ -name "*.md" ! -name "index.md" ! -name "README.md" | wc -l
