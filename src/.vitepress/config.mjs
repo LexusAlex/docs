@@ -161,6 +161,15 @@ export default defineConfig({
                       },
                       { text: 'Базовые',collapsed: true,link: '/base/frontend/html/elements/basics/',}
                     ]
+                  },
+                  { text: 'Атрибуты',collapsed: true,link: '/base/frontend/html/attributes/',
+                    items: [
+                      { text: 'Глобальные',collapsed: true,link: '/base/frontend/html/attributes/global/',
+                        items: [
+                          { text: 'id',link: '/base/frontend/html/attributes/global/id',}
+                        ]
+                      }
+                    ]
                   }
                 ]
               },
