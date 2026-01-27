@@ -182,6 +182,11 @@ export default defineConfig({
                       { text: 'Псевдоклассы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-classes/'},
                       { text: 'Псевдоэлементы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-elements/'}
                     ]
+                  },
+                  { text: 'Методологии',collapsed: true,link: '/base/frontend/css/methodologies/',
+                    items: [
+                      { text: 'БЭМ',link: '/base/frontend/css/methodologies/bem'}
+                    ]
                   }
                 ]
               },
