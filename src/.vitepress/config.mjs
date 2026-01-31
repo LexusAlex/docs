@@ -196,8 +196,17 @@ export default defineConfig({
                     items:[
                       { text: 'events', link: '/base/frontend/javascript/vanilla/events/' },
                     ]},
-                  { text: 'jquery', link: '/base/frontend/javascript/jquery/' },
                   { text: 'typescript', link: '/base/frontend/javascript/typescript/' },
+                  { text: 'Фреймворки',collapsed: true, link: '/base/frontend/javascript/frameworks/',
+                    items: [
+                      { text: 'Vue.js', link: '/base/frontend/javascript/frameworks/vue-js' },
+                    ]
+                  },
+                  { text: 'Библиотеки',collapsed: true, link: '/base/frontend/javascript/libraries/',
+                    items: [
+                      { text: 'jquery', link: '/base/frontend/javascript/libraries/jquery/' },
+                    ]
+                  },
                 ]
               },
             ]
@@ -287,7 +296,11 @@ export default defineConfig({
                   },
                 ]
               },
-              { text: 'Docker', link: '/base/infrastructure/docker/' },
+              { text: 'Docker',collapsed: true, link: '/base/infrastructure/docker/',
+                items: [
+                  { text: 'docker compose',collapsed: true, link: '/base/infrastructure/docker/docker-compose',}
+                ]
+              },
               { text: 'Ansible', link: '/base/infrastructure/ansible/' },
               { text: 'Серверы', collapsed: true, link: '/base/infrastructure/server/',
                 items: [
