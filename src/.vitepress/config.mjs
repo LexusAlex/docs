@@ -298,7 +298,11 @@ export default defineConfig({
               },
               { text: 'Docker',collapsed: true, link: '/base/infrastructure/docker/',
                 items: [
-                  { text: 'docker compose',collapsed: true, link: '/base/infrastructure/docker/docker-compose',}
+                  { text: 'docker compose',collapsed: true, link: '/base/infrastructure/docker/docker-compose/',
+                    items: [
+                      { text: 'compose.yaml', link: '/base/infrastructure/docker/docker-compose/compose-yaml',}
+                    ]
+                  }
                 ]
               },
               { text: 'Ansible', link: '/base/infrastructure/ansible/' },
