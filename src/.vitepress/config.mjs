@@ -194,7 +194,13 @@ export default defineConfig({
                 items:[
                   { text: 'vanilla',collapsed: true, link: '/base/frontend/javascript/vanilla/',
                     items:[
-                      { text: 'events', link: '/base/frontend/javascript/vanilla/events/' },
+                      { text: 'EventTarget',collapsed: true, link: '/base/frontend/javascript/vanilla/event-target/',
+                        items: [
+                          { text: 'addEventListener()', link: '/base/frontend/javascript/vanilla/event-target/add-event-listener'},
+                          { text: 'Node',collapsed: true, link: '/base/frontend/javascript/vanilla/event-target/node/'}
+                        ]
+                      },
+                      { text: 'Event',collapsed: true, link: '/base/frontend/javascript/vanilla/event/'}
                     ]},
                   { text: 'typescript', link: '/base/frontend/javascript/typescript/' },
                   { text: 'Фреймворки',collapsed: true, link: '/base/frontend/javascript/frameworks/',
