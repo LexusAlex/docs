@@ -1,0 +1,32 @@
+v-bind - сокращенное от :style
+v-on - сокращенное от @click
+
+Директивы
+https://www.youtube.com/redirect?event=video_description&redir_token=QUFFLUhqbk5LcWpnRldpRlc0d0k0cEhteXkxR09LeWJpQXxBQ3Jtc0ttcHZZN05kbTVwT0l2S09WcnJ2bWRkTTR1cWNKRlVrUHJsNGtSNFh5bzk0T0xuSENPTUhYdE5aUE5YSjk4Zkk5ZHQ4OGhHS1JQcFA4S1ZPa2ZfdUpRQXJWVWJQNERJTjM4TGdONmdzX01DTjZhVk8yOA&q=https%3A%2F%2Fvuejs.org%2Fapi%2Fbuilt-in-directives.html%23built-in-directives&v=KzLjfK9eDsw
+
+sfc компонент
+
+App.vue - однофайловые компоненты
+
+script setup
+
+Первым писать скрипт
+script - создает реактивную модель
+template - сам шаблон
+style - стили
+
+Все компоненты vue - это два слова DispayNumber
+<display-number></display-number>
+<DispayNumber></DispayNumber>
+
+v- это директива
+
+Макрос
+defineProps(['count'])
+defineProps({
+    count : {
+        type: Number,
+        default: 15
+    }
+})
+

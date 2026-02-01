@@ -63,3 +63,7 @@ https://jestjs.io/
 
 Считаем статьи
 find src/base/ -name "*.md" ! -name "index.md" ! -name "README.md" | wc -l
+
+vue
+
+https://gitlab.com/radin.cerny/vuejs3-pwa-demo-plus/-/blob/main/vite.config.js?ref_type=heads
