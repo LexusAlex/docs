@@ -205,7 +205,11 @@ export default defineConfig({
                   { text: 'typescript', link: '/base/frontend/javascript/typescript/' },
                   { text: 'Фреймворки',collapsed: true, link: '/base/frontend/javascript/frameworks/',
                     items: [
-                      { text: 'Vue.js', link: '/base/frontend/javascript/frameworks/vue-js' },
+                      { text: 'Vue.js',collapsed: true, link: '/base/frontend/javascript/frameworks/vue-js/',
+                        items: [
+                          { text: 'Концепции', link: '/base/frontend/javascript/frameworks/vue-js/concept'}
+                        ]
+                      },
                     ]
                   },
                   { text: 'Библиотеки',collapsed: true, link: '/base/frontend/javascript/libraries/',

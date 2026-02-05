@@ -1,3 +1,6 @@
+Конструкции
+https://mariadb.com/docs/server/reference/sql-statements/data-manipulation/selecting-data/select
+
 - Более широкий выбор движков
 - Формат данных несовместим с `mysql`
 - Отдельная траектория развитие после `mysql 5.7`
