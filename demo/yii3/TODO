@@ -1,3 +1,5 @@
 Разработка приложений
 
 Настройка docker образов
+
+docker compose run --rm php-cli composer require yiisoft/yii-runner-http

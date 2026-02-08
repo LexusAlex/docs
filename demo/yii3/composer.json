@@ -1,0 +1,44 @@
+{
+    "name": "demo/yii3",
+    "type": "project",
+    "version": "1.0.0",
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true,
+        "bump-after-update": true,
+        "allow-plugins": {
+            "bamarni/composer-bin-plugin": true,
+            "yiisoft/config": true
+        }
+    },
+    "authors": [
+        {
+            "name": "Alexsey Shmelev",
+            "email": "alexsey_89@bk.ru"
+        }
+    ],
+    "extra": {
+        "bamarni-bin": {
+            "bin-links": false,
+            "target-directory": "tools",
+            "forward-command": true
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src"
+        }
+    },
+    "scripts": {
+        "bump-dev": [
+            "@composer bump --dev-only",
+            "@composer bin all bump --dev-only"
+        ]
+    },
+    "require": {
+        "yiisoft/yii-runner-http": "^3.2.1"
+    },
+    "require-dev": {
+        "bamarni/composer-bin-plugin": "^1.9.1"
+    }
+}
