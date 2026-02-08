@@ -22,7 +22,8 @@
             "bin-links": false,
             "target-directory": "tools",
             "forward-command": true
-        }
+        },
+        "config-plugin-file": "configurations/configuration.php"
     },
     "autoload": {
         "psr-4": {

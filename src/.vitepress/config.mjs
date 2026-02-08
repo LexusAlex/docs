@@ -226,7 +226,22 @@ export default defineConfig({
             link: '/base/backend/',
             collapsed: true,
             items: [
-              { text: 'PHP', link: '/base/backend/php/' },
+              { text: 'php',collapsed: true, link: '/base/backend/php/',
+                items: [
+                  { text: 'Фреймворки',collapsed: true, link: '/base/backend/php/frameworks/',
+                    items: [
+                      { text: 'yii3',collapsed: true, link: '/base/backend/php/frameworks/yii3/',
+                        items: [
+                          { text: 'Пакеты',collapsed: true, link: '/base/backend/php/frameworks/yii3/packages/', items: [
+                              { text: 'yii-runner-http', link: '/base/backend/php/frameworks/yii3/packages/yii-runner-http'}
+                            ]
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                ]
+              },
             ]
           },
           {
