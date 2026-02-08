@@ -3,3 +3,5 @@
 Настройка docker образов
 
 docker compose run --rm php-cli composer require yiisoft/yii-runner-http
+docker compose run --rm php-cli composer require yiisoft/log yiisoft/log-target-file
+docker compose run --rm php-cli composer require psr/log

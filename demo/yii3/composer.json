@@ -30,6 +30,9 @@
             "App\\": "src"
         }
     },
+    "psr-4": {
+        "Test\\": "tests/"
+    },
     "scripts": {
         "bump-dev": [
             "@composer bump --dev-only",
@@ -37,6 +40,8 @@
         ]
     },
     "require": {
+        "yiisoft/log": "^2.2",
+        "yiisoft/log-target-file": "^3.1",
         "yiisoft/yii-runner-http": "^3.2.1"
     },
     "require-dev": {

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a08cd83d0745f38ffdaec51f8288d520",
+    "content-hash": "c5684957a05eac4af7b80464acb95089",
     "packages": [
         {
             "name": "alexkart/curl-builder",
@@ -1620,6 +1620,74 @@
             "time": "2022-10-27T12:02:21+00:00"
         },
         {
+            "name": "yiisoft/files",
+            "version": "2.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/files.git",
+                "reference": "465650fd9e4295669f42ab7e9fec2386700540a7"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/files/zipball/465650fd9e4295669f42ab7e9fec2386700540a7",
+                "reference": "465650fd9e4295669f42ab7e9fec2386700540a7",
+                "shasum": ""
+            },
+            "require": {
+                "php": "8.0 - 8.5",
+                "yiisoft/strings": "^2.0"
+            },
+            "require-dev": {
+                "bamarni/composer-bin-plugin": "^1.8.3",
+                "ext-zlib": "*",
+                "maglnet/composer-require-checker": "^4.4",
+                "phpunit/phpunit": "^9.6.22",
+                "rector/rector": "^2.0.10",
+                "spatie/phpunit-watcher": "^1.23.6"
+            },
+            "type": "library",
+            "extra": {
+                "bamarni-bin": {
+                    "bin-links": true,
+                    "forward-command": true,
+                    "target-directory": "tools"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yiisoft\\Files\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Helper to manage files and directories",
+            "homepage": "https://www.yiiframework.com/",
+            "keywords": [
+                "files"
+            ],
+            "support": {
+                "chat": "https://t.me/yii3en",
+                "forum": "https://www.yiiframework.com/forum/",
+                "irc": "ircs://irc.libera.chat:6697/yii",
+                "issues": "https://github.com/yiisoft/files/issues?state=open",
+                "source": "https://github.com/yiisoft/files",
+                "wiki": "https://www.yiiframework.com/wiki/"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/yiisoft",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/yiisoft",
+                    "type": "opencollective"
+                }
+            ],
+            "time": "2025-12-01T06:30:27+00:00"
+        },
+        {
             "name": "yiisoft/friendly-exception",
             "version": "1.2.0",
             "source": {
@@ -1834,6 +1902,173 @@
                 }
             ],
             "time": "2025-12-01T11:14:17+00:00"
+        },
+        {
+            "name": "yiisoft/log",
+            "version": "2.2.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/log.git",
+                "reference": "8c2775436442d5a74339fa2ae9df33788a190de3"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/log/zipball/8c2775436442d5a74339fa2ae9df33788a190de3",
+                "reference": "8c2775436442d5a74339fa2ae9df33788a190de3",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^8.0",
+                "psr/log": "^2.0 || ^3.0",
+                "yiisoft/var-dumper": "^1.0"
+            },
+            "conflict": {
+                "ext-psr": "*"
+            },
+            "provide": {
+                "psr/log-implementation": "1.0.0"
+            },
+            "require-dev": {
+                "maglnet/composer-require-checker": "^4.4",
+                "phpunit/phpunit": "^9.6.23",
+                "rector/rector": "^2.0.17",
+                "roave/infection-static-analysis-plugin": "^1.25",
+                "spatie/phpunit-watcher": "^1.23.6",
+                "vimeo/psalm": "^4.30 || ^5.26.1 || ^6.12"
+            },
+            "suggest": {
+                "yiisoft/log-target-db": "Allows writing log messages to the database",
+                "yiisoft/log-target-email": "Allows sending log messages by email",
+                "yiisoft/log-target-file": "Allows writing log messages to the files",
+                "yiisoft/log-target-syslog": "Allows writing log messages to the Syslog"
+            },
+            "type": "library",
+            "extra": {
+                "config-plugin": {
+                    "events-web": "events-web.php",
+                    "events-console": "events-console.php"
+                },
+                "config-plugin-options": {
+                    "source-directory": "config"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yiisoft\\Log\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Yii Logging Library",
+            "homepage": "https://www.yiiframework.com/",
+            "keywords": [
+                "framework",
+                "log",
+                "logger",
+                "psr-3",
+                "yii"
+            ],
+            "support": {
+                "chat": "https://t.me/yii3en",
+                "forum": "https://www.yiiframework.com/forum/",
+                "irc": "ircs://irc.libera.chat:6697/yii",
+                "issues": "https://github.com/yiisoft/log/issues?state=open",
+                "source": "https://github.com/yiisoft/log",
+                "wiki": "https://www.yiiframework.com/wiki/"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/yiisoft",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/yiisoft",
+                    "type": "opencollective"
+                }
+            ],
+            "time": "2025-12-13T10:17:37+00:00"
+        },
+        {
+            "name": "yiisoft/log-target-file",
+            "version": "3.1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/yiisoft/log-target-file.git",
+                "reference": "24d51c88a362c3c60adafa884b959f0423a208da"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/yiisoft/log-target-file/zipball/24d51c88a362c3c60adafa884b959f0423a208da",
+                "reference": "24d51c88a362c3c60adafa884b959f0423a208da",
+                "shasum": ""
+            },
+            "require": {
+                "ext-zlib": "*",
+                "php": "^8.0",
+                "yiisoft/files": "^1.0|^2.0",
+                "yiisoft/log": "^2.2"
+            },
+            "require-dev": {
+                "maglnet/composer-require-checker": "^4.2",
+                "phpunit/phpunit": "^9.5",
+                "rector/rector": "^2.0",
+                "roave/infection-static-analysis-plugin": "^1.25",
+                "spatie/phpunit-watcher": "^1.23",
+                "vimeo/psalm": "^4.30|^5.24",
+                "yiisoft/aliases": "^3.0",
+                "yiisoft/di": "^1.0"
+            },
+            "suggest": {
+                "ext-zlib": "Enabling gzip compression of rotated files."
+            },
+            "type": "library",
+            "extra": {
+                "config-plugin": {
+                    "di": "di.php",
+                    "params": "params.php"
+                },
+                "config-plugin-options": {
+                    "source-directory": "config"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Yiisoft\\Log\\Target\\File\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "description": "Yii Logging Library - File Target",
+            "homepage": "https://www.yiiframework.com/",
+            "keywords": [
+                "framework",
+                "log",
+                "logger",
+                "yii"
+            ],
+            "support": {
+                "chat": "https://t.me/yii3en",
+                "forum": "https://www.yiiframework.com/forum/",
+                "irc": "ircs://irc.libera.chat:6697/yii",
+                "issues": "https://github.com/yiisoft/log-target-file/issues",
+                "source": "https://github.com/yiisoft/log-target-file",
+                "wiki": "https://www.yiiframework.com/wiki/"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/sponsors/yiisoft",
+                    "type": "github"
+                },
+                {
+                    "url": "https://opencollective.com/yiisoft",
+                    "type": "opencollective"
+                }
+            ],
+            "time": "2025-12-13T11:57:57+00:00"
         },
         {
             "name": "yiisoft/middleware-dispatcher",

@@ -1,9 +1,11 @@
 <?php
 
-use App\Environment;
+use App\Core\Main\Environment;
 
 return [
-    'config-plugin' => [],
+    'config-plugin' => [
+        'di' => 'common/di/*.php',
+    ],
     'config-plugin-environments' => [
         Environment::DEV => [
             'params' => [
