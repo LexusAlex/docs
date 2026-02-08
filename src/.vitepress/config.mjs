@@ -233,6 +233,7 @@ export default defineConfig({
                       { text: 'yii3',collapsed: true, link: '/base/backend/php/frameworks/yii3/',
                         items: [
                           { text: 'Пакеты',collapsed: true, link: '/base/backend/php/frameworks/yii3/packages/', items: [
+                              { text: 'config', link: '/base/backend/php/frameworks/yii3/packages/config'},
                               { text: 'yii-runner-http', link: '/base/backend/php/frameworks/yii3/packages/yii-runner-http'}
                             ]
                           }
