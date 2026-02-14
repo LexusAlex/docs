@@ -236,7 +236,8 @@ export default defineConfig({
                               { text: 'config', link: '/base/backend/php/frameworks/yii3/packages/config'},
                               { text: 'yii-runner-http', link: '/base/backend/php/frameworks/yii3/packages/yii-runner-http'}
                             ]
-                          }
+                          },
+                          { text: 'Как это работает', link: '/base/backend/php/frameworks/yii3/hoe-to-work',}
                         ]
                       }
                     ]

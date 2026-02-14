@@ -5,3 +5,18 @@
 docker compose run --rm php-cli composer require yiisoft/yii-runner-http
 docker compose run --rm php-cli composer require yiisoft/log yiisoft/log-target-file
 docker compose run --rm php-cli composer require psr/log
+docker compose run --rm php-cli composer require yiisoft/error-handler
+docker compose run --rm php-cli composer require yiisoft/aliases
+docker compose run --rm php-cli composer require --dev yiisoft/var-dumper
+docker compose run --rm php-cli composer require httpsoft/http-message
+docker compose run --rm php-cli composer require yiisoft/router-fastroute
+docker compose run --rm php-cli composer require yiisoft/router
+docker compose run --rm php-cli composer require yiisoft/hydrator
+docker compose run --rm php-cli composer require yiisoft/input-http
+
+
+Стартуем приложение
+public function run(): void
+    {
+        $this->runInternal($this->emitter);
+    }

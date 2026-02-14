@@ -16,6 +16,7 @@ $root = dirname(__DIR__);
 // Подготовительные действия
 require_once $root . '/src/Core/Main/autoload.php';
 
+
 // Приложение
 $runner = new HttpApplicationRunner(
     rootPath: $root,
@@ -34,7 +35,9 @@ $runner = new HttpApplicationRunner(
         // Дефолтный рендер
         new HtmlRenderer()
     )
+
 );
 
+//d($runner);
 // Запуск
 $runner->run();
