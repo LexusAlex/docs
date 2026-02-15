@@ -177,7 +177,11 @@ export default defineConfig({
                 items: [
                   { text: 'Селекторы',collapsed: true,link: '/base/frontend/css/selectors/',
                     items: [
-                      { text: 'Базовые',collapsed: true,link: '/base/frontend/css/selectors/basics/'},
+                      { text: 'Базовые',collapsed: true,link: '/base/frontend/css/selectors/basics/',
+                        items: [
+                          { text: 'Универсальный',link: '/base/frontend/css/selectors/basics/universal'}
+                        ]
+                      },
                       { text: 'Комбинаторы',collapsed: true,link: '/base/frontend/css/selectors/combined/'},
                       { text: 'Псевдоклассы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-classes/'},
                       { text: 'Псевдоэлементы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-elements/'}
