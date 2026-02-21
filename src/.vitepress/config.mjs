@@ -103,7 +103,13 @@ export default defineConfig({
             text: 'Принципы и практики',
             link: '/base/principles/',
             collapsed: true,
-            items: []
+            items: [
+              { text: 'Архитектура и Процессы Разработки',collapsed: true, link: '/base/principles/architecture-and-development-processes/',
+                items: [
+                  { text: 'Приложение 12 факторов', link: '/base/principles/architecture-and-development-processes/12-factors'}
+                ]
+              }
+            ]
           },
           {
             text: 'Инструменты',
