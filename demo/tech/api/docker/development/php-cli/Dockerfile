@@ -20,7 +20,7 @@ RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 COPY ./development/php-cli/conf.d /usr/local/etc/php/conf.d
 
 # Composer
-RUN apk add --no-cache composer=${COMPOSER_VERSION}-r0
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --version=$COMPOSER_VERSION --quiet
 
 # Пользователь
 RUN addgroup -g 1000 tech && adduser -u 1000 -G tech -s /bin/sh -D tech

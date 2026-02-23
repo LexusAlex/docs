@@ -22,7 +22,7 @@ RUN apk add --no-cache --virtual .build-deps \
     # Удаляем все зависимости сборки, чтобы уменьшить размер образа
     && apk del .build-deps
 # Composer
-RUN apk add --no-cache composer=${COMPOSER_VERSION}-r0
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --version=$COMPOSER_VERSION --quiet
 
 # dev режим php
 RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
