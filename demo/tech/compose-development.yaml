@@ -4,9 +4,11 @@ services:
       context: api/docker
       dockerfile: development/nginx/Dockerfile
     ports:
-      - "8080:80"
+      - "127.0.0.1:8080:80"
     volumes:
       - ./api:/api
+    networks:
+      - app-network
     depends_on:
       - api-php-fpm
   api-php-fpm:
@@ -18,3 +20,19 @@ services:
       APPLICATION_DEBUG: 1
     volumes:
       - ./api:/api
+    networks:
+      - app-network
+  api-php-cli:
+    build:
+      context: api/docker
+      dockerfile: development/php-cli/Dockerfile
+    environment:
+      APPLICATION_ENVIRONMENT: development
+      APPLICATION_DEBUG: 1
+    volumes:
+      - ./api:/api
+    networks:
+      - app-network
+networks:
+  app-network:
+    driver: bridge

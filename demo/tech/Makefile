@@ -5,7 +5,8 @@ COMPOSE_FILE ?= compose-$(ENVIRONMENT).yaml
 # Версии Образов
 NGINX_IMAGE ?=nginx:1.28-alpine3.23
 PHP_FPM_IMAGE ?=php:8.5-fpm-alpine3.23
-XDEBUG_VERSION ?=3.5.0
+PHP_CLI_IMAGE ?=php:8.5-cli-alpine3.23
+XDEBUG_VERSION ?=3.5.1
 COMPOSER_VERSION ?=2.9.5
 # Конфигурация
 include makefiles/$(ENVIRONMENT).mk
@@ -25,12 +26,19 @@ build:
 	docker compose -f $(COMPOSE_FILE) build \
         --build-arg NGINX_IMAGE=$(NGINX_IMAGE) \
         --build-arg PHP_FPM_IMAGE=$(PHP_FPM_IMAGE) \
+        --build-arg PHP_CLI_IMAGE=$(PHP_CLI_IMAGE) \
         --build-arg XDEBUG_VERSION=$(XDEBUG_VERSION) \
         --build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
         --no-cache --pull
 	docker image prune -f
 build-cache:
-	docker compose -f $(COMPOSE_FILE) build --build-arg NGINX_IMAGE=$(NGINX_IMAGE) --build-arg NGINX_IMAGE=$(PHP_FPM_IMAGE) --build-arg XDEBUG_VERSION=$(XDEBUG_VERSION) --build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) --pull
+	docker compose -f $(COMPOSE_FILE) build \
+		--build-arg NGINX_IMAGE=$(NGINX_IMAGE) \
+		--build-arg PHP_FPM_IMAGE=$(PHP_FPM_IMAGE) \
+		--build-arg PHP_CLI_IMAGE=$(PHP_CLI_IMAGE) \
+		--build-arg XDEBUG_VERSION=$(XDEBUG_VERSION) \
+		--build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
+		--pull
 	docker image prune -f
 up:
 	docker compose -f $(COMPOSE_FILE) up -d
