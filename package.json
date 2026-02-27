@@ -1,6 +1,6 @@
 {
   "devDependencies": {
-    "npm-check-updates": "^19.4.1",
+    "npm-check-updates": "^19.6.3",
     "vitepress": "^2.0.0-alpha.16"
   },
   "scripts": {
