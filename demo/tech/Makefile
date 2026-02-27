@@ -31,6 +31,8 @@ help:
 	@echo "Доступные команды:"
 	@echo "  make build               # Сборка контейнера без кеша ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make build-cache               # Сборка контейнера c кешем ENVIRONMENT=$(ENVIRONMENT)"
+	@echo "  make rebuild SERVICE=... # Пересобрать ОДИН контейнер без кеша"
+	@echo "  make rebuild-cache SERVICE=... # Пересобрать ОДИН контейнер с кешем"
 	@echo "  make up               #  Поднять контейнеры ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make down              #  Остановить контейнеры ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make logs              #  Просмотр логов ENVIRONMENT=$(ENVIRONMENT)"
@@ -46,6 +48,22 @@ build:
 build-cache:
 	docker compose -f $(COMPOSE_FILE) build $(BUILD_ARGS) --pull
 	docker image prune -f
+rebuild:
+	@if [ -z "$(SERVICE)" ]; then \
+        echo "Ошибка: укажите сервис для пересборки. Пример: make rebuild SERVICE=$(API_SERVICE)"; \
+        exit 1; \
+    fi
+	@echo "--- Пересборка сервиса $(SERVICE) без кеша ---"
+	docker compose -f $(COMPOSE_FILE) build $(BUILD_ARGS) --no-cache --pull $(SERVICE)
+	docker image prune -f
+
+rebuild-cache:
+	@if [ -z "$(SERVICE)" ]; then \
+        echo "Ошибка: укажите сервис для пересборки. Пример: make rebuild-cache SERVICE=$(API_SERVICE)"; \
+        exit 1; \
+    fi
+	@echo "--- Пересборка сервиса $(SERVICE) с использованием кеша ---"
+	docker compose -f $(COMPOSE_FILE) build $(BUILD_ARGS) --pull $(SERVICE)
 up:
 	docker compose -f $(COMPOSE_FILE) up -d
 down:

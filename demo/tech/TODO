@@ -83,6 +83,7 @@
 63. sqlmap
 64. Переход на https://github.com/axllent/mailpit
 65. Понять как работать с секретами в docker
+66. Внедрить hadolint docker
 
 На изучение:
 1. Что производительнее статические функции или статические методы https://deworker.pro/edu/series/interactive-site/installing-slim#comment-2348eedc-8045-44ba-8fa1-98137eb805a1
@@ -114,6 +115,8 @@
 9. По максимому используем чистые технологии html css js, в идеале, так лучше понимаешь что происходит. Для этого можем использовать vite
 10. Пакеты берем обособленные по аналогии как backend-php
 
-Установка sudo apt install mkcert
+Установка
+sudo apt install libnss3-tools
 mkcert -install
+mkcert my-local-site.test localhost 127.0.0.1 ::1
 
