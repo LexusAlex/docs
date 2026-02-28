@@ -84,6 +84,7 @@
 64. Переход на https://github.com/axllent/mailpit
 65. Понять как работать с секретами в docker
 66. Внедрить hadolint docker
+67. Если это библиотека то оставляем только папку scr остальное все убираем библиотека для контроля этого https://github.com/savinmikhail/dist-size-optimizer
 
 На изучение:
 1. Что производительнее статические функции или статические методы https://deworker.pro/edu/series/interactive-site/installing-slim#comment-2348eedc-8045-44ba-8fa1-98137eb805a1

@@ -2,7 +2,7 @@ ARG PHP_FPM_IMAGE=php:8.5-fpm-alpine3.23
 
 FROM ${PHP_FPM_IMAGE}
 
-ARG XDEBUG_VERSION=3.5.0
+ARG XDEBUG_VERSION=3.5.1
 ARG COMPOSER_VERSION=2.9.5
 
 RUN apk add --no-cache --virtual .build-deps \
