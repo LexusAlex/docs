@@ -25,7 +25,7 @@ UI_SERVICE := ui-node-cli
 ARGS ?=
 SERVICE ?= # Для универсальной цели run
 
-.PHONY: help build build-cache up down logs
+.PHONY: help build build-cache rebuild rebuild-cache up down logs
 # Цель по умолчанию
 help:
 	@echo "Доступные команды:"
