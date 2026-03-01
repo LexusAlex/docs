@@ -2,10 +2,8 @@
 ENVIRONMENT ?= development
 # Основной файл
 COMPOSE_FILE ?= compose-$(ENVIRONMENT).yaml
-
-# Конфигурация
+# Переменные окружений
 include makefiles/$(ENVIRONMENT).mk
-
 # Версии Образов
 NGINX_IMAGE ?=nginx:1.28-alpine3.23
 PHP_FPM_IMAGE ?=php:8.5-fpm-alpine3.23
@@ -19,9 +17,6 @@ BUILD_ARGS := --build-arg NGINX_IMAGE=$(NGINX_IMAGE) \
               --build-arg XDEBUG_VERSION=$(XDEBUG_VERSION) \
               --build-arg COMPOSER_VERSION=$(COMPOSER_VERSION)
 
-API_SERVICE := api-php-cli
-SHARED_SERVICE := shared-php-cli
-UI_SERVICE := ui-php-cli
 # Передача команд в контейнер
 ARGS ?=
 SERVICE ?= # Для универсальной цели run
@@ -91,9 +86,15 @@ endef
 # Универсальная цель для любого сервиса
 exec:
 	$(call RUN_IN_SERVICE,$(SERVICE),$(USER_ARGS))
-api-shell:
-	$(call RUN_IN_SERVICE,$(API_SERVICE),$(USER_ARGS))
-api-php:
-	$(call RUN_IN_SERVICE,$(API_SERVICE),php $(USER_ARGS))
-api-composer:
-	$(call RUN_IN_SERVICE,$(API_SERVICE),composer $(USER_ARGS))
+
+# api
+include api/api.mk
+# shared
+include shared/shared.mk
+# ui
+include ui/ui.mk
+
+#php-all: ARGS := "-v"
+# make php-all-composer ARGS="i"
+php-all: api-php shared-php
+php-all-composer: api-composer shared-composer
