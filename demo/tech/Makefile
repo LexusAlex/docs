@@ -20,7 +20,8 @@ BUILD_ARGS := --build-arg NGINX_IMAGE=$(NGINX_IMAGE) \
               --build-arg COMPOSER_VERSION=$(COMPOSER_VERSION)
 
 API_SERVICE := api-php-cli
-UI_SERVICE := ui-node-cli
+SHARED_SERVICE := shared-php-cli
+UI_SERVICE := ui-php-cli
 # Передача команд в контейнер
 ARGS ?=
 SERVICE ?= # Для универсальной цели run
@@ -39,7 +40,7 @@ help:
 	@echo "  make shell-api ARGS='...' # Выполнить любую команду в бэкенде"
 	@echo "  make php ARGS='...'      # Выполнить php команду make php ARGS='composer'"
 	@echo "  make composer ARGS='...' # Выполнить composer команду"
-	@echo "  make run SERVICE=... ARGS='...' # Выполнить команду в ЛЮБОМ сервисе"
+	@echo "  make exec SERVICE=... ARGS='...' # Выполнить команду в ЛЮБОМ сервисе"
 
 # docker
 build:
@@ -56,7 +57,6 @@ rebuild:
 	@echo "--- Пересборка сервиса $(SERVICE) без кеша ---"
 	docker compose -f $(COMPOSE_FILE) build $(BUILD_ARGS) --no-cache --pull $(SERVICE)
 	docker image prune -f
-
 rebuild-cache:
 	@if [ -z "$(SERVICE)" ]; then \
         echo "Ошибка: укажите сервис для пересборки. Пример: make rebuild-cache SERVICE=$(API_SERVICE)"; \
@@ -72,20 +72,28 @@ logs:
 	docker compose -f $(COMPOSE_FILE) logs -f
 
 # Выполнение команды
-shell-api:
-	@if [ -z "$(ARGS)" ]; then \
-		echo "Ошибка: укажите команду для выполнения через ARGS='...'"; \
+# Универсальная команда
+# Эта переменная будет пустой, если пользователь не указал ARGS=...
+USER_ARGS := $(ARGS)
+# Что запускать в сервисе
+define RUN_IN_SERVICE
+	$(eval SERVICE_TO_RUN := $(1))
+	$(eval ARGS_TO_RUN := $(2))
+
+	@if [ -z "$(SERVICE_TO_RUN)" ] || [ -z "$(USER_ARGS)" ]; then \
+		echo "Ошибка: не указаны SERVICE или ARGS."; \
+		echo "Пример: make exec SERVICE=api-php-cli ARGS='ls -la'"; \
 		exit 1; \
 	fi
-	docker compose -f $(COMPOSE_FILE) run --rm $(API_SERVICE) $(ARGS)
-php: shell-api
-	@# Цель `php` просто вызывает `shell-api` с нужной командой
-	$(eval ARGS := php $(ARGS))
-composer: shell-api
-    $(eval ARGS := composer $(ARGS))
-run:
-	@if [ -z "$(SERVICE)" ] || [ -z "$(ARGS)" ]; then \
-        echo "Ошибка: укажите SERVICE и ARGS. Пример: make run SERVICE=backend ARGS='ls -la'"; \
-        exit 1; \
-    fi
-	docker compose -f $(COMPOSE_FILE) run --rm $(SERVICE) $(ARGS)
+	@echo "==> Выполняю команду в сервисе '$(SERVICE_TO_RUN)': $(ARGS_TO_RUN)"
+	docker compose -f $(COMPOSE_FILE) run --rm $(SERVICE_TO_RUN) $(ARGS_TO_RUN)
+endef
+# Универсальная цель для любого сервиса
+exec:
+	$(call RUN_IN_SERVICE,$(SERVICE),$(USER_ARGS))
+api-shell:
+	$(call RUN_IN_SERVICE,$(API_SERVICE),$(USER_ARGS))
+api-php:
+	$(call RUN_IN_SERVICE,$(API_SERVICE),php $(USER_ARGS))
+api-composer:
+	$(call RUN_IN_SERVICE,$(API_SERVICE),composer $(USER_ARGS))
