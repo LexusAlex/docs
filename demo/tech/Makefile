@@ -32,9 +32,6 @@ help:
 	@echo "  make up               #  Поднять контейнеры ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make down              #  Остановить контейнеры ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make logs              #  Просмотр логов ENVIRONMENT=$(ENVIRONMENT)"
-	@echo "  make shell-api ARGS='...' # Выполнить любую команду в бэкенде"
-	@echo "  make php ARGS='...'      # Выполнить php команду make php ARGS='composer'"
-	@echo "  make composer ARGS='...' # Выполнить composer команду"
 	@echo "  make exec SERVICE=... ARGS='...' # Выполнить команду в ЛЮБОМ сервисе"
 
 # docker
