@@ -45,6 +45,17 @@ services:
       - ./shared:/shared
     networks:
       - app-network
+  ui-php-cli:
+    build:
+      context: ui/docker
+      dockerfile: development/php-cli/Dockerfile
+    environment:
+      APPLICATION_ENVIRONMENT: development
+      APPLICATION_DEBUG: 1
+    volumes:
+      - ./ui:/ui
+    networks:
+      - app-network
 networks:
   app-network:
     driver: bridge

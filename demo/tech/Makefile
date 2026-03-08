@@ -131,7 +131,10 @@ include shared/shared.mk
 # ui
 include ui/ui.mk
 
+# main
+# Установка пакетов composer
+install-composer: USER_ARGS := "i"
+install-composer: shared-composer api-composer ui-composer
 #php-all: ARGS := "-v"
 # make php-all-composer ARGS="i"
 php-all: api-php shared-php
-php-all-composer: api-composer shared-composer
