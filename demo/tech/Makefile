@@ -35,16 +35,45 @@ help:
 	@echo "  make exec SERVICE=... ARGS='...' # Выполнить команду в ЛЮБОМ сервисе"
 
 check-updates:
-	@echo "=== Проверка обновлений ==="
-	@# Composer (GitHub API)
-	@echo -n "Composer (текущая: $(COMPOSER_VERSION)): "
-	@curl -s "https://api.github.com/repos/composer/composer/releases/latest" | grep -oP '"tag_name": "\K(.*)(?=")' | xargs -I {} echo "Последняя версия: {}"
+	@echo "=== Проверка обновлений Docker образов ==="
 	@echo ""
-	@# Xdebug (GitHub API)
+	@# Nginx - ищем теги типа 1.28-alpine3.21
+	@echo ">>> Nginx (текущая: $(NGINX_IMAGE))"
+	@curl -s "https://hub.docker.com/v2/repositories/library/nginx/tags/?page_size=100" | \
+        grep -oP '"name":"\K[^"]+' | \
+        grep -E '^[0-9]+\.[0-9]+-alpine[0-9]+\.[0-9]+$$' | \
+        sort -Vr | head -5 | while read tag; do \
+            echo "    Доступно: $$tag"; \
+        done
+	@echo ""
+	@# PHP FPM - стабильные версии без rc
+	@echo ">>> PHP-FPM (текущая: $(PHP_FPM_IMAGE))"
+	@curl -s "https://hub.docker.com/v2/repositories/library/php/tags/?page_size=100" | \
+        grep -oP '"name":"\K[^"]+' | \
+        grep -E '^[0-9]+\.[0-9]+-fpm-alpine[0-9]+\.[0-9]+$$' | \
+        sort -Vr | head -5 | while read tag; do \
+            echo "    Доступно: $$tag"; \
+        done
+	@echo ""
+	@# PHP CLI - стабильные версии без rc
+	@echo ">>> PHP-CLI (текущая: $(PHP_CLI_IMAGE))"
+	@curl -s "https://hub.docker.com/v2/repositories/library/php/tags/?page_size=100" | \
+        grep -oP '"name":"\K[^"]+' | \
+        grep -E '^[0-9]+\.[0-9]+-cli-alpine[0-9]+\.[0-9]+$$' | \
+        sort -Vr | head -5 | while read tag; do \
+            echo "    Доступно: $$tag"; \
+        done
+	@echo ""
+	@echo "=== GitHub Releases ==="
+	@echo -n "Composer (текущая: $(COMPOSER_VERSION)): "
+	@curl -s "https://api.github.com/repos/composer/composer/releases/latest" | \
+        grep -oP '"tag_name": "\K(.*)(?=")' | xargs -I {} echo "Последняя: {}"
 	@echo -n "Xdebug (текущая: $(XDEBUG_VERSION)): "
-	@curl -s "https://api.github.com/repos/xdebug/xdebug/releases/latest" | grep -oP '"tag_name": "\K(.*)(?=")' | xargs -I {} echo "Последняя версия: {}"
+	@curl -s "https://api.github.com/repos/xdebug/xdebug/releases/latest" | \
+        grep -oP '"tag_name": "\K(.*)(?=")' | xargs -I {} echo "Последняя: {}"
 	@echo ""
 	@echo "==========================="
+
 # docker
 build:
 	docker compose -f $(COMPOSE_FILE) build $(BUILD_ARGS) --no-cache --pull
