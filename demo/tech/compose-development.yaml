@@ -47,6 +47,7 @@ services:
         SERVICE_NAME: shared
     volumes:
       - ./shared:/shared
+      - ./tools:/tools
   tools-php-cli:
     <<: *php-common
     build:

@@ -11,5 +11,8 @@
     "psr-4": {
       "Shared\\": "src/"
     }
+  },
+  "scripts": {
+    "phpunit": "/tools/vendor/bin/phpunit --colors=always"
   }
 }

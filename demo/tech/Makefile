@@ -113,13 +113,13 @@ define RUN_IN_SERVICE
 	$(eval ARGS_TO_RUN := $(2))
 	$(eval SERVICE_WORKDIR := /$(word 1,$(subst -, ,$(SERVICE_TO_RUN))))
 
-	@if [ -z "$(SERVICE_TO_RUN)" ] || [ -z "$(USER_ARGS)" ]; then \
+	@if [ -z "$(SERVICE_TO_RUN)" ] || [ -z "$(ARGS_TO_RUN)" ]; then \
 		echo "Ошибка: не указаны SERVICE или ARGS."; \
-		echo "Пример: make exec SERVICE=api-php-cli ARGS='ls -la'"; \
+		echo "Пример использования в Makefile: $$(call RUN_IN_SERVICE,api-php-cli,ls -la)"; \
 		exit 1; \
 	fi
-	@echo "==> Выполняю команду в сервисе '$(SERVICE_TO_RUN)' в директории '$(SERVICE_WORKDIR)': $(ARGS_TO_RUN)"
-	docker compose -f $(COMPOSE_FILE) run --workdir $(SERVICE_WORKDIR) --rm $(SERVICE_TO_RUN) $(ARGS_TO_RUN)
+	@echo "==> Выполняю в '$(SERVICE_TO_RUN)' (в $(SERVICE_WORKDIR)): $(ARGS_TO_RUN)"
+    @docker compose -f $(COMPOSE_FILE) run --workdir $(SERVICE_WORKDIR) --rm $(SERVICE_TO_RUN) $(ARGS_TO_RUN)
 endef
 # Универсальная цель для любого сервиса
 exec:
@@ -135,9 +135,30 @@ include ui/ui.mk
 include tools/tools.mk
 
 # main
+PHP_CLI_SERVICES := shared api ui tools
+# Эта цель выполняет произвольную команду composer для всех сервисов.
+# Использование: make composer-all COMMAND="install"
+.PHONY: composer-all
+composer-all:
+	@if [ -z "$(COMMAND)" ]; then \
+		echo "Ошибка: укажите команду."; \
+		echo "Пример: make composer-all COMMAND='install'"; \
+		exit 1; \
+	fi
+	@echo "==> Выполняю 'composer $(COMMAND)' для всех сервисов..."
+    # Цикл по всем сервисам. Если одна команда упадет, вся остановится.
+	@$(foreach service,$(PHP_CLI_SERVICES),$(call RUN_IN_SERVICE,$(service)-php-cli,composer $(COMMAND));)
 # Установка пакетов composer
-install-composer: USER_ARGS := "i"
-install-composer: shared-composer api-composer ui-composer tools-composer
+.PHONY: composer-install
+composer-install:
+	@$(MAKE) composer-all COMMAND="i"
+.PHONY: composer-dump
+composer-dump:
+	@$(MAKE) composer-all COMMAND="dump-autoload"
+.PHONY: composer-update
+composer-update:
+	@$(MAKE) composer-all COMMAND="update"
+
 #php-all: ARGS := "-v"
 # make php-all-composer ARGS="i"
 php-all: api-php shared-php
