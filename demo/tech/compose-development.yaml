@@ -1,8 +1,16 @@
+x-php-common: &php-common
+  environment:
+    APPLICATION_ENVIRONMENT: development
+    APPLICATION_DEBUG: 1
+  networks:
+    - app-network
 services:
   api-nginx:
     build:
-      context: api/docker
-      dockerfile: development/nginx/Dockerfile
+      context: .
+      dockerfile: docker/development/nginx/Dockerfile
+      args:
+        SERVICE_NAME: api
     ports:
       - "127.0.0.1:80:80"
       - "127.0.0.1:443:443"
@@ -13,49 +21,50 @@ services:
     depends_on:
       - api-php-fpm
   api-php-fpm:
+    <<: *php-common
     build:
-      context: api/docker
-      dockerfile: development/php-fpm/Dockerfile
-    environment:
-      APPLICATION_ENVIRONMENT: development
-      APPLICATION_DEBUG: 1
+      context: .
+      dockerfile: docker/development/php-fpm/Dockerfile
+      args:
+        SERVICE_NAME: api
     volumes:
       - ./api:/api
-    networks:
-      - app-network
   api-php-cli:
+    <<: *php-common
     build:
-      context: api/docker
-      dockerfile: development/php-cli/Dockerfile
-    environment:
-      APPLICATION_ENVIRONMENT: development
-      APPLICATION_DEBUG: 1
+      context: .
+      dockerfile: docker/development/php-cli/Dockerfile
+      args:
+        SERVICE_NAME: api
     volumes:
       - ./api:/api
-    networks:
-      - app-network
   shared-php-cli:
+    <<: *php-common
     build:
-      context: shared/docker
-      dockerfile: development/php-cli/Dockerfile
-    environment:
-      APPLICATION_ENVIRONMENT: development
-      APPLICATION_DEBUG: 1
+      context: .
+      dockerfile: docker/development/php-cli/Dockerfile
+      args:
+        SERVICE_NAME: shared
     volumes:
       - ./shared:/shared
-    networks:
-      - app-network
-  ui-php-cli:
+  tools-php-cli:
+    <<: *php-common
     build:
-      context: ui/docker
-      dockerfile: development/php-cli/Dockerfile
-    environment:
-      APPLICATION_ENVIRONMENT: development
-      APPLICATION_DEBUG: 1
+      context: .
+      dockerfile: docker/development/php-cli/Dockerfile
+      args:
+        SERVICE_NAME: tools
+    volumes:
+      - ./tools:/tools
+  ui-php-cli:
+    <<: *php-common
+    build:
+      context: .
+      dockerfile: docker/development/php-cli/Dockerfile
+      args:
+        SERVICE_NAME: ui
     volumes:
       - ./ui:/ui
-    networks:
-      - app-network
 networks:
   app-network:
     driver: bridge

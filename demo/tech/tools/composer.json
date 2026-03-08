@@ -1,0 +1,27 @@
+{
+  "name": "tech/tools",
+  "type": "project",
+  "authors": [
+    {
+      "name": "Alexey Shmelev",
+      "email": "alexsey_89@bk.ru"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Tools\\": "src/"
+    }
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^13.0",
+    "bamarni/composer-bin-plugin": "^1.9"
+  },
+  "scripts": {
+    "phpunit": "phpunit --colors=always"
+  },
+  "config": {
+    "allow-plugins": {
+      "bamarni/composer-bin-plugin": true
+    }
+  }
+}

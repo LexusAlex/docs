@@ -111,14 +111,15 @@ USER_ARGS := $(ARGS)
 define RUN_IN_SERVICE
 	$(eval SERVICE_TO_RUN := $(1))
 	$(eval ARGS_TO_RUN := $(2))
+	$(eval SERVICE_WORKDIR := /$(word 1,$(subst -, ,$(SERVICE_TO_RUN))))
 
 	@if [ -z "$(SERVICE_TO_RUN)" ] || [ -z "$(USER_ARGS)" ]; then \
 		echo "Ошибка: не указаны SERVICE или ARGS."; \
 		echo "Пример: make exec SERVICE=api-php-cli ARGS='ls -la'"; \
 		exit 1; \
 	fi
-	@echo "==> Выполняю команду в сервисе '$(SERVICE_TO_RUN)': $(ARGS_TO_RUN)"
-	docker compose -f $(COMPOSE_FILE) run --rm $(SERVICE_TO_RUN) $(ARGS_TO_RUN)
+	@echo "==> Выполняю команду в сервисе '$(SERVICE_TO_RUN)' в директории '$(SERVICE_WORKDIR)': $(ARGS_TO_RUN)"
+	docker compose -f $(COMPOSE_FILE) run --workdir $(SERVICE_WORKDIR) --rm $(SERVICE_TO_RUN) $(ARGS_TO_RUN)
 endef
 # Универсальная цель для любого сервиса
 exec:
@@ -130,11 +131,13 @@ include api/api.mk
 include shared/shared.mk
 # ui
 include ui/ui.mk
+# ui
+include tools/tools.mk
 
 # main
 # Установка пакетов composer
 install-composer: USER_ARGS := "i"
-install-composer: shared-composer api-composer ui-composer
+install-composer: shared-composer api-composer ui-composer tools-composer
 #php-all: ARGS := "-v"
 # make php-all-composer ARGS="i"
 php-all: api-php shared-php

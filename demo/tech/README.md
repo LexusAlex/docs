@@ -22,3 +22,9 @@
 # Общая структура
 
 - `shared`  - общий код
+
+# Выполнение команд
+
+Пример выполнения команды в контейнере.
+
+`make shared-composer ARGS='require --dev phpunit/phpunit'`
