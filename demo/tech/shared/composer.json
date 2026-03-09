@@ -13,6 +13,6 @@
     }
   },
   "scripts": {
-    "phpunit": "/tools/vendor/bin/phpunit --colors=always"
+    "phpunit": "/tools/vendor/bin/phpunit --colors=always --configuration=etc/phpunit.xml"
   }
 }

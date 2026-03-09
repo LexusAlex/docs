@@ -149,13 +149,11 @@ composer-all:
     # Цикл по всем сервисам. Если одна команда упадет, вся остановится.
 	@$(foreach service,$(PHP_CLI_SERVICES),$(call RUN_IN_SERVICE,$(service)-php-cli,composer $(COMMAND));)
 # Установка пакетов composer
-.PHONY: composer-install
+.PHONY: composer-dump composer-install composer-update
 composer-install:
 	@$(MAKE) composer-all COMMAND="i"
-.PHONY: composer-dump
 composer-dump:
 	@$(MAKE) composer-all COMMAND="dump-autoload"
-.PHONY: composer-update
 composer-update:
 	@$(MAKE) composer-all COMMAND="update"
 
