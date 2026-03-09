@@ -1,0 +1,28 @@
+{
+    "$schema": "../../tools/t/infection/vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "../src"
+        ],
+        "excludes": [
+            "Core/Test",
+            "Http/Test",
+            "Authentication/Test"
+        ]
+    },
+    "logs": {
+        "text": "../var/cache/infection/infection.log",
+        "html": "../var/cache/infection/infection.html",
+        "summary": "../var/cache/infection/summary.log",
+        "stryker": {
+            "report": "/^\\d+\\.\\d+\\.x$/"
+        }
+    },
+    "phpUnit": {
+        "configDir": ".",
+        "customPath": "../../tools/t/phpunit/vendor/bin/phpunit"
+    },
+    "mutators": {
+        "@default": true
+    }
+}
