@@ -1,0 +1,11 @@
+{
+    "type": "project",
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true,
+        "bump-after-update": true
+    },
+    "require-dev": {
+        "deptrac/deptrac": "^4.6"
+    }
+}

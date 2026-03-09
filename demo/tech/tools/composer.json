@@ -33,9 +33,9 @@
   "config": {
     "process-timeout": 0,
     "sort-packages": true,
+    "bump-after-update": true,
     "allow-plugins": {
       "bamarni/composer-bin-plugin": true
-    },
-    "bump-after-update": true
+    }
   }
 }

@@ -156,7 +156,9 @@ composer-dump:
 	@$(MAKE) composer-all COMMAND="dump-autoload"
 composer-update:
 	@$(MAKE) composer-all COMMAND="update"
-
+# tools
+composer-tools-be-update:
+	@$(MAKE) tools-composer ARGS="bin all show -l -o -A"
 #php-all: ARGS := "-v"
 # make php-all-composer ARGS="i"
 php-all: api-php shared-php

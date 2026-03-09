@@ -1,0 +1,14 @@
+{
+    "type": "project",
+    "require-dev": {
+        "infection/infection": "^0.32.6"
+    },
+    "config": {
+        "process-timeout": 0,
+        "sort-packages": true,
+        "bump-after-update": true,
+        "allow-plugins": {
+            "infection/extension-installer": true
+        }
+    }
+}
