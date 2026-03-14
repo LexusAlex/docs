@@ -25,6 +25,7 @@ SERVICE ?= # Для универсальной цели run
 # Цель по умолчанию
 help:
 	@echo "Доступные команды:"
+	@echo "  make check-updates       # Проверить обновления образов и пакетов"
 	@echo "  make build               # Сборка контейнера без кеша ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make build-cache               # Сборка контейнера c кешем ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make rebuild SERVICE=... # Пересобрать ОДИН контейнер без кеша"
@@ -35,42 +36,94 @@ help:
 	@echo "  make exec SERVICE=... ARGS='...' # Выполнить команду в ЛЮБОМ сервисе"
 
 check-updates:
-	@echo "=== Проверка обновлений Docker образов ==="
+	@echo "=== Docker Images ==="
 	@echo ""
-	@# Nginx - ищем теги типа 1.28-alpine3.21
-	@echo ">>> Nginx (текущая: $(NGINX_IMAGE))"
-	@curl -s "https://hub.docker.com/v2/repositories/library/nginx/tags/?page_size=100" | \
-        grep -oP '"name":"\K[^"]+' | \
-        grep -E '^[0-9]+\.[0-9]+-alpine[0-9]+\.[0-9]+$$' | \
-        sort -Vr | head -5 | while read tag; do \
-            echo "    Доступно: $$tag"; \
-        done
-	@echo ""
-	@# PHP FPM - стабильные версии без rc
-	@echo ">>> PHP-FPM (текущая: $(PHP_FPM_IMAGE))"
-	@curl -s "https://hub.docker.com/v2/repositories/library/php/tags/?page_size=100" | \
-        grep -oP '"name":"\K[^"]+' | \
-        grep -E '^[0-9]+\.[0-9]+-fpm-alpine[0-9]+\.[0-9]+$$' | \
-        sort -Vr | head -5 | while read tag; do \
-            echo "    Доступно: $$tag"; \
-        done
-	@echo ""
-	@# PHP CLI - стабильные версии без rc
-	@echo ">>> PHP-CLI (текущая: $(PHP_CLI_IMAGE))"
-	@curl -s "https://hub.docker.com/v2/repositories/library/php/tags/?page_size=100" | \
-        grep -oP '"name":"\K[^"]+' | \
-        grep -E '^[0-9]+\.[0-9]+-cli-alpine[0-9]+\.[0-9]+$$' | \
-        sort -Vr | head -5 | while read tag; do \
-            echo "    Доступно: $$tag"; \
-        done
+	@@if command -v jq >/dev/null 2>&1; then \
+		echo ">>> Nginx (current: $(NGINX_IMAGE))"; \
+		curl -s "https://hub.docker.com/v2/repositories/library/nginx/tags/?page_size=100" | \
+			jq -r '.results[].name' | \
+			grep -E '^[0-9]+\.[0-9]+-alpine[0-9]+\.[0-9]+$$' | \
+			sort -Vr | head -3 | while read tag; do \
+				if [ "$$tag" = "$(NGINX_IMAGE)" ]; then \
+					echo -e "    \033[32m$$tag (current)\033[0m"; \
+				else \
+					echo "    $$tag"; \
+				fi; \
+			done; \
+		echo ""; \
+		echo ">>> PHP-FPM (current: $(PHP_FPM_IMAGE))"; \
+		curl -s "https://hub.docker.com/v2/repositories/library/php/tags/?page_size=100" | \
+			jq -r '.results[].name' | \
+			grep -E '^[0-9]+\.[0-9]+-fpm-alpine[0-9]+\.[0-9]+$$' | \
+			sort -Vr | head -3 | while read tag; do \
+				if [ "$$tag" = "$(PHP_FPM_IMAGE)" ]; then \
+					echo -e "    \033[32m$$tag (current)\033[0m"; \
+				else \
+					echo "    $$tag"; \
+				fi; \
+			done; \
+		echo ""; \
+		echo ">>> PHP-CLI (current: $(PHP_CLI_IMAGE))"; \
+		curl -s "https://hub.docker.com/v2/repositories/library/php/tags/?page_size=100" | \
+			jq -r '.results[].name' | \
+			grep -E '^[0-9]+\.[0-9]+-cli-alpine[0-9]+\.[0-9]+$$' | \
+			sort -Vr | head -3 | while read tag; do \
+				if [ "$$tag" = "$(PHP_CLI_IMAGE)" ]; then \
+					echo -e "    \033[32m$$tag (current)\033[0m"; \
+				else \
+					echo "    $$tag"; \
+				fi; \
+			done; \
+	else \
+		echo "jq not installed. Install: apt install jq"; \
+		echo ""; \
+		echo ">>> Nginx (current: $(NGINX_IMAGE))"; \
+		curl -s "https://hub.docker.com/v2/repositories/library/nginx/tags/?page_size=100" | \
+			grep -oP '"name":"\K[^"]+' | \
+			grep -E '^[0-9]+\.[0-9]+-alpine[0-9]+\.[0-9]+$$' | \
+			sort -Vr | head -3 | while read tag; do \
+				echo "    $$tag"; \
+			done; \
+		echo ""; \
+		echo ">>> PHP-FPM (current: $(PHP_FPM_IMAGE))"; \
+		curl -s "https://hub.docker.com/v2/repositories/library/php/tags/?page_size=100" | \
+			grep -oP '"name":"\K[^"]+' | \
+			grep -E '^[0-9]+\.[0-9]+-fpm-alpine[0-9]+\.[0-9]+$$' | \
+			sort -Vr | head -3 | while read tag; do \
+				echo "    $$tag"; \
+			done; \
+		echo ""; \
+		echo ">>> PHP-CLI (current: $(PHP_CLI_IMAGE))"; \
+		curl -s "https://hub.docker.com/v2/repositories/library/php/tags/?page_size=100" | \
+			grep -oP '"name":"\K[^"]+' | \
+			grep -E '^[0-9]+\.[0-9]+-cli-alpine[0-9]+\.[0-9]+$$' | \
+			sort -Vr | head -3 | while read tag; do \
+				echo "    $$tag"; \
+			done; \
+	fi
 	@echo ""
 	@echo "=== GitHub Releases ==="
-	@echo -n "Composer (текущая: $(COMPOSER_VERSION)): "
-	@curl -s "https://api.github.com/repos/composer/composer/releases/latest" | \
-        grep -oP '"tag_name": "\K(.*)(?=")' | xargs -I {} echo "Последняя: {}"
-	@echo -n "Xdebug (текущая: $(XDEBUG_VERSION)): "
-	@curl -s "https://api.github.com/repos/xdebug/xdebug/releases/latest" | \
-        grep -oP '"tag_name": "\K(.*)(?=")' | xargs -I {} echo "Последняя: {}"
+	@( \
+		latest=$$(curl -s "https://api.github.com/repos/composer/composer/releases/latest" | grep -oP '"tag_name": "\K[^"]+'); \
+		printf "Composer (current: $(COMPOSER_VERSION)): "; \
+		if [ "$(COMPOSER_VERSION)" = "$$latest" ]; then \
+			echo "$$latest (current)"; \
+		else \
+			echo "$$latest (update available)"; \
+		fi \
+	)
+	@( \
+		latest=$$(curl -s "https://api.github.com/repos/xdebug/xdebug/releases/latest" | grep -oP '"tag_name": "\K[^"]+'); \
+		printf "Xdebug (current: $(XDEBUG_VERSION)): "; \
+		if [ "$(XDEBUG_VERSION)" = "$$latest" ]; then \
+			echo "$$latest (current)"; \
+		else \
+			echo "$$latest (update available)"; \
+		fi \
+	)
+	@echo ""
+	@echo "=== NPM Packages ==="
+	@docker compose run --rm node-cli npx npm-check-updates --filterVersion '>=1.0.0' --format group 2>/dev/null || echo "No updates or npm-check-updates not configured"
 	@echo ""
 	@echo "==========================="
 
@@ -158,6 +211,7 @@ composer-update:
 	@$(MAKE) composer-all COMMAND="update"
 # tools
 composer-tools-be-update:
+	@$(MAKE) composer-all COMMAND="show -l -o -A"
 	@$(MAKE) tools-composer ARGS="bin all show -l -o -A"
 #php-all: ARGS := "-v"
 # make php-all-composer ARGS="i"
