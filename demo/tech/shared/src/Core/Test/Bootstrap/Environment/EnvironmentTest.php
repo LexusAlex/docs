@@ -2,17 +2,28 @@
 
 declare(strict_types=1);
 
+/**
+ * @psalm-suppress UnusedClass
+ * @psalm-suppress PropertyNotSetInConstructor
+ */
 namespace Shared\Core\Test\Bootstrap\Environment;
 
+use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Shared\Core\Bootstrap\Environment;
 
+/**
+ * @testdox Environment
+ * @psalm-suppress PropertyNotSetInConstructor
+ * @psalm-suppress MissingConstructor
+ */
 final class EnvironmentTest extends TestCase
 {
     private Environment $environment;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
