@@ -210,7 +210,7 @@ composer-dump:
 composer-update:
 	@$(MAKE) composer-all COMMAND="update"
 # tools
-composer-tools-be-update:
+composer-be-update:
 	@$(MAKE) composer-all COMMAND="show -l -o -A"
 	@$(MAKE) tools-composer ARGS="bin all show -l -o -A"
 #php-all: ARGS := "-v"

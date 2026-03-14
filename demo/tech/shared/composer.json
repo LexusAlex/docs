@@ -17,6 +17,8 @@
     "phpunit-coverage": "/tools/t/phpunit/vendor/bin/phpunit --colors=always --configuration=etc/phpunit.xml --coverage-html var/cache/coverage --coverage-xml=var/cache/coverage-xml --log-junit=var/cache/junit.xml",
     "infection": "/tools/t/infection/vendor/bin/infection --show-mutations --log-verbosity=default --min-covered-msi=100 --threads=4 --coverage=../var/cache --configuration=etc/infection.json5",
     "phpstan": "/tools/t/phpstan/vendor/bin/phpstan analyse -c etc/phpstan.neon",
-    "psalm": "/tools/t/psalm/vendor/bin/psalm --config=etc/psalm.xml"
+    "psalm": "/tools/t/psalm/vendor/bin/psalm --config=etc/psalm.xml",
+    "require-checker": "/tools/t/composer-require-checker/vendor/bin/composer-require-checker check --config-file=etc/composer-require-checker.json",
+    "unused": "/tools/t/composer-unused/vendor/bin/composer-unused"
   }
 }

@@ -1,0 +1,10 @@
+{
+  "symbol-whitelist": [
+    "getenv",
+    "putenv",
+    "RuntimeException",
+    "PHPUnit\\Framework\\Attributes\\Test",
+    "PHPUnit\\Framework\\TestCase"
+  ],
+  "scan-files": []
+}
