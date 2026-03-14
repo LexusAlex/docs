@@ -15,6 +15,6 @@
   "scripts": {
     "phpunit": "/tools/t/phpunit/vendor/bin/phpunit --colors=always --configuration=etc/phpunit.xml",
     "phpunit-coverage": "/tools/t/phpunit/vendor/bin/phpunit --colors=always --configuration=etc/phpunit.xml --coverage-html var/cache/coverage --coverage-xml=var/cache/coverage-xml --log-junit=var/cache/junit.xml",
-    "infection": "/tools/t/infection/vendor/bin/infection --show-mutations --log-verbosity=default --threads=4 --coverage=../var/cache --configuration=etc/infection.json5"
+    "infection": "/tools/t/infection/vendor/bin/infection --show-mutations --log-verbosity=default --min-covered-msi=100 --threads=4 --coverage=../var/cache --configuration=etc/infection.json5"
   }
 }

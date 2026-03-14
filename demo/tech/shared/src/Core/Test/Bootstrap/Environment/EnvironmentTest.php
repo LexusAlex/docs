@@ -2,17 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Shared\Core\Test\Bootstrap;
+namespace Shared\Core\Test\Bootstrap\Environment;
 
-use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Shared\Core\Bootstrap\Environment;
-use Shared\Core\Bootstrap\EnvironmentInterface;
 
-#[CoversClass(Environment::class)]
-#[CoversClass(EnvironmentInterface::class)]
 final class EnvironmentTest extends TestCase
 {
     private Environment $environment;

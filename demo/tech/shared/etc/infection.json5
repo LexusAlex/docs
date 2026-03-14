@@ -5,15 +5,15 @@
             "../src"
         ],
         "excludes": [
-            "Core/Test",
-            "Http/Test",
-            "Authentication/Test"
+            "Core/Test"
         ]
     },
+    "timeout": 10,
     "logs": {
         "text": "../var/cache/infection/infection.log",
         "html": "../var/cache/infection/infection.html",
         "summary": "../var/cache/infection/summary.log",
+        "perMutator": "../var/cache/infection/per-mutator.md",
         "stryker": {
             "report": "/^\\d+\\.\\d+\\.x$/"
         }
