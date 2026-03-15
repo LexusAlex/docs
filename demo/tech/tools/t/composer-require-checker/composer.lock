@@ -4,42 +4,124 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "39a647955b62eb2f166d94f9ec0b1557",
+    "content-hash": "d880fd0d2a23cb2fee9a8c0af2c11d53",
     "packages": [],
     "packages-dev": [
         {
-            "name": "maglnet/composer-require-checker",
-            "version": "4.17.0",
+            "name": "azjezz/psl",
+            "version": "5.5.0",
             "source": {
                 "type": "git",
-                "url": "https://github.com/maglnet/ComposerRequireChecker.git",
-                "reference": "c4aeb5882988a23b22216ecf3e934ec50c072a40"
+                "url": "https://github.com/azjezz/psl.git",
+                "reference": "8534d06d442b602970ee66ebc1d79c92361a4ba7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/c4aeb5882988a23b22216ecf3e934ec50c072a40",
-                "reference": "c4aeb5882988a23b22216ecf3e934ec50c072a40",
+                "url": "https://api.github.com/repos/azjezz/psl/zipball/8534d06d442b602970ee66ebc1d79c92361a4ba7",
+                "reference": "8534d06d442b602970ee66ebc1d79c92361a4ba7",
                 "shasum": ""
             },
             "require": {
-                "composer-runtime-api": "^2.0.0",
-                "ext-phar": "*",
-                "nikic/php-parser": "^5.5.0",
-                "php": "~8.2.0 || ~8.3.0 || ~8.4.0 || ~8.5.0",
-                "symfony/console": "^6.4.1 || ^7.0.1",
-                "webmozart/assert": "^1.11.0",
-                "webmozart/glob": "^4.7.0"
+                "ext-bcmath": "*",
+                "ext-intl": "*",
+                "ext-json": "*",
+                "ext-mbstring": "*",
+                "ext-openssl": "*",
+                "ext-sodium": "*",
+                "php": "~8.4.0 || ~8.5.0",
+                "revolt/event-loop": "^1.0.8"
             },
             "require-dev": {
-                "doctrine/coding-standard": "^13.0.1",
+                "carthage-software/mago": "^1.14.0",
+                "infection/infection": "^0.32.6",
+                "php-coveralls/php-coveralls": "^2.9.1",
+                "phpbench/phpbench": "^1.5.1",
+                "phpunit/phpunit": "^13.0.5"
+            },
+            "suggest": {
+                "php-standard-library/phpstan-extension": "PHPStan integration",
+                "php-standard-library/psalm-plugin": "Psalm integration"
+            },
+            "type": "library",
+            "extra": {
+                "thanks": {
+                    "url": "https://github.com/hhvm/hsl",
+                    "name": "hhvm/hsl"
+                }
+            },
+            "autoload": {
+                "files": [
+                    "src/bootstrap.php"
+                ],
+                "psr-4": {
+                    "Psl\\": "src/Psl"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "azjezz",
+                    "email": "azjezz@protonmail.com"
+                }
+            ],
+            "description": "PHP Standard Library",
+            "support": {
+                "issues": "https://github.com/azjezz/psl/issues",
+                "source": "https://github.com/azjezz/psl/tree/5.5.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/azjezz",
+                    "type": "github"
+                },
+                {
+                    "url": "https://github.com/veewee",
+                    "type": "github"
+                }
+            ],
+            "time": "2026-03-12T20:19:39+00:00"
+        },
+        {
+            "name": "maglnet/composer-require-checker",
+            "version": "4.22.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/maglnet/ComposerRequireChecker.git",
+                "reference": "17a5f1401d3bc993ec386a73d83253fa320f9559"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/maglnet/ComposerRequireChecker/zipball/17a5f1401d3bc993ec386a73d83253fa320f9559",
+                "reference": "17a5f1401d3bc993ec386a73d83253fa320f9559",
+                "shasum": ""
+            },
+            "require": {
+                "azjezz/psl": "^5.4.0",
+                "composer-runtime-api": "^2.0.0",
+                "ext-phar": "*",
+                "nikic/php-parser": "^5.7.0",
+                "php": "~8.4.0 || ~8.5.0",
+                "symfony/console": "^8.0.7",
+                "webmozart/glob": "^4.7.0"
+            },
+            "conflict": {
+                "revolt/event-loop": "< 1.0.8"
+            },
+            "require-dev": {
+                "doctrine/coding-standard": "^14.0.0",
                 "ext-zend-opcache": "*",
-                "phing/phing": "^3.0.1",
-                "phpstan/phpstan": "^2.1.19",
-                "phpunit/phpunit": "^11.5.27",
+                "phing/phing": "^3.1.2",
+                "php-standard-library/phpstan-extension": "^2.0.3",
+                "php-standard-library/psalm-plugin": "^2.3",
+                "phpstan/phpstan": "^2.1.40",
+                "phpunit/phpunit": "^12.5.14",
                 "psalm/plugin-phpunit": "^0.19.5",
-                "roave/infection-static-analysis-plugin": "^1.38.0",
-                "spatie/temporary-directory": "^2.3.0",
-                "vimeo/psalm": "^6.13.0"
+                "roave/infection-static-analysis-plugin": "^1.43.0",
+                "spatie/temporary-directory": "^2.3.1",
+                "vimeo/psalm": "^6.15.1"
             },
             "bin": [
                 "bin/composer-require-checker"
@@ -84,9 +166,9 @@
             ],
             "support": {
                 "issues": "https://github.com/maglnet/ComposerRequireChecker/issues",
-                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.17.0"
+                "source": "https://github.com/maglnet/ComposerRequireChecker/tree/4.22.0"
             },
-            "time": "2025-10-30T08:46:55+00:00"
+            "time": "2026-03-10T21:53:54+00:00"
         },
         {
             "name": "nikic/php-parser",
@@ -200,48 +282,112 @@
             "time": "2021-11-05T16:47:00+00:00"
         },
         {
-            "name": "symfony/console",
-            "version": "v7.4.7",
+            "name": "revolt/event-loop",
+            "version": "v1.0.8",
             "source": {
                 "type": "git",
-                "url": "https://github.com/symfony/console.git",
-                "reference": "e1e6770440fb9c9b0cf725f81d1361ad1835329d"
+                "url": "https://github.com/revoltphp/event-loop.git",
+                "reference": "b6fc06dce8e9b523c9946138fa5e62181934f91c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/console/zipball/e1e6770440fb9c9b0cf725f81d1361ad1835329d",
-                "reference": "e1e6770440fb9c9b0cf725f81d1361ad1835329d",
+                "url": "https://api.github.com/repos/revoltphp/event-loop/zipball/b6fc06dce8e9b523c9946138fa5e62181934f91c",
+                "reference": "b6fc06dce8e9b523c9946138fa5e62181934f91c",
                 "shasum": ""
             },
             "require": {
-                "php": ">=8.2",
-                "symfony/deprecation-contracts": "^2.5|^3",
-                "symfony/polyfill-mbstring": "~1.0",
-                "symfony/service-contracts": "^2.5|^3",
-                "symfony/string": "^7.2|^8.0"
+                "php": ">=8.1"
             },
-            "conflict": {
-                "symfony/dependency-injection": "<6.4",
-                "symfony/dotenv": "<6.4",
-                "symfony/event-dispatcher": "<6.4",
-                "symfony/lock": "<6.4",
-                "symfony/process": "<6.4"
+            "require-dev": {
+                "ext-json": "*",
+                "jetbrains/phpstorm-stubs": "^2019.3",
+                "phpunit/phpunit": "^9",
+                "psalm/phar": "^5.15"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-main": "1.x-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Revolt\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Aaron Piotrowski",
+                    "email": "aaron@trowski.com"
+                },
+                {
+                    "name": "Cees-Jan Kiewiet",
+                    "email": "ceesjank@gmail.com"
+                },
+                {
+                    "name": "Christian Lück",
+                    "email": "christian@clue.engineering"
+                },
+                {
+                    "name": "Niklas Keller",
+                    "email": "me@kelunik.com"
+                }
+            ],
+            "description": "Rock-solid event loop for concurrent PHP applications.",
+            "keywords": [
+                "async",
+                "asynchronous",
+                "concurrency",
+                "event",
+                "event-loop",
+                "non-blocking",
+                "scheduler"
+            ],
+            "support": {
+                "issues": "https://github.com/revoltphp/event-loop/issues",
+                "source": "https://github.com/revoltphp/event-loop/tree/v1.0.8"
+            },
+            "time": "2025-08-27T21:33:23+00:00"
+        },
+        {
+            "name": "symfony/console",
+            "version": "v8.0.7",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/symfony/console.git",
+                "reference": "15ed9008a4ebe2d6a78e4937f74e0c13ef2e618a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/symfony/console/zipball/15ed9008a4ebe2d6a78e4937f74e0c13ef2e618a",
+                "reference": "15ed9008a4ebe2d6a78e4937f74e0c13ef2e618a",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=8.4",
+                "symfony/polyfill-mbstring": "^1.0",
+                "symfony/service-contracts": "^2.5|^3",
+                "symfony/string": "^7.4|^8.0"
             },
             "provide": {
                 "psr/log-implementation": "1.0|2.0|3.0"
             },
             "require-dev": {
                 "psr/log": "^1|^2|^3",
-                "symfony/config": "^6.4|^7.0|^8.0",
-                "symfony/dependency-injection": "^6.4|^7.0|^8.0",
-                "symfony/event-dispatcher": "^6.4|^7.0|^8.0",
-                "symfony/http-foundation": "^6.4|^7.0|^8.0",
-                "symfony/http-kernel": "^6.4|^7.0|^8.0",
-                "symfony/lock": "^6.4|^7.0|^8.0",
-                "symfony/messenger": "^6.4|^7.0|^8.0",
-                "symfony/process": "^6.4|^7.0|^8.0",
-                "symfony/stopwatch": "^6.4|^7.0|^8.0",
-                "symfony/var-dumper": "^6.4|^7.0|^8.0"
+                "symfony/config": "^7.4|^8.0",
+                "symfony/dependency-injection": "^7.4|^8.0",
+                "symfony/event-dispatcher": "^7.4|^8.0",
+                "symfony/http-foundation": "^7.4|^8.0",
+                "symfony/http-kernel": "^7.4|^8.0",
+                "symfony/lock": "^7.4|^8.0",
+                "symfony/messenger": "^7.4|^8.0",
+                "symfony/process": "^7.4|^8.0",
+                "symfony/stopwatch": "^7.4|^8.0",
+                "symfony/var-dumper": "^7.4|^8.0"
             },
             "type": "library",
             "autoload": {
@@ -275,7 +421,7 @@
                 "terminal"
             ],
             "support": {
-                "source": "https://github.com/symfony/console/tree/v7.4.7"
+                "source": "https://github.com/symfony/console/tree/v8.0.7"
             },
             "funding": [
                 {
@@ -295,7 +441,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2026-03-06T14:06:20+00:00"
+            "time": "2026-03-06T14:06:22+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
@@ -875,64 +1021,6 @@
                 }
             ],
             "time": "2026-02-09T10:14:57+00:00"
-        },
-        {
-            "name": "webmozart/assert",
-            "version": "1.12.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/webmozarts/assert.git",
-                "reference": "9be6926d8b485f55b9229203f962b51ed377ba68"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/webmozarts/assert/zipball/9be6926d8b485f55b9229203f962b51ed377ba68",
-                "reference": "9be6926d8b485f55b9229203f962b51ed377ba68",
-                "shasum": ""
-            },
-            "require": {
-                "ext-ctype": "*",
-                "ext-date": "*",
-                "ext-filter": "*",
-                "php": "^7.2 || ^8.0"
-            },
-            "suggest": {
-                "ext-intl": "",
-                "ext-simplexml": "",
-                "ext-spl": ""
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "1.10-dev"
-                }
-            },
-            "autoload": {
-                "psr-4": {
-                    "Webmozart\\Assert\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Bernhard Schussek",
-                    "email": "bschussek@gmail.com"
-                }
-            ],
-            "description": "Assertions to validate method input/output with nice error messages.",
-            "keywords": [
-                "assert",
-                "check",
-                "validate"
-            ],
-            "support": {
-                "issues": "https://github.com/webmozarts/assert/issues",
-                "source": "https://github.com/webmozarts/assert/tree/1.12.1"
-            },
-            "time": "2025-10-29T15:56:20+00:00"
         },
         {
             "name": "webmozart/glob",

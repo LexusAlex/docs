@@ -6,11 +6,11 @@ ARG XDEBUG_VERSION=3.5.1
 ARG COMPOSER_VERSION=2.9.5
 
 # ПО
-RUN apk add --no-cache libpq-dev bash coreutils git linux-headers \
+RUN apk add --no-cache libpq-dev bash coreutils git linux-headers icu icu-dev \
     && docker-php-ext-configure pgsql -with-pgsql=/usr/local/pgsql \
     && git clone --branch $XDEBUG_VERSION --depth 1 https://github.com/xdebug/xdebug.git /usr/src/php/ext/xdebug \
     && docker-php-ext-configure xdebug --enable-xdebug-dev \
-    && docker-php-ext-install pdo_pgsql xdebug \
+    && docker-php-ext-install pdo_pgsql xdebug bcmath intl \
     && apk del git linux-headers
 
 # dev режим php

@@ -1,11 +1,11 @@
 {
     "type": "project",
-    "require-dev": {
-        "maglnet/composer-require-checker": "^4.17"
-    },
     "config": {
         "process-timeout": 0,
         "sort-packages": true,
         "bump-after-update": true
+    },
+    "require-dev": {
+        "maglnet/composer-require-checker": "^4.22"
     }
 }
