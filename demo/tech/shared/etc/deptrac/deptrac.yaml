@@ -1,0 +1,19 @@
+deptrac:
+  paths:
+    - ../../src
+    - ../../tests
+  exclude_files:
+    - '.*/vendor/.*'
+    - '.*/var/.*'
+  layers:
+    - name: Application
+      collectors:
+        - type: classLike
+          value: ^Shared\\Core\\(?!Test)
+    - name: Test
+      collectors:
+        - type: classLike
+          value: ^Shared\\Core\\Test
+  ruleset:
+    Application: []
+    Test: [Application]

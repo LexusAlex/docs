@@ -24,6 +24,7 @@
     "require-checker": "/tools/t/composer-require-checker/vendor/bin/composer-require-checker check --config-file=etc/composer-require-checker.json",
     "unused": "/tools/t/composer-unused/vendor/bin/composer-unused",
     "php-cs-fixer-dry-run": "/tools/t/php-cs-fixer/vendor/bin/php-cs-fixer fix --dry-run --config etc/.php-cs-fixer.php --diff --show-progress=bar",
-    "php-cs-fixer": "/tools/t/php-cs-fixer/vendor/bin/php-cs-fixer fix --config etc/.php-cs-fixer.php --diff --show-progress=bar"
+    "php-cs-fixer": "/tools/t/php-cs-fixer/vendor/bin/php-cs-fixer fix --config etc/.php-cs-fixer.php --diff --show-progress=bar",
+    "deptrac": "/tools/t/deptrac/vendor/bin/deptrac analyse --config-file=etc/deptrac/deptrac.yaml --report-uncovered --cache-file=var/cache/deptrac/.deptrac.cache"
   }
 }
