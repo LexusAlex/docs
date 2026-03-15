@@ -19,3 +19,5 @@ $(eval $(call DEFINE_PHP_TOOL,phpstan))
 $(eval $(call DEFINE_PHP_TOOL,require-checker))
 $(eval $(call DEFINE_PHP_TOOL,unused))
 $(eval $(call DEFINE_INFECTION))
+# Общая цель для проверки
+$(SERVICE_NAME)-all-checks: $(SERVICE_NAME)-phpunit $(SERVICE_NAME)-phpstan $(SERVICE_NAME)-psalm $(SERVICE_NAME)-require-checker $(SERVICE_NAME)-unused $(SERVICE_NAME)-infection

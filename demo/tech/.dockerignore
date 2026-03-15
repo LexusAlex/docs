@@ -43,6 +43,7 @@ api/vendor/
 shared/vendor/
 ui/vendor/
 tools/vendor/
+tools/t
 
 # Зависимости NPM (если есть в ui)
 ui/node_modules/

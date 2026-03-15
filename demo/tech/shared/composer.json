@@ -19,6 +19,8 @@
     "phpstan": "/tools/t/phpstan/vendor/bin/phpstan analyse -c etc/phpstan.neon",
     "psalm": "/tools/t/psalm/vendor/bin/psalm --config=etc/psalm.xml",
     "require-checker": "/tools/t/composer-require-checker/vendor/bin/composer-require-checker check --config-file=etc/composer-require-checker.json",
-    "unused": "/tools/t/composer-unused/vendor/bin/composer-unused"
+    "unused": "/tools/t/composer-unused/vendor/bin/composer-unused",
+    "fixer-dry-run": "tools/fixer/vendor/bin/php-cs-fixer fix --dry-run --config etc/.php-cs-fixer.php --diff --show-progress=bar",
+    "fixer": "tools/fixer/vendor/bin/php-cs-fixer fix --config etc/.php-cs-fixer.php --diff --show-progress=bar"
   }
 }

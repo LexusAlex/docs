@@ -4,6 +4,8 @@ FROM ${PHP_CLI_IMAGE}
 
 ARG XDEBUG_VERSION=3.5.1
 ARG COMPOSER_VERSION=2.9.5
+ARG UID=1000
+ARG GID=1000
 
 # ПО
 RUN apk add --no-cache libpq-dev bash coreutils git linux-headers icu icu-dev \
@@ -23,7 +25,7 @@ COPY docker/development/php-cli/conf.d /usr/local/etc/php/conf.d
 RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --filename=composer --version=$COMPOSER_VERSION --quiet
 
 # Пользователь
-RUN addgroup -g 1000 tech && adduser -u 1000 -G tech -s /bin/sh -D tech
+RUN addgroup -g $GID tech && adduser -u $UID -G tech -s /bin/sh -D tech
 
 # Директория
 WORKDIR /$SERVICE_NAME

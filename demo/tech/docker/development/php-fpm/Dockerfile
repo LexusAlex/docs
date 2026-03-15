@@ -4,6 +4,8 @@ FROM ${PHP_FPM_IMAGE}
 
 ARG XDEBUG_VERSION=3.5.1
 ARG COMPOSER_VERSION=2.9.5
+ARG UID=1000
+ARG GID=1000
 
 RUN apk add --no-cache --virtual .build-deps \
         # Зависимости для сборки
@@ -28,7 +30,7 @@ RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/bin --fil
 RUN mv $PHP_INI_DIR/php.ini-development $PHP_INI_DIR/php.ini
 
 # Пользователь
-RUN addgroup -g 1000 tech && adduser -u 1000 -G tech -s /bin/sh -D tech
+RUN addgroup -g $GID tech && adduser -u $UID -G tech -s /bin/sh -D tech
 
 # Директория
 WORKDIR /${SERVICE_NAME}

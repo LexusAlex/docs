@@ -10,12 +10,16 @@ PHP_FPM_IMAGE ?=php:8.5-fpm-alpine3.23
 PHP_CLI_IMAGE ?=php:8.5-cli-alpine3.23
 XDEBUG_VERSION ?=3.5.1
 COMPOSER_VERSION ?=2.9.5
+UID ?=1000
+GID ?=1000
 # Переменные для сборки
 BUILD_ARGS := --build-arg NGINX_IMAGE=$(NGINX_IMAGE) \
               --build-arg PHP_FPM_IMAGE=$(PHP_FPM_IMAGE) \
               --build-arg PHP_CLI_IMAGE=$(PHP_CLI_IMAGE) \
               --build-arg XDEBUG_VERSION=$(XDEBUG_VERSION) \
-              --build-arg COMPOSER_VERSION=$(COMPOSER_VERSION)
+              --build-arg COMPOSER_VERSION=$(COMPOSER_VERSION) \
+              --build-arg UID=$(UID) \
+              --build-arg GID=$(GID)
 
 # Передача команд в контейнер
 ARGS ?=

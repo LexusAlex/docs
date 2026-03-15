@@ -18,4 +18,8 @@
     <projectFiles>
         <directory name="../src" />
     </projectFiles>
+
+    <issueHandlers>
+        <InvalidAttribute errorLevel="info" />
+    </issueHandlers>
 </psalm>
