@@ -6,6 +6,7 @@ declare(strict_types=1);
  * @psalm-suppress UnusedClass
  * @psalm-suppress PropertyNotSetInConstructor
  */
+
 namespace Shared\Core\Test\Bootstrap\Environment;
 
 use Override;
@@ -18,6 +19,7 @@ use Shared\Core\Bootstrap\Environment;
  * @testdox Environment
  * @psalm-suppress PropertyNotSetInConstructor
  * @psalm-suppress MissingConstructor
+ * @internal
  */
 final class EnvironmentTest extends TestCase
 {
