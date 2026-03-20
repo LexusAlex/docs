@@ -6,6 +6,6 @@
         "bump-after-update": true
     },
     "require-dev": {
-        "maglnet/composer-require-checker": "^4.22"
+        "maglnet/composer-require-checker": "^4.24"
     }
 }
