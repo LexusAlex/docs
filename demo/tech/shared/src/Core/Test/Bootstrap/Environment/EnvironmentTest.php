@@ -23,6 +23,20 @@ use Shared\Core\Bootstrap\Environment;
  */
 final class EnvironmentTest extends TestCase
 {
+    private const TEST_VARS = [
+        'TEST_VAR',
+        'NULL_VAR',
+        'SPECIAL_VAR',
+        'UNICODE_VAR',
+        'NUMERIC_VAR',
+        'SPACED_VAR',
+        'EQUALS_VAR',
+        'NEWLINE_VAR',
+        'CASE_VAR',
+        'case_var',
+        'MULTI_VAR',
+        'EMPTY_VAR',
+    ];
     private Environment $environment;
 
     #[Override]
@@ -32,15 +46,24 @@ final class EnvironmentTest extends TestCase
         $this->environment = new Environment();
     }
 
+    #[Override]
+    protected function tearDown(): void
+    {
+        foreach (self::TEST_VARS as $var) {
+            putenv($var);
+        }
+        parent::tearDown();
+    }
+
     #[Test]
     public function getExistingEnvVariable(): void
     {
+        putenv('TEST_VAR');
         putenv('TEST_VAR=hello');
 
         $result = $this->environment->get('TEST_VAR');
 
         self::assertSame('hello', $result);
-        putenv('TEST_VAR');
     }
 
     #[Test]
@@ -80,83 +103,85 @@ final class EnvironmentTest extends TestCase
     #[Test]
     public function getEnvVariableSetWithoutValue(): void
     {
+        putenv('NULL_VAR');
         putenv('NULL_VAR=');
 
         $result = $this->environment->get('NULL_VAR', 'default');
 
         self::assertSame('', $result);
-        putenv('NULL_VAR');
     }
 
     #[Test]
     public function getEnvVariableWithSpecialCharacters(): void
     {
+        putenv('SPECIAL_VAR');
         putenv('SPECIAL_VAR=hello"world$`!@#%');
 
         $result = $this->environment->get('SPECIAL_VAR');
 
         self::assertSame('hello"world$`!@#%', $result);
-        putenv('SPECIAL_VAR');
     }
 
     #[Test]
     public function getEnvVariableWithUnicode(): void
     {
+        putenv('UNICODE_VAR');
         putenv('UNICODE_VAR=Привет мир 🌍');
 
         $result = $this->environment->get('UNICODE_VAR');
 
         self::assertSame('Привет мир 🌍', $result);
-        putenv('UNICODE_VAR');
     }
 
     #[Test]
     public function getEnvVariableWithNumericValue(): void
     {
+        putenv('NUMERIC_VAR');
         putenv('NUMERIC_VAR=12345');
 
         $result = $this->environment->get('NUMERIC_VAR');
 
         self::assertSame('12345', $result);
-        putenv('NUMERIC_VAR');
     }
 
     #[Test]
     public function getEnvVariableWithLeadingTrailingSpaces(): void
     {
+        putenv('SPACED_VAR');
         putenv('SPACED_VAR=  trimmed  ');
 
         $result = $this->environment->get('SPACED_VAR');
 
         self::assertSame('  trimmed  ', $result);
-        putenv('SPACED_VAR');
     }
 
     #[Test]
     public function getEnvVariableWithEqualsSign(): void
     {
+        putenv('EQUALS_VAR');
         putenv('EQUALS_VAR=key=value');
 
         $result = $this->environment->get('EQUALS_VAR');
 
         self::assertSame('key=value', $result);
-        putenv('EQUALS_VAR');
     }
 
     #[Test]
     public function getEnvVariableWithNewline(): void
     {
+        putenv('NEWLINE_VAR');
         putenv("NEWLINE_VAR=line1\nline2");
 
         $result = $this->environment->get('NEWLINE_VAR');
 
         self::assertSame("line1\nline2", $result);
-        putenv('NEWLINE_VAR');
     }
 
     #[Test]
     public function getCaseSensitiveEnvVariable(): void
     {
+        putenv('CASE_VAR');
+        putenv('case_var');
         putenv('CASE_VAR=upper');
         putenv('case_var=lower');
 
@@ -165,13 +190,12 @@ final class EnvironmentTest extends TestCase
 
         self::assertSame('upper', $upperResult);
         self::assertSame('lower', $lowerResult);
-        putenv('CASE_VAR');
-        putenv('case_var');
     }
 
     #[Test]
     public function getEnvVariableAfterMultiplePuts(): void
     {
+        putenv('MULTI_VAR');
         putenv('MULTI_VAR=first');
         $firstResult = $this->environment->get('MULTI_VAR');
 
@@ -180,17 +204,16 @@ final class EnvironmentTest extends TestCase
 
         self::assertSame('first', $firstResult);
         self::assertSame('second', $secondResult);
-        putenv('MULTI_VAR');
     }
 
     #[Test]
     public function getEmptyEnvVariable(): void
     {
+        putenv('EMPTY_VAR');
         putenv('EMPTY_VAR=');
 
         $result = $this->environment->get('EMPTY_VAR');
 
         self::assertSame('', $result);
-        putenv('EMPTY_VAR');
     }
 }
