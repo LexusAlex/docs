@@ -1,0 +1,31 @@
+Конфигурация - это просто файл который возвращает массив, например
+return [
+LoggerInterface::class => static function () {
+$file = __DIR__ . '/../../../../var/logs/' . PHP_SAPI . '/application.log';
+
+        $logger = new Logger('backend');
+
+        $logger->pushHandler(new RotatingFileHandler($file, 30));
+
+        return $logger;
+    },
+];
+Таких файлов может быть много они все лежат в папке Configuration в каждом подпроекте, включая shared и tools
+Каждый файл может лежать в папке соответствующем текущему окружению приложения
+По умолчанию это подпапка Configuration/common, но могут быть еще Configuration/development или Configuration/production
+
+Нужно сделать загрузчик конфигурации массивов в файле /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/ConfigurationLoader.php который будет работать по принципу
+Загружать конфигурацию из shared далее загружать из подпроекта где он запущен и объединять все в один массив например
+
+foreach ($modules as $nameModule => $module) {
+foreach ($module as $component) {
+$configuration[] = new PhpFileProvider(__DIR__ . "/../../{$nameModule}/{$component}/Configuration/common/*.php");
+$configuration[] = new PhpFileProvider(__DIR__ . "/../../{$nameModule}/{$component}/Configuration/" . environment('APPLICATION_ENVIRONMENT', 'production') . '/*.php');
+}
+}
+
+$aggregator = new ConfigAggregator($configuration);
+
+return $aggregator->getMergedConfig();
+
+ConfigurationLoader можно подключить в любом подпроекте. Для получения переменных окружения использовать класс /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/Environment.php

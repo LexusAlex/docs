@@ -4,7 +4,8 @@
     "putenv",
     "RuntimeException",
     "PHPUnit\\Framework\\Attributes\\Test",
-    "PHPUnit\\Framework\\TestCase"
+    "PHPUnit\\Framework\\TestCase",
+    "PHPUnit\\Framework\\Attributes\\DataProvider"
   ],
   "scan-files": []
 }

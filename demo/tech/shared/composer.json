@@ -13,7 +13,8 @@
     }
   },
   "require": {
-    "php": ">=8.5"
+    "php": ">=8.5",
+    "laminas/laminas-config-aggregator": "^1.19"
   },
   "scripts": {
     "phpunit": "/tools/t/phpunit/vendor/bin/phpunit --colors=always --configuration=etc/phpunit.xml",

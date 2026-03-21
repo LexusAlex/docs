@@ -31,4 +31,5 @@
 Пример выполнения команды в контейнере.
 
 - `make shared-composer ARGS='require --dev phpunit/phpunit'`
-- `make tools-composer ARGS='bin composer-require-checker require --dev maglnet/composer-require-checker'`
+- `make shared-composer ARGS='require laminas/laminas-config-aggregator'`
+- `make tools-composer ARGS='bin psalm remove --dev psalm/plugin-phpunit'`
