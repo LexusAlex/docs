@@ -38,7 +38,7 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
 
     private static function resolveProjectRoot(): string
     {
-        $path = self::$projectRoot ?? (new Environment())->get('CONFIG_PROJECT_ROOT');
+        $path = self::$projectRoot ?? new Environment()->get('CONFIG_PROJECT_ROOT');
 
         if (!is_dir($path)) {
             throw new RuntimeException('Project root path is not set or does not exist: ' . $path);
@@ -57,8 +57,8 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
 
         return array_merge(
             ...array_map(
-                static fn(string $base) => array_map(
-                    static fn(string $env) => new PhpFileProvider(sprintf(self::CONFIG_PATH_TEMPLATE, $base, $env)),
+                static fn (string $base) => array_map(
+                    static fn (string $env) => new PhpFileProvider(sprintf(self::CONFIG_PATH_TEMPLATE, $base, $env)),
                     $environments
                 ),
                 $paths

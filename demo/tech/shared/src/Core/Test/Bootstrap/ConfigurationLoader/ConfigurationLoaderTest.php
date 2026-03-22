@@ -304,10 +304,7 @@ final class ConfigurationLoaderTest extends TestCase
     private function getSection(array $config, string $key): array
     {
         self::assertArrayHasKey($key, $config);
-        /** @var array<mixed, mixed> $section */
-        $section = $config[$key];
-
-        return $section;
+        return (array)$config[$key];
     }
 
     private function setComplexEnvironment(string $environment): void

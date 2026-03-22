@@ -102,6 +102,7 @@ services:
         SERVICE_NAME: ui
     volumes:
       - ./ui:/ui
+      - ./shared:/shared
 networks:
   app-network:
     driver: bridge
