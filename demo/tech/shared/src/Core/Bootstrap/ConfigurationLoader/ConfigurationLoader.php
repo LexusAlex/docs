@@ -8,7 +8,7 @@ use Laminas\ConfigAggregator\ConfigAggregator;
 use Laminas\ConfigAggregator\PhpFileProvider;
 use Override;
 use RuntimeException;
-use Shared\Core\Bootstrap\Environment;
+use Shared\Core\Bootstrap\Environment\Environment;
 
 use function sprintf;
 

@@ -35,3 +35,4 @@
 - `make tools-composer ARGS='bin psalm remove --dev psalm/plugin-phpunit'`
 - `make api-php ARGS=public/index.php`
 - `make exec SERVICE=api-php-cli ARGS="ls -la /shared"`
+- `make api-php ARGS=public/index.php`

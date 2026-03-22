@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shared\Core\Bootstrap;
+namespace Shared\Core\Bootstrap\Environment;
 
 interface EnvironmentInterface
 {

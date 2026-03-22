@@ -7,13 +7,13 @@ declare(strict_types=1);
  * @psalm-suppress PropertyNotSetInConstructor
  */
 
-namespace Shared\Core\Test\Bootstrap\Environment;
+namespace Shared\Core\Test\Environment;
 
 use Override;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Shared\Core\Bootstrap\Environment;
+use Shared\Core\Bootstrap\Environment\Environment;
 
 /**
  * @testdox Environment
