@@ -1,11 +1,33 @@
-x-php-common: &php-common
-  environment:
-    APPLICATION_ENVIRONMENT: development
-    APPLICATION_DEBUG: 1
+x-env-common: &env-common
+  APPLICATION_ENVIRONMENT: development
+  APPLICATION_DEBUG: 1
+  CONFIG_SHARED_PATH: /shared
+
+x-env-api: &env-api
+  <<: *env-common
+  CONFIG_PROJECT_ROOT: /api
+
+x-env-shared: &env-shared
+  <<: *env-common
+  CONFIG_PROJECT_ROOT: /shared
+
+x-env-tools: &env-tools
+  <<: *env-common
+  CONFIG_PROJECT_ROOT: /tools
+
+x-env-ui: &env-ui
+  <<: *env-common
+  CONFIG_PROJECT_ROOT: /ui
+
+x-api-common: &api-common
   networks:
     - app-network
+
 services:
   api-nginx:
+    <<: *api-common
+    environment:
+      <<: *env-api
     build:
       context: .
       dockerfile: docker/development/nginx/Dockerfile
@@ -16,12 +38,13 @@ services:
       - "127.0.0.1:443:443"
     volumes:
       - ./api:/api
-    networks:
-      - app-network
+      - ./shared:/shared
     depends_on:
       - api-php-fpm
   api-php-fpm:
-    <<: *php-common
+    <<: *api-common
+    environment:
+      <<: *env-api
     build:
       context: .
       dockerfile: docker/development/php-fpm/Dockerfile
@@ -29,8 +52,11 @@ services:
         SERVICE_NAME: api
     volumes:
       - ./api:/api
+      - ./shared:/shared
   api-php-cli:
-    <<: *php-common
+    <<: *api-common
+    environment:
+      <<: *env-api
     build:
       context: .
       dockerfile: docker/development/php-cli/Dockerfile
@@ -38,8 +64,12 @@ services:
         SERVICE_NAME: api
     volumes:
       - ./api:/api
+      - ./shared:/shared
   shared-php-cli:
-    <<: *php-common
+    environment:
+      <<: *env-shared
+    networks:
+      - app-network
     build:
       context: .
       dockerfile: docker/development/php-cli/Dockerfile
@@ -49,7 +79,10 @@ services:
       - ./shared:/shared
       - ./tools:/tools
   tools-php-cli:
-    <<: *php-common
+    environment:
+      <<: *env-tools
+    networks:
+      - app-network
     build:
       context: .
       dockerfile: docker/development/php-cli/Dockerfile
@@ -58,7 +91,10 @@ services:
     volumes:
       - ./tools:/tools
   ui-php-cli:
-    <<: *php-common
+    environment:
+      <<: *env-ui
+    networks:
+      - app-network
     build:
       context: .
       dockerfile: docker/development/php-cli/Dockerfile

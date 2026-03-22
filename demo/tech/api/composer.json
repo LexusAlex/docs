@@ -1,6 +1,8 @@
 {
   "name": "tech/api",
   "type": "project",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
   "authors": [
     {
       "name": "Alexey Shmelev",

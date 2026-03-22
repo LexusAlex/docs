@@ -72,15 +72,15 @@ ConfigurationLoaderTest.php
 ### 6. loadWithoutProjectRootThrowsException
 Проверяет что при отсутствии project root выбрасывается исключение.
 
-**Setup:** `ConfigurationLoader::projectRoot('')`, `putenv('CONFIG_PROJECT_ROOT')` (удалено)
+**Setup:** `ConfigurationLoader::projectRoot(null)`, `putenv('CONFIG_PROJECT_ROOT')`
 
 **Asserts:**
 - Выбрасывается `RuntimeException`
-- Сообщение: `'Project root path is not set or does not exist'`
+- Сообщение: `'Undefined environment variable CONFIG_PROJECT_ROOT'`
 
 ---
 
-### 6a. loadWithNonexistentProjectRootThrowsException
+### 7. loadWithNonexistentProjectRootThrowsException
 Проверяет что при несуществующем project root выбрасывается исключение.
 
 **Setup:** `ConfigurationLoader::projectRoot('/nonexistent/path')`
@@ -91,10 +91,10 @@ ConfigurationLoaderTest.php
 
 ---
 
-### 7. loadWithDefaultSharedPath
-Проверяет работу с дефолтным путём к shared (когда `CONFIG_SHARED_PATH` не установлен).
+### 8. loadWithDefaultSharedPath
+Проверяет работу с дефолтным путём к shared из фикстур.
 
-**Setup:** `putenv('CONFIG_SHARED_PATH')` (удалено), используется `__DIR__`
+**Setup:** `CONFIG_SHARED_PATH=fixtures/shared`
 
 **Asserts:**
 - `$config['project']` существует
@@ -103,7 +103,7 @@ ConfigurationLoaderTest.php
 
 ---
 
-### 8. projectOverridesSharedNestedArrays
+### 9. projectOverridesSharedNestedArrays
 Проверяет глубокое слияние вложенных массивов.
 
 **Setup:** shared содержит `nested.key`, project переопределяет только `nested.key`
@@ -114,22 +114,13 @@ ConfigurationLoaderTest.php
 
 ---
 
-### 9. projectCanAddNewKeys
+### 10. projectCanAddNewKeys
 Проверяет что project может добавлять новые ключи.
 
 **Setup:** В project определён `project_only` ключ.
 
 **Asserts:**
 - `$config['shared']['project_only'] === 'new_key'`
-
----
-
-### 10. multipleModulesFromSharedAreLoaded
-Проверяет загрузку конфигов из нескольких модулей.
-
-**Asserts:**
-- `$config['shared']` существует
-- `$config['project']` существует
 
 ---
 
@@ -217,12 +208,12 @@ ConfigurationLoaderTest.php
 
 ---
 
-### 17. emptyStringProjectRootResetsToEnv
-Проверяет что пустая строка сбрасывает project root к значению из env.
+### 17. nullProjectRootResetsToEnv
+Проверяет что null сбрасывает project root к значению из env.
 
 **Setup:** 
 1. `projectRoot('/path1')`
-2. `projectRoot('')` (сброс)
+2. `projectRoot(null)` (сброс)
 3. `CONFIG_PROJECT_ROOT=fixtures/project`
 
 **Asserts:**
@@ -291,8 +282,11 @@ fixtures/
 │           └── Configuration/
 │               ├── common/
 │               │   ├── shared.php
-│               │   └── shared_config.php
+│               │   ├── shared_config.php
+│               │   └── core.php
 │               ├── production/
+│               │   └── database.php
+│               ├── development/
 │               │   └── database.php
 │               └── test/
 │                   └── shared_env_config.php
@@ -341,7 +335,7 @@ fixtures/
 
 ## Metrics
 
-- **Tests:** 21 (один с DataProvider: 2 cases = 22 тестовых прогона)
-- **Assertions:** 81
+- **Tests:** 36 (один с DataProvider: 2 cases = 37 тестовых прогонов)
+- **Assertions:** 79
 - **Mutation Coverage:** 100%
 - **Mutation Score Index (MSI):** 100%

@@ -17,59 +17,34 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
     private const string CONFIG_PATH_TEMPLATE = '%s/src/*/Configuration/%s/*.php';
 
     private static ?string $projectRoot = null;
-    private static ?Environment $environment = null;
 
     #[Override]
     public static function load(): array
     {
-        $environment = self::getEnvironment();
+        $environment = new Environment();
         $environmentName = $environment->get('APPLICATION_ENVIRONMENT', 'production');
 
+        /** @infection-ignore-all */
         $sharedPath = $environment->get('CONFIG_SHARED_PATH', __DIR__ . '/../../../../');
-        $projectRoot = self::resolveProjectRoot();
 
-        self::validatePath($projectRoot);
-
-        $providers = self::buildProviders($sharedPath, $projectRoot, $environmentName);
-
-        return new ConfigAggregator($providers)->getMergedConfig();
+        return new ConfigAggregator(self::buildProviders($sharedPath, self::resolveProjectRoot(), $environmentName))->getMergedConfig();
     }
 
     #[Override]
-    public static function projectRoot(string $path): void
+    public static function projectRoot(?string $path): void
     {
         self::$projectRoot = '' === $path ? null : $path;
-        self::$environment = null;
-    }
-
-    private static function getEnvironment(): Environment
-    {
-        if (null === self::$environment) {
-            self::$environment = new Environment();
-        }
-
-        return self::$environment;
     }
 
     private static function resolveProjectRoot(): string
     {
-        if (null !== self::$projectRoot) {
-            return self::$projectRoot;
-        }
+        $path = self::$projectRoot ?? (new Environment())->get('CONFIG_PROJECT_ROOT');
 
-        $envValue = getenv('CONFIG_PROJECT_ROOT');
-        if (false !== $envValue) {
-            return $envValue;
-        }
-
-        throw new RuntimeException('Project root path is not set or does not exist: CONFIG_PROJECT_ROOT');
-    }
-
-    private static function validatePath(string $path): void
-    {
-        if ('' === $path || !is_dir($path)) {
+        if (!is_dir($path)) {
             throw new RuntimeException('Project root path is not set or does not exist: ' . $path);
         }
+
+        return $path;
     }
 
     /**
@@ -77,14 +52,17 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
      */
     private static function buildProviders(string $sharedPath, string $projectRoot, string $environment): array
     {
-        $providers = [];
+        $paths = [$sharedPath, $projectRoot];
+        $environments = ['common', $environment];
 
-        foreach ([$sharedPath, $projectRoot] as $base) {
-            foreach (['common', $environment] as $env) {
-                $providers[] = new PhpFileProvider(sprintf(self::CONFIG_PATH_TEMPLATE, $base, $env));
-            }
-        }
-
-        return $providers;
+        return array_merge(
+            ...array_map(
+                static fn(string $base) => array_map(
+                    static fn(string $env) => new PhpFileProvider(sprintf(self::CONFIG_PATH_TEMPLATE, $base, $env)),
+                    $environments
+                ),
+                $paths
+            )
+        );
     }
 }

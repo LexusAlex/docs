@@ -1,3 +1,4 @@
+---------------------
 Конфигурация - это просто файл который возвращает массив, например
 return [
 LoggerInterface::class => static function () {
@@ -29,3 +30,4 @@ $aggregator = new ConfigAggregator($configuration);
 return $aggregator->getMergedConfig();
 
 ConfigurationLoader можно подключить в любом подпроекте. Для получения переменных окружения использовать класс /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/Environment.php
+---------------------

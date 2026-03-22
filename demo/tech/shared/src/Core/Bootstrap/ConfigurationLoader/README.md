@@ -19,10 +19,10 @@ ConfigurationLoader::load()
 ┌─────────────────────────────────────────┐
 │  2. Строит список путей для загрузки    │
 │     Порядок загрузки (приоритет):       │
-│     1. shared/common/*.php   (низкий)   │
-│     2. shared/{env}/*.php               │
-│     3. project/common/*.php (высокий)   │
-│     4. project/{env}/*.php              │
+│     1. shared/common/*.php   (низкий)  │
+│     2. shared/{env}/*.php              │
+│     3. project/common/*.php (высокий)  │
+│     4. project/{env}/*.php             │
 └─────────────────────────────────────────┘
          │
          ▼
@@ -46,7 +46,7 @@ ConfigurationLoader::load()
 | Переменная | По умолчанию | Описание |
 |------------|--------------|----------|
 | `APPLICATION_ENVIRONMENT` | `production` | Окружение: `common`, `development`, `production`, `test` |
-| `CONFIG_SHARED_PATH` | `__DIR__ . '/../../../'` | Путь к папке shared |
+| `CONFIG_SHARED_PATH` | `__DIR__ . '/../../../../'` | Путь к папке shared |
 | `CONFIG_PROJECT_ROOT` | — | Путь к проекту (api/ui/tools) |
 
 ## Использование
@@ -175,28 +175,28 @@ return [
 ## Класс
 
 ```php
-namespace Shared\Core\Bootstrap;
+namespace Shared\Core\Bootstrap\ConfigurationLoader;
 
 final class ConfigurationLoader implements ConfigurationLoaderInterface
 {
     /**
      * Загружает и объединяет все конфигурации
      * @return array<mixed, mixed>
-     * @throws RuntimeException если project root не установлен или не существует
+     * @throws RuntimeException если project root не существует
      */
     public static function load(): array;
 
     /**
      * Устанавливает путь к корню проекта.
-     * Пустая строка сбрасывает к значению из CONFIG_PROJECT_ROOT
+     * null сбрасывает к значению из CONFIG_PROJECT_ROOT
      */
-    public static function projectRoot(string $path): void;
+    public static function projectRoot(?string $path): void;
 }
 ```
 
 ## Особенности реализации
 
-- **Lazy Environment**: экземпляр `Environment` создаётся один раз и переиспользуется
-- **Валидация путей**: `load()` проверяет существование project root перед загрузкой
+- **Stateless Environment**: экземпляр `Environment` создаётся при каждом вызове
+- **Валидация в resolveProjectRoot**: путь проверяется на существование перед загрузкой
 - **Приоритет projectRoot()**: если установлен через метод, переменная `CONFIG_PROJECT_ROOT` игнорируется
-- **Сброс через пустую строку**: `projectRoot('')` сбрасывает статику и читает из env
+- **Сброс через null**: `projectRoot(null)` сбрасывает статику и читает из env
