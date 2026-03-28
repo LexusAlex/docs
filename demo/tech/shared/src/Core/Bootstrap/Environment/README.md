@@ -69,6 +69,26 @@ getenv($name)
 └─────────────────┘
 ```
 
-## Примеры в коде
+## EnvironmentProductionChecker
 
-См. тесты: `src/Core/Test/Bootstrap/Environment/EnvironmentTest.php`
+Класс для проверки production-окружения.
+
+### Использование
+
+```php
+$checker = new EnvironmentProductionChecker();
+
+if ($checker->isProduction()) {
+    // production-логика
+}
+```
+
+### Логика работы
+
+- Если `APPLICATION_ENVIRONMENT` не установлена → возвращает `true` (по умолчанию production)
+- Если `APPLICATION_ENVIRONMENT=production` → возвращает `true`
+- Иначе → возвращает `false`
+
+### Тесты
+
+См. тесты: `src/Core/Test/Bootstrap/Environment/EnvironmentProductionCheckerTest.php`

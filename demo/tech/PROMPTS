@@ -110,3 +110,16 @@ return [
 ];
 
 -----------------
+У меня 4 подпроекта shared api ui tools. в подпроекте shared используется php-di контейнер у него есть опция кеширования enableCompilation
+Так же для объединения конфигурации используется laminas/laminas-config-aggregator там есть тоже возможность кеширования конфигурации
+$aggregator = new ConfigAggregator(
+    [
+        new ArrayProvider([ConfigAggregator::ENABLE_CACHE => true]),
+        new PhpFileProvider('*.global.php'),
+    ],
+    'data/config-cache.php'
+);
+Стоил ли для production окружения что-то тут использовать
+Для проверки production окружения используй класс /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/Environment/EnvironmentProductionChecker.php
+
+-----------------

@@ -8,4 +8,4 @@ use Shared\Core\Bootstrap\Container\ContainerFactory;
 
 $container = new ContainerFactory()->create();
 
-print_r($container->get('shared'));
+print_r($container);

@@ -29,3 +29,21 @@
     Что тестирует: Повторный вызов putenv с новым значением корректно обновляет значение.
 15. getEmptyEnvVariable (строка 211)
     Что тестирует: Пустое значение переменной (VAR=) возвращает пустую строку.
+
+## EnvironmentProductionCheckerTest
+
+Объяснение каждого теста:
+1. isProductionWhenEnvNotSet (строка 41)
+   Что тестирует: Когда APPLICATION_ENVIRONMENT не установлена, возвращает true (по умолчанию production).
+2. isProductionWhenSetToProduction (строка 52)
+   Что тестирует: Когда APPLICATION_ENVIRONMENT=production, возвращает true.
+3. isProductionWhenSetToDevelopment (строка 63)
+   Что тестирует: Когда APPLICATION_ENVIRONMENT=development, возвращает false.
+4. isProductionWhenSetToStaging (строка 74)
+   Что тестирует: Когда APPLICATION_ENVIRONMENT=staging, возвращает false.
+5. isProductionWhenSetToLocal (строка 85)
+   Что тестирует: Когда APPLICATION_ENVIRONMENT=local, возвращает false.
+6. isProductionIsCaseSensitive (строка 96)
+   Что тестирует: Проверка регистрозависимости — 'Production' ≠ 'production'.
+7. isProductionWhenSetToEmptyString (строка 107)
+   Что тестирует: Пустая строка в качестве значения не считается production.
