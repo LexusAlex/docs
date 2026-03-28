@@ -95,10 +95,11 @@ final class ConfigurationLoaderTest extends TestCase
     #[Test]
     public function loadWithNonexistentProjectRootThrowsException(): void
     {
-        ConfigurationLoader::projectRoot('/nonexistent/path');
+        $nonexistentPath = sys_get_temp_dir() . '/nonexistent_' . uniqid();
+        ConfigurationLoader::projectRoot($nonexistentPath);
 
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Project root path is not set or does not exist: /nonexistent/path');
+        $this->expectExceptionMessage('Project root path is not set or does not exist: ' . $nonexistentPath);
 
         $this->loadConfig();
     }
@@ -160,9 +161,7 @@ final class ConfigurationLoaderTest extends TestCase
 
         self::assertSame($expectedHost, $database['host']);
         self::assertSame($debug, $database['debug']);
-        if ('production' === $environment) {
-            self::assertTrue($ssl);
-        }
+        self::assertSame($ssl, $database['ssl'] ?? false);
     }
 
     /**
@@ -225,17 +224,16 @@ final class ConfigurationLoaderTest extends TestCase
 
         $config = $this->loadConfig();
 
-        self::assertArrayHasKey('project', $config);
-        self::assertArrayHasKey('shared', $config);
+        $project = $this->getSection($config, 'project');
+        self::assertSame('project_value', $project['key']);
     }
 
     #[Test]
-    public function emptyStringProjectRootResetsToEnv(): void
+    public function emptyStringProjectRootFallsBackToEnvironmentVariable(): void
     {
+        putenv('CONFIG_PROJECT_ROOT=' . $this->fixturesPath . '/project');
         ConfigurationLoader::projectRoot($this->fixturesPath . '/project');
         ConfigurationLoader::projectRoot('');
-
-        putenv('CONFIG_PROJECT_ROOT=' . $this->fixturesPath . '/project');
 
         $config = $this->loadConfig();
 

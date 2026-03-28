@@ -83,11 +83,11 @@ ConfigurationLoaderTest.php
 ### 7. loadWithNonexistentProjectRootThrowsException
 Проверяет что при несуществующем project root выбрасывается исключение.
 
-**Setup:** `ConfigurationLoader::projectRoot('/nonexistent/path')`
+**Setup:** `ConfigurationLoader::projectRoot(sys_get_temp_dir() . '/nonexistent_' . uniqid())`
 
 **Asserts:**
 - Выбрасывается `RuntimeException`
-- Сообщение: `'Project root path is not set or does not exist'`
+- Сообщение: `'Project root path is not set or does not exist: <temp>/nonexistent_<unique>'`
 
 ---
 
@@ -200,24 +200,23 @@ ConfigurationLoaderTest.php
 ### 16. projectRootMethodTakesPrecedence
 Проверяет что метод `projectRoot()` приоритетнее переменной окружения.
 
-**Setup:** `CONFIG_PROJECT_ROOT=/custom/path`, но `projectRoot()` указывает на реальный путь
+**Setup:** `CONFIG_PROJECT_ROOT=/custom/path`, но `projectRoot()` указывает на реальный путь `fixtures/project`
 
 **Asserts:**
-- `$config['project']` существует
-- `$config['shared']` существует
+- `$config['project']['key'] === 'project_value'`
 
 ---
 
-### 17. nullProjectRootResetsToEnv
-Проверяет что null сбрасывает project root к значению из env.
+### 17. emptyStringProjectRootFallsBackToEnvironmentVariable
+Проверяет что пустая строка сбрасывает project root к значению из env.
 
 **Setup:** 
-1. `projectRoot('/path1')`
-2. `projectRoot(null)` (сброс)
-3. `CONFIG_PROJECT_ROOT=fixtures/project`
+1. `CONFIG_PROJECT_ROOT=fixtures/project`
+2. `projectRoot('/path1')`
+3. `projectRoot('')` (сброс)
 
 **Asserts:**
-- `$config['project']` существует
+- `$config['project']` существует (загружен из env)
 
 ---
 
@@ -336,6 +335,6 @@ fixtures/
 ## Metrics
 
 - **Tests:** 36 (один с DataProvider: 2 cases = 37 тестовых прогонов)
-- **Assertions:** 79
+- **Assertions:** 80
 - **Mutation Coverage:** 100%
 - **Mutation Score Index (MSI):** 100%
