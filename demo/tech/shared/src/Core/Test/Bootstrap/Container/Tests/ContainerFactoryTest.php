@@ -43,8 +43,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function createReturnsContainer(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         self::assertInstanceOf(ContainerInterface::class, $container);
         self::assertInstanceOf(Container::class, $container);
@@ -53,8 +52,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function canGetSimpleValueFromContainer(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var string $value */
         $value = $container->get('test.value');
@@ -65,8 +63,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function canGetServiceWithDependencies(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var TestService $service */
         $service = $container->get(TestService::class);
@@ -78,8 +75,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function containerReturnsSameInstance(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var TestService $service1 */
         $service1 = $container->get(TestService::class);
@@ -92,8 +88,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function hasReturnsTrueForRegisteredService(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         self::assertTrue($container->has(TestService::class));
     }
@@ -101,8 +96,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function hasReturnsTrueForRegisteredValue(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         self::assertTrue($container->has('test.value'));
     }
@@ -110,8 +104,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function hasReturnsFalseForUnregisteredService(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         self::assertFalse($container->has('NonExistentService'));
     }
@@ -119,8 +112,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function throwsExceptionWhenServiceNotFound(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         $this->expectException(NotFoundException::class);
 
@@ -128,22 +120,20 @@ final class ContainerFactoryTest extends TestCase
     }
 
     #[Test]
-    public function productionEnvironmentLoadsProductionConfig(): void
+    public function productionEnvironmentLoadsDifferentConfig(): void
     {
-        putenv('APPLICATION_ENVIRONMENT=production');
-        ConfigurationLoader::projectRoot($this->fixturesPath . '/configs');
+        $container = $this->createProductionContainer();
 
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        /** @var string $productionValue */
+        $productionValue = $container->get('test.value');
 
-        self::assertTrue($container->has('test.value'));
+        self::assertSame('production_value', $productionValue);
     }
 
     #[Test]
     public function canGetNestedDependentService(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var DependentService $service */
         $service = $container->get(DependentService::class);
@@ -156,8 +146,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function canGetDeepNestedDependentService(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var DeepDependentService $service */
         $service = $container->get(DeepDependentService::class);
@@ -170,8 +159,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function canGetStringConfig(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var string $value */
         $value = $container->get('test.config_string');
@@ -182,8 +170,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function canGetIntConfig(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var int $value */
         $value = $container->get('test.config_int');
@@ -194,8 +181,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function canGetFloatConfig(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var float $value */
         $value = $container->get('test.config_float');
@@ -206,8 +192,7 @@ final class ContainerFactoryTest extends TestCase
     #[Test]
     public function canGetBoolConfig(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var bool $value */
         $value = $container->get('test.config_bool');
@@ -216,10 +201,20 @@ final class ContainerFactoryTest extends TestCase
     }
 
     #[Test]
+    public function canGetFalseBoolConfig(): void
+    {
+        $container = $this->createProductionContainer();
+
+        /** @var bool $value */
+        $value = $container->get('test.config_bool');
+
+        self::assertFalse($value);
+    }
+
+    #[Test]
     public function canGetArrayConfig(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var array<string, mixed> $value */
         $value = $container->get('test.config_array');
@@ -230,10 +225,20 @@ final class ContainerFactoryTest extends TestCase
     }
 
     #[Test]
+    public function canGetEmptyArrayConfig(): void
+    {
+        $container = $this->createProductionContainer();
+
+        /** @var array<mixed, mixed> $value */
+        $value = $container->get('test.config_empty_array');
+
+        self::assertSame([], $value);
+    }
+
+    #[Test]
     public function canGetNullConfig(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var mixed $value */
         $value = $container->get('test.config_null');
@@ -242,22 +247,65 @@ final class ContainerFactoryTest extends TestCase
     }
 
     #[Test]
+    public function canGetZeroIntConfig(): void
+    {
+        $container = $this->createProductionContainer();
+
+        /** @var int $value */
+        $value = $container->get('test.config_zero');
+
+        self::assertSame(0, $value);
+    }
+
+    #[Test]
+    public function canGetNegativeIntConfig(): void
+    {
+        $container = $this->createProductionContainer();
+
+        /** @var int $value */
+        $value = $container->get('test.config_negative_int');
+
+        self::assertSame(-42, $value);
+    }
+
+    #[Test]
+    public function canGetNegativeFloatConfig(): void
+    {
+        $container = $this->createProductionContainer();
+
+        /** @var float $value */
+        $value = $container->get('test.config_negative_float');
+
+        self::assertSame(-3.14, $value);
+    }
+
+    #[Test]
+    public function canGetEmptyStringConfig(): void
+    {
+        $container = $this->createProductionContainer();
+
+        /** @var string $value */
+        $value = $container->get('test.config_empty_string');
+
+        self::assertSame('', $value);
+    }
+
+    #[Test]
     public function autowiringCreatesServiceWithoutFactory(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var AutowireableService $service */
         $service = $container->get(AutowireableService::class);
 
         self::assertInstanceOf(AutowireableService::class, $service);
+        self::assertSame('autowireable', $service->getName());
     }
 
     #[Test]
     public function autowiringInjectsConstructorDependencies(): void
     {
-        $factory = new ContainerFactory();
-        $container = $factory->create();
+        $container = $this->createContainer();
 
         /** @var AutowireableWithDependency $service */
         $service = $container->get(AutowireableWithDependency::class);
@@ -265,6 +313,28 @@ final class ContainerFactoryTest extends TestCase
         self::assertInstanceOf(AutowireableWithDependency::class, $service);
         self::assertInstanceOf(TestService::class, $service->getTestService());
         self::assertSame('from_config', $service->getTestService()->getValue());
+    }
+
+    #[Test]
+    public function autowiringThrowsForNonExistentClass(): void
+    {
+        $container = $this->createContainer();
+
+        $this->expectException(NotFoundException::class);
+
+        $container->get('NonExistentClass');
+    }
+
+    private function createContainer(): ContainerInterface
+    {
+        return new ContainerFactory()->create();
+    }
+
+    private function createProductionContainer(): ContainerInterface
+    {
+        putenv('APPLICATION_ENVIRONMENT=production');
+        ConfigurationLoader::projectRoot($this->fixturesPath . '/configs');
+        return new ContainerFactory()->create();
     }
 
     private function resetEnvironment(): void

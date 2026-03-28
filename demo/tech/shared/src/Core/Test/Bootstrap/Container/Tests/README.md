@@ -8,64 +8,69 @@
 make shared-phpunit
 ```
 
-## Тестовые кейсы
+## Тестовые кейсы (23)
 
 ### createReturnsContainer
 Проверяет, что `create()` возвращает объект, реализующий `Psr\Container\ContainerInterface` и `DI\Container`.
 
 ### canGetSimpleValueFromContainer
-Проверяет получение простого значения (строки) из контейнера по строковому ключу.
+Проверяет получение простого значения (строки) из контейнера.
 
 ### canGetServiceWithDependencies
-Проверяет получение сервиса, зарегистрированного через фабрику. Также проверяет, что фабрика корректно инжектирует зависимости из контейнера.
+Проверяет получение сервиса через фабрику с внедрением зависимостей.
 
 ### containerReturnsSameInstance
-Проверяет, что контейнер возвращает тот же экземпляр при повторном запросе сервиса (singleton behavior по умолчанию в PHP-DI).
+Проверяет, что контейнер возвращает тот же экземпляр (singleton).
 
 ### hasReturnsTrueForRegisteredService
-Проверяет, что `has()` возвращает `true` для зарегистрированного сервиса.
+Проверяет `has()` для зарегистрированного сервиса.
 
 ### hasReturnsTrueForRegisteredValue
-Проверяет, что `has()` возвращает `true` для простого значения (конфига).
+Проверяет `has()` для простого значения.
 
 ### hasReturnsFalseForUnregisteredService
-Проверяет, что `has()` возвращает `false` для несуществующего сервиса.
+Проверяет `has()` для несуществующего сервиса.
 
 ### throwsExceptionWhenServiceNotFound
-Проверяет, что при вызове `get()` для несуществующего сервиса выбрасывается `DI\NotFoundException`.
+Проверяет исключение при запросе несуществующего сервиса.
 
-### productionEnvironmentLoadsProductionConfig
-Проверяет, что при смене окружения (production) загружаются соответствующие конфиги.
+### productionEnvironmentLoadsDifferentConfig
+Проверяет, что production-конфиг отличается от test-конфига.
 
 ### canGetNestedDependentService
-Проверяет получение сервиса с зависимостью от другого сервиса (A → B).
+Проверяет вложенные зависимости (A → B).
 
 ### canGetDeepNestedDependentService
-Проверяет получение сервиса с глубокой вложенностью (A → B → C), а также использование конфига в конструкторе.
+Проверяет глубокую вложенность (A → B → C + конфиг).
 
-### canGetStringConfig
-Проверяет получение строкового конфига.
+### Типы конфигов
+- `canGetStringConfig` - строка
+- `canGetIntConfig` - положительное число
+- `canGetFloatConfig` - положительное число с плавающей точкой
+- `canGetBoolConfig` - true
+- `canGetFalseBoolConfig` - false
 
-### canGetIntConfig
-Проверяет получение числового конфига (int).
+### Boundary значения
+- `canGetZeroIntConfig` - ноль
+- `canGetNegativeIntConfig` - отрицательное число
+- `canGetNegativeFloatConfig` - отрицательное число с плавающей точкой
+- `canGetEmptyArrayConfig` - пустой массив
+- `canGetEmptyStringConfig` - пустая строка
+- `canGetNullConfig` - null
 
-### canGetFloatConfig
-Проверяет получение конфига с плавающей точкой (float).
+### Autowiring
+- `autowiringCreatesServiceWithoutFactory` - создание без фабрики
+- `autowiringInjectsConstructorDependencies` - внедрение зависимостей
+- `autowiringThrowsForNonExistentClass` - исключение для несуществующего класса
 
-### canGetBoolConfig
-Проверяет получение булева конфига.
+## Helper методы
 
-### canGetArrayConfig
-Проверяет получение массива из конфига.
+```php
+private function createContainer(): ContainerInterface
+private function createProductionContainer(): ContainerInterface
+```
 
-### canGetNullConfig
-Проверяет получение null из конфига.
-
-### autowiringCreatesServiceWithoutFactory
-Проверяет, что PHP-DI может создать сервис без явной фабрики (по имени класса).
-
-### autowiringInjectsConstructorDependencies
-Проверяет, что autowiring корректно инжектирует зависимости в конструктор сервиса.
+Используются для создания контейнера в test окружении и production окружении соответственно.
 
 ## Структура
 

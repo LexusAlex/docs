@@ -13,7 +13,7 @@ Container/
 │   ├── AutowireableService.php
 │   ├── AutowireableWithDependency.php
 │   └── README.md
-├── Tests/                        # Тесты
+├── Tests/                        # Тесты (23 кейса)
 │   ├── ContainerFactoryTest.php
 │   └── README.md
 └── fixtures/                     # Конфигурации
@@ -24,27 +24,35 @@ Container/
             └── services.php
 ```
 
-## Services
+## Покрытие тестов
 
-Тестовые сервисы для проверки:
-- Базовое получение сервиса
-- Вложенные зависимости (A → B)
-- Глубокая вложенность (A → B → C)
-- Autowiring без фабрики
-- Autowiring с зависимостями
-
-## Tests
-
-Unit-тесты для `ContainerFactory`:
+### Базовое
 - Создание контейнера
 - Получение значений и сервисов
-- Проверка наличия (has)
-- Обработка исключений
-- Разные типы конфигов
+
+### Зависимости
+- Вложенные (A → B)
+- Глубокие (A → B → C)
 - Autowiring
 
-## Fixtures
+### Конфиги
+- string, int, float, bool
+- true/false, 0, negative, null
+- array (включая пустой)
+- empty string
 
-Конфигурационные файлы, имитирующие структуру проекта:
-- `common/` - общие конфиги
-- `production/` - конфиги для production окружения
+### Поведение
+- Singleton (тот же экземпляр)
+- has() для существующих/несуществующих
+- Исключения при отсутствии сервиса
+
+### Окружения
+- test vs production конфиги
+
+## Запуск тестов
+
+```bash
+make shared-phpunit     # PHPUnit
+make shared-phpstan     # PHPStan
+make shared-psalm       # Psalm
+```
