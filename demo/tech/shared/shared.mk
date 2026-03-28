@@ -7,5 +7,10 @@ shared-php:
 	$(call RUN_IN_SERVICE,$(SHARED_SERVICE),php $(USER_ARGS))
 shared-composer:
 	$(call RUN_IN_SERVICE,$(SHARED_SERVICE),composer $(USER_ARGS))
-
+shared-composer-dump:
+	$(call RUN_IN_SERVICE,$(API_SERVICE),composer dump-autoload)
+shared-composer-update:
+	$(call RUN_IN_SERVICE,$(API_SERVICE),composer update)
+shared-composer-install:
+	$(call RUN_IN_SERVICE,$(API_SERVICE),composer install)
 SERVICE_NAME :=

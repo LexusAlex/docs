@@ -32,7 +32,26 @@
 
 - `make shared-composer ARGS='require --dev phpunit/phpunit'`
 - `make shared-composer ARGS='require laminas/laminas-config-aggregator'`
+- `make shared-composer ARGS='require php-di/php-di'`
 - `make tools-composer ARGS='bin psalm remove --dev psalm/plugin-phpunit'`
 - `make api-php ARGS=public/index.php`
 - `make exec SERVICE=api-php-cli ARGS="ls -la /shared"`
 - `make api-php ARGS=public/index.php`
+
+# Команды
+
+# shared
+
+- shared-all-checks        
+- shared-deptrac           
+- shared-php               
+- shared-phpstan           
+- shared-phpunit-coverage  
+- shared-require-checker   
+- shared-unused
+- shared-composer          
+- shared-infection         
+- shared-php-cs-fixer      
+- shared-phpunit           
+- shared-psalm             
+- shared-shell 

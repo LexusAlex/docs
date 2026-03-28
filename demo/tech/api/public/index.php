@@ -4,8 +4,8 @@ declare(strict_types=1);
 require __DIR__ . '/../../shared/vendor/autoload.php';
 require __DIR__ . '/../vendor/autoload.php';
 
-use Shared\Core\Bootstrap\ConfigurationLoader\ConfigurationLoader;
+use Shared\Core\Bootstrap\Container\ContainerFactory;
 
-$config = ConfigurationLoader::load();
+$container = new ContainerFactory()->create();
 
-print_r($config);
+print_r($container->get('shared'));

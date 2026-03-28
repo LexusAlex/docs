@@ -5,7 +5,9 @@
     "RuntimeException",
     "PHPUnit\\Framework\\Attributes\\Test",
     "PHPUnit\\Framework\\TestCase",
-    "PHPUnit\\Framework\\Attributes\\DataProvider"
+    "PHPUnit\\Framework\\Attributes\\DataProvider",
+    "Psr\\Container\\ContainerInterface"
+
   ],
   "scan-files": []
 }

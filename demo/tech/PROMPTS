@@ -31,3 +31,82 @@ return $aggregator->getMergedConfig();
 
 ConfigurationLoader можно подключить в любом подпроекте. Для получения переменных окружения использовать класс /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/Environment.php
 ---------------------
+У меня 4 подпроекта shared api ui tools. Класс /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/ConfigurationLoader/ConfigurationLoader.php поставляет dependencies то есть массив зависимостей. Нужно его положить в контейнер внедрения зависимостей и доставать зависимости оттуда по запросу
+
+Примерно как я это вижу использовать
+
+$builder = new ContainerBuilder();
+$builder->addDefinitions($dependencies);
+return $builder->build();
+
+Где $dependencies это массив зависимостей его поставяляет класс /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/ConfigurationLoader/ConfigurationLoader.php
+
+Тут я спользую php-di DI\ContainerBuilder
+
+Возможно есть другие более лучшие решения для этой задачи
+
+<?php
+
+declare(strict_types=1);
+
+use App\Core\Handlers\Error\LogErrorHandler;
+use App\Core\Main\Environment;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Log\LoggerInterface;
+use Slim\Handlers\ErrorHandler;
+use Slim\Interfaces\CallableResolverInterface;
+use Slim\Middleware\ErrorMiddleware;
+
+Примерный конфиг
+return [
+    ErrorMiddleware::class => static function (ContainerInterface $container): ErrorMiddleware {
+        /** @var CallableResolverInterface $callableResolver */
+        $callableResolver = $container->get(CallableResolverInterface::class);
+        /** @var ResponseFactoryInterface $responseFactory */
+        $responseFactory = $container->get(ResponseFactoryInterface::class);
+
+        $middleware = new ErrorMiddleware(
+            $callableResolver,
+            $responseFactory,
+            (bool)Environment::env('APPLICATION_DEBUG'),
+            true,
+            true
+        );
+
+        /** @var LoggerInterface $logger */
+        $logger = $container->get(LoggerInterface::class);
+
+        $middleware->setDefaultErrorHandler(
+            new LogErrorHandler($callableResolver, $responseFactory, $logger),
+        );
+
+        /**
+         * @var ErrorHandler $defaultHandler
+         */
+        $defaultHandler = $middleware->getDefaultErrorHandler();
+
+        $defaultHandler->forceContentType('application/json');
+
+        return $middleware;
+    },
+];
+
+или просто
+return [
+    'database' => [
+        'host' => 'localhost',
+        'port' => 3306,
+        'max_connections' => 100,
+        'debug' => false,
+    ],
+    'cache' => [
+        'driver' => 'file',
+        'path' => '/tmp/cache',
+    ],
+    'logger' => [
+        'level' => 'info',
+    ],
+];
+
+-----------------
