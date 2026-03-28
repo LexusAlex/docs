@@ -26,6 +26,28 @@
 - `api` - непосредственно api часть приложения
 - `ui` - ui часть приложения
 
+# Конфигурация
+
+```
+Каждый подпроект может содержать неограниченное кол-во модулей
+
+├── shared/
+│   └── src/
+│       └── {Module}/
+│           └── Configuration/
+│               ├── common/          ← загружается всегда
+│               ├── development/     ← загружается при ENVIRONMENT=development
+│               ├── production/       ← загружается при ENVIRONMENT=production
+│               └── test/             ← загружается при ENVIRONMENT=test
+│
+├── api/
+│   └── src/
+│       └── {Module}/
+│           └── Configuration/
+│               ├── common/
+│               └── {environment}/   ← переопределяет shared
+```
+
 # Выполнение команд
 
 Пример выполнения команды в контейнере.
@@ -40,18 +62,19 @@
 
 # Команды
 
-# shared
+## shared
 
 - shared-all-checks        
 - shared-deptrac           
 - shared-php               
-- shared-phpstan           
+         
 - shared-phpunit-coverage  
 - shared-require-checker   
 - shared-unused
 - shared-composer          
 - shared-infection         
-- shared-php-cs-fixer      
+- shared-php-cs-fixer 
+  shared-phpstan
 - shared-phpunit           
 - shared-psalm             
 - shared-shell 

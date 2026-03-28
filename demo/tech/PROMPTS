@@ -121,5 +121,21 @@ $aggregator = new ConfigAggregator(
 );
 Стоил ли для production окружения что-то тут использовать
 Для проверки production окружения используй класс /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/Environment/EnvironmentProductionChecker.php
+Давай вынесем возможность включения этой опции в конфигурацию модуля
+├── shared/
+│   └── src/
+│       └── Core/
+│           └── Configuration/
+│               ├── common/
 
+Сделай включение опционально через конфигурацию модуля
+
+Запускай тестирование и анализ командами
+make shared-phpunit
+make shared-psalm
+make shared-phpstan
+
+Кеш должен хранится в папке var/cache каждого подпроекта
+
+Предусмотри включать автоматически в production, но давать возможность переопределить
 -----------------

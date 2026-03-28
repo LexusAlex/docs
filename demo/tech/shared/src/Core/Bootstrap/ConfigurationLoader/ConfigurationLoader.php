@@ -10,6 +10,7 @@ use Override;
 use RuntimeException;
 use Shared\Core\Bootstrap\Environment\Environment;
 
+use function is_dir;
 use function sprintf;
 
 final class ConfigurationLoader implements ConfigurationLoaderInterface
@@ -19,6 +20,9 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
     private static ?string $projectRoot = null;
 
     #[Override]
+    /**
+     * @return array<string, mixed>
+     */
     public static function load(): array
     {
         $environment = new Environment();
@@ -27,7 +31,12 @@ final class ConfigurationLoader implements ConfigurationLoaderInterface
         /** @infection-ignore-all */
         $sharedPath = $environment->get('CONFIG_SHARED_PATH', __DIR__ . '/../../../../');
 
-        return new ConfigAggregator(self::buildProviders($sharedPath, self::resolveProjectRoot(), $environmentName))->getMergedConfig();
+        $projectRoot = self::resolveProjectRoot();
+
+        $providers = self::buildProviders($sharedPath, $projectRoot, $environmentName);
+
+        return new ConfigAggregator($providers)->getMergedConfig();
+        /** @var array<string, mixed> $config */
     }
 
     #[Override]
