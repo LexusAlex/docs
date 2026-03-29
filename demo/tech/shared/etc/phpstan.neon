@@ -3,6 +3,8 @@ parameters:
     paths:
         - ../src
         - ../tests
+    excludePaths:
+        - ../src/Core/Test/Bootstrap/ConfigurationLoader/fixtures
     tmpDir: ../var/cache/phpstan
     bootstrapFiles:
             - ../../tools/t/phpunit/vendor/autoload.php

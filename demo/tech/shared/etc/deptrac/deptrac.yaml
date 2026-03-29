@@ -5,6 +5,7 @@ deptrac:
   exclude_files:
     - '.*/vendor/.*'
     - '.*/var/.*'
+    - fixtures
   layers:
     - name: Application
       collectors:

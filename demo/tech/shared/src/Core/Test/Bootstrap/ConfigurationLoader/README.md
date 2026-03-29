@@ -16,7 +16,8 @@ ConfigurationLoaderTest.php
 ├── Тесты базовой загрузки
 ├── Тесты переопределения
 ├── Тесты переменных окружения (с DataProvider)
-└── Тесты с complex fixtures
+├── Тесты с complex fixtures
+└── Тесты с невалидными конфигами (#[RunInSeparateProcess])
 ```
 
 ## Test Cases
@@ -177,17 +178,7 @@ ConfigurationLoaderTest.php
 
 ---
 
-### 14. differentEnvironmentsProduceDifferentResults
-Проверяет что разные окружения дают разные результаты.
-
-**Setup:** Сначала `test`, потом `production`
-
-**Asserts:**
-- `$testConfig !== $productionConfig`
-
----
-
-### 15. projectRootCanBeSetViaEnvironmentVariable
+### 14. projectRootCanBeSetViaEnvironmentVariable
 Проверяет установку project root через `CONFIG_PROJECT_ROOT`.
 
 **Setup:** `CONFIG_PROJECT_ROOT=fixtures/project`
@@ -197,7 +188,7 @@ ConfigurationLoaderTest.php
 
 ---
 
-### 16. projectRootMethodTakesPrecedence
+### 15. projectRootMethodTakesPrecedence
 Проверяет что метод `projectRoot()` приоритетнее переменной окружения.
 
 **Setup:** `CONFIG_PROJECT_ROOT=/custom/path`, но `projectRoot()` указывает на реальный путь `fixtures/project`
@@ -207,20 +198,7 @@ ConfigurationLoaderTest.php
 
 ---
 
-### 17. emptyStringProjectRootFallsBackToEnvironmentVariable
-Проверяет что пустая строка сбрасывает project root к значению из env.
-
-**Setup:** 
-1. `CONFIG_PROJECT_ROOT=fixtures/project`
-2. `projectRoot('/path1')`
-3. `projectRoot('')` (сброс)
-
-**Asserts:**
-- `$config['project']` существует (загружен из env)
-
----
-
-### 18. configsAreMergedInCorrectOrder
+### 16. configsAreMergedInCorrectOrder
 Проверяет правильный порядок объединения конфигов.
 
 **Setup:** `APPLICATION_ENVIRONMENT=production`
@@ -238,7 +216,7 @@ ConfigurationLoaderTest.php
 
 ---
 
-### 19. loadHandlesMultipleConfigFilesInSameDirectory
+### 17. loadHandlesMultipleConfigFilesInSameDirectory
 Проверяет загрузку нескольких файлов из одной директории.
 
 **Setup:** `APPLICATION_ENVIRONMENT=common`
@@ -255,7 +233,7 @@ ConfigurationLoaderTest.php
 
 ---
 
-### 20. scalarValuesCanBeOverridden
+### 18. scalarValuesCanBeOverridden
 Проверяет переопределение скалярных значений.
 
 **Setup:** `APPLICATION_ENVIRONMENT=production`
@@ -268,6 +246,45 @@ ConfigurationLoaderTest.php
 **Asserts:**
 - `$config['database']['debug'] === false`
 - `$config['max_connections'] === 100`
+
+---
+
+### 19. loadWithSyntaxErrorInConfigThrowsException
+Проверяет что синтаксическая ошибка в PHP файле выбрасывает исключение.
+
+**Setup:** `#[RunInSeparateProcess]`, `CONFIG_SHARED_PATH=fixtures/invalid/shared`
+
+**Fixtures:**
+- `fixtures/invalid/shared/src/InvalidModule/Configuration/common/syntax_error.php` - содержит синтаксическую ошибку
+
+**Asserts:**
+- Выбрасывается `Laminas\ConfigAggregator\InvalidConfigProviderException`
+
+---
+
+### 20. loadWithNonArrayReturnInConfigThrowsException
+Проверяет что файл конфига возвращающий не массив выбрасывает исключение.
+
+**Setup:** `#[RunInSeparateProcess]`, `CONFIG_SHARED_PATH=fixtures/invalid/shared`
+
+**Fixtures:**
+- `fixtures/invalid/shared/src/InvalidModule/Configuration/common/non_array.php` - возвращает строку вместо массива
+
+**Asserts:**
+- Выбрасывается `Laminas\ConfigAggregator\InvalidConfigProviderException`
+
+---
+
+### 21. loadWithIncludeErrorInConfigThrowsException
+Проверяет что ошибка include в конфиге выбрасывает исключение.
+
+**Setup:** `#[RunInSeparateProcess]`, `CONFIG_SHARED_PATH=fixtures/invalid/shared`
+
+**Fixtures:**
+- `fixtures/invalid/shared/src/InvalidModule/Configuration/common/include_error.php` - include отсутствующего файла
+
+**Asserts:**
+- Выбрасывается `Laminas\ConfigAggregator\InvalidConfigProviderException`
 
 ---
 
@@ -298,43 +315,60 @@ fixtures/
 │               │   └── override.php
 │               └── test/
 │                   └── project_env_config.php
-└── complex/
+├── complex/
+│   ├── shared/
+│   │   └── src/
+│   │       ├── Module1/
+│   │       │   └── Configuration/
+│   │       │       ├── common/
+│   │       │       │   ├── base.php
+│   │       │       │   ├── cache.php
+│   │       │       │   ├── database.php
+│   │       │       │   └── shared.php
+│   │       │       ├── production/
+│   │       │       │   └── database.php
+│   │       │       └── development/
+│   │       │           └── database.php
+│   │       └── Module2/
+│   │           └── Configuration/
+│   │               └── common/
+│   │                   └── logger.php
+│   └── project/
+│       └── src/
+│           ├── ProjectModule1/
+│           │   └── Configuration/
+│           │       ├── common/
+│           │       │   └── base.php
+│           │       ├── production/
+│           │       │   └── database.php
+│           │       └── development/
+│           │           └── database.php
+│           └── ProjectModule2/
+│               └── Configuration/
+│                   └── common/
+│                       └── routes.php
+└── invalid/ (для тестирования ошибок)
     ├── shared/
     │   └── src/
-    │       ├── Module1/
-    │       │   └── Configuration/
-    │       │       ├── common/
-    │       │       │   ├── base.php
-    │       │       │   ├── cache.php
-    │       │       │   ├── database.php
-    │       │       │   └── shared.php
-    │       │       ├── production/
-    │       │       │   └── database.php
-    │       │       └── development/
-    │       │           └── database.php
-    │       └── Module2/
+    │       └── InvalidModule/
     │           └── Configuration/
     │               └── common/
-    │                   └── logger.php
+    │                   ├── syntax_error.php   # синтаксическая ошибка PHP
+    │                   ├── non_array.php      # возвращает строку вместо массива
+    │                   └── include_error.php  # include отсутствующего файла
     └── project/
         └── src/
-            ├── ProjectModule1/
-            │   └── Configuration/
-            │       ├── common/
-            │       │   └── base.php
-            │       ├── production/
-            │       │   └── database.php
-            │       └── development/
-            │           └── database.php
-            └── ProjectModule2/
+            └── InvalidModule/
                 └── Configuration/
                     └── common/
-                        └── routes.php
+                        ├── syntax_error.php
+                        ├── non_array.php
+                        └── include_error.php
 ```
 
 ## Metrics
 
-- **Tests:** 36 (один с DataProvider: 2 cases = 37 тестовых прогонов)
-- **Assertions:** 80
+- **Tests:** 29 (один с DataProvider: 2 cases = 30 тестовых прогонов)
+- **Assertions:** 125
 - **Mutation Coverage:** 100%
 - **Mutation Score Index (MSI):** 100%

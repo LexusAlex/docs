@@ -6,6 +6,7 @@
     "PHPUnit\\Framework\\Attributes\\Test",
     "PHPUnit\\Framework\\TestCase",
     "PHPUnit\\Framework\\Attributes\\DataProvider",
+    "PHPUnit\\Framework\\Attributes\\RunInSeparateProcess",
     "Psr\\Container\\ContainerInterface"
 
   ],

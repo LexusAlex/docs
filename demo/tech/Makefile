@@ -29,6 +29,8 @@ SERVICE ?= # Для универсальной цели run
 # Цель по умолчанию
 help:
 	@echo "Доступные команды:"
+	@echo "  make init               # Полное разворачивание проекта с нуля с зупуском"
+	@echo "  make init-without              # Полное разворачивание проекта с нуля без запуска"
 	@echo "  make check-updates       # Проверить обновления образов и пакетов"
 	@echo "  make build               # Сборка контейнера без кеша ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make build-cache               # Сборка контейнера c кешем ENVIRONMENT=$(ENVIRONMENT)"
@@ -38,6 +40,29 @@ help:
 	@echo "  make down              #  Остановить контейнеры ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make logs              #  Просмотр логов ENVIRONMENT=$(ENVIRONMENT)"
 	@echo "  make exec SERVICE=... ARGS='...' # Выполнить команду в ЛЮБОМ сервисе"
+
+# Основные команды
+
+.PHONY: init init-without
+init: ## Полное разворачивание и запуск проекта с нуля
+	@echo "==> Останавливаю старые контейнеры..."
+	@$(MAKE) down
+	@echo "==> Собираю образы..."
+	@$(MAKE) build
+	@echo "==> Запускаю контейнеры..."
+	@$(MAKE) up
+	@echo "==> Устанавливаю зависимости composer..."
+	@$(MAKE) composer-install
+	@echo "==> Готово!"
+
+init-without: ## Полное разворачивание проекта
+	@echo "==> Останавливаю старые контейнеры..."
+	@$(MAKE) down
+	@echo "==> Собираю образы..."
+	@$(MAKE) build
+	@echo "==> Устанавливаю зависимости composer..."
+	@$(MAKE) composer-install
+	@echo "==> Готово!"
 
 check-updates:
 	@echo "=== Docker Images ==="
@@ -219,4 +244,3 @@ composer-be-update:
 	@$(MAKE) tools-composer ARGS="bin all show -l -o -A"
 #php-all: ARGS := "-v"
 # make php-all-composer ARGS="i"
-php-all: api-php shared-php

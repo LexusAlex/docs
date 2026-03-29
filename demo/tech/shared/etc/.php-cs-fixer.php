@@ -15,7 +15,7 @@ return
                     __DIR__ . '/../src',
                     __DIR__ . '/../tests',
                 ])
-                // ->exclude([])
+                ->exclude('fixtures')
                 ->append([
                     __FILE__,
                 ]),

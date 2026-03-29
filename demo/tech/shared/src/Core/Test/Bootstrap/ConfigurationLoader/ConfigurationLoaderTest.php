@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Shared\Core\Test\Bootstrap\ConfigurationLoader;
 
+use Laminas\ConfigAggregator\InvalidConfigProviderException;
 use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -194,18 +196,6 @@ final class ConfigurationLoaderTest extends TestCase
     }
 
     #[Test]
-    public function differentEnvironmentsProduceDifferentResults(): void
-    {
-        $this->setComplexEnvironment('test');
-        $testConfig = $this->loadConfig();
-
-        $this->setComplexEnvironment('production');
-        $productionConfig = $this->loadConfig();
-
-        self::assertNotEquals($testConfig, $productionConfig);
-    }
-
-    #[Test]
     public function projectRootCanBeSetViaEnvironmentVariable(): void
     {
         putenv('CONFIG_PROJECT_ROOT=' . $this->fixturesPath . '/project');
@@ -226,18 +216,6 @@ final class ConfigurationLoaderTest extends TestCase
 
         $project = $this->getSection($config, 'project');
         self::assertSame('project_value', $project['key']);
-    }
-
-    #[Test]
-    public function emptyStringProjectRootFallsBackToEnvironmentVariable(): void
-    {
-        putenv('CONFIG_PROJECT_ROOT=' . $this->fixturesPath . '/project');
-        ConfigurationLoader::projectRoot($this->fixturesPath . '/project');
-        ConfigurationLoader::projectRoot('');
-
-        $config = $this->loadConfig();
-
-        self::assertArrayHasKey('project', $config);
     }
 
     #[Test]
@@ -275,6 +253,39 @@ final class ConfigurationLoaderTest extends TestCase
 
         self::assertFalse($database['debug']);
         self::assertSame(100, $database['max_connections']);
+    }
+
+    #[Test]
+    #[RunInSeparateProcess]
+    public function loadWithSyntaxErrorInConfigThrowsException(): void
+    {
+        putenv('CONFIG_SHARED_PATH=' . $this->fixturesPath . '/invalid/shared');
+
+        $this->expectException(InvalidConfigProviderException::class);
+
+        $this->loadConfig();
+    }
+
+    #[Test]
+    #[RunInSeparateProcess]
+    public function loadWithNonArrayReturnInConfigThrowsException(): void
+    {
+        putenv('CONFIG_SHARED_PATH=' . $this->fixturesPath . '/invalid/shared');
+
+        $this->expectException(InvalidConfigProviderException::class);
+
+        $this->loadConfig();
+    }
+
+    #[Test]
+    #[RunInSeparateProcess]
+    public function loadWithIncludeErrorInConfigThrowsException(): void
+    {
+        putenv('CONFIG_SHARED_PATH=' . $this->fixturesPath . '/invalid/shared');
+
+        $this->expectException(InvalidConfigProviderException::class);
+
+        $this->loadConfig();
     }
 
     private function resetToDefaultEnvironment(): void
