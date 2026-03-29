@@ -104,6 +104,11 @@ export default defineConfig({
             link: '/base/principles/',
             collapsed: true,
             items: [
+              { text: 'Принципы проектирования кода',collapsed: true, link: '/base/principles/principles-of-code-design/',
+                items: [
+                  { text: 'Use Cases', link: '/base/principles/principles-of-code-design/use-cases'}
+                ]
+              },
               { text: 'Архитектура и Процессы Разработки',collapsed: true, link: '/base/principles/architecture-and-development-processes/',
                 items: [
                   { text: 'Приложение 12 факторов', link: '/base/principles/architecture-and-development-processes/12-factors'}
