@@ -53,7 +53,7 @@
 Пример выполнения команды в контейнере.
 
 - `make shared-composer ARGS='require --dev phpunit/phpunit'`
-- `make shared-composer ARGS='require laminas/laminas-config-aggregator'`
+- `make shared-composer ARGS='require slim/slim slim/psr7'`
 - `make shared-composer ARGS='require php-di/php-di'`
 - `make tools-composer ARGS='bin psalm remove --dev psalm/plugin-phpunit'`
 - `make api-php ARGS=public/index.php`
@@ -66,8 +66,7 @@
 
 - shared-all-checks        
 - shared-deptrac           
-- shared-php               
-         
+- shared-php                
 - shared-phpunit-coverage  
 - shared-require-checker   
 - shared-unused

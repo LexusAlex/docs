@@ -15,7 +15,9 @@
   "require": {
     "php": ">=8.5",
     "laminas/laminas-config-aggregator": "^1.19",
-    "php-di/php-di": "^7.1.1"
+    "php-di/php-di": "^7.1.1",
+    "slim/psr7": "^1.8",
+    "slim/slim": "^4.15"
   },
   "scripts": {
     "bump-dev": [
