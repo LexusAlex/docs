@@ -4,8 +4,11 @@ declare(strict_types=1);
 require __DIR__ . '/../../shared/vendor/autoload.php';
 require __DIR__ . '/../vendor/autoload.php';
 
-use Shared\Core\Bootstrap\Container\ContainerFactory;
+use Shared\Core\Bootstrap\Application\Application;
 
-$container = new ContainerFactory()->create();
+$application = Application::create(function ($app) {
+    //$app->get('/', \Api\Action\HomeAction::class);
+});
 
-print_r($container);
+print_r('ui');
+//$application->run();

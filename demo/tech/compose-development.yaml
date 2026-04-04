@@ -23,6 +23,10 @@ x-api-common: &api-common
   networks:
     - app-network
 
+x-ui-common: &ui-common
+  networks:
+    - app-network
+
 services:
   api-nginx:
     <<: *api-common
@@ -30,12 +34,12 @@ services:
       <<: *env-api
     build:
       context: .
-      dockerfile: docker/development/nginx/Dockerfile
+      dockerfile: docker/development/api-nginx/Dockerfile
       args:
         SERVICE_NAME: api
     ports:
-      - "127.0.0.1:80:80"
-      - "127.0.0.1:443:443"
+      - "127.0.0.1:8080:80"
+      - "127.0.0.1:8443:443"
     volumes:
       - ./api:/api
       - ./shared:/shared
@@ -98,6 +102,35 @@ services:
     build:
       context: .
       dockerfile: docker/development/php-cli/Dockerfile
+      args:
+        SERVICE_NAME: ui
+    volumes:
+      - ./ui:/ui
+      - ./shared:/shared
+  ui-nginx:
+    <<: *ui-common
+    environment:
+      <<: *env-ui
+    build:
+      context: .
+      dockerfile: docker/development/ui-nginx/Dockerfile
+      args:
+        SERVICE_NAME: ui
+    ports:
+      - "127.0.0.1:80:80"
+      - "127.0.0.1:443:443"
+    volumes:
+      - ./ui:/ui
+      - ./shared:/shared
+    depends_on:
+      - ui-php-fpm
+  ui-php-fpm:
+    <<: *ui-common
+    environment:
+      <<: *env-ui
+    build:
+      context: .
+      dockerfile: docker/development/php-fpm/Dockerfile
       args:
         SERVICE_NAME: ui
     volumes:

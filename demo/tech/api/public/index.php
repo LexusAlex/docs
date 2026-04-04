@@ -10,4 +10,5 @@ $application = Application::create(function ($app) {
     //$app->get('/', \Api\Action\HomeAction::class);
 });
 
+print_r('api');
 //$application->run();
