@@ -161,3 +161,22 @@ make shared-phpstan
 api будет всегда возвращать json а ui html с использованияем js
 ui будет ходить за данными в api
 Мне кажется slim/psr7 и slim/slim должны быть в shared
+
+---------------------
+В проекте есть три подпроекта shared, api и ui
+В shared будет класс Application который будет возвращать приложение slim куда будет передаваться контейнер, настраиваться middleware и передаваться маршруты по типу
+
+$application = AppFactory::createFromContainer($container);
+// middlewares
+// $application->addBodyParsingMiddleware();
+/**
+ * @infection-ignore-all
+ */
+$application->add(ErrorMiddleware::class);
+// routes
+$application->get('/', HomeAction::class);
+return $application;
+
+У каждого из подпроектов это все свое. middleware могут быть общими
+
+Задача реализовать такой класс
