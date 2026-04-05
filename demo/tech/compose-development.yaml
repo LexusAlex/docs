@@ -34,9 +34,11 @@ services:
       <<: *env-api
     build:
       context: .
-      dockerfile: docker/development/api-nginx/Dockerfile
+      dockerfile: docker/development/nginx/Dockerfile
       args:
         SERVICE_NAME: api
+        NGINX_ROOT: /api/public
+        PHP_FPM_HOST: api-php-fpm
     ports:
       - "127.0.0.1:8080:80"
       - "127.0.0.1:8443:443"
@@ -113,9 +115,11 @@ services:
       <<: *env-ui
     build:
       context: .
-      dockerfile: docker/development/ui-nginx/Dockerfile
+      dockerfile: docker/development/nginx/Dockerfile
       args:
         SERVICE_NAME: ui
+        NGINX_ROOT: /ui/public
+        PHP_FPM_HOST: ui-php-fpm
     ports:
       - "127.0.0.1:80:80"
       - "127.0.0.1:443:443"
