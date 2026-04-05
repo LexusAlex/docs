@@ -5,10 +5,10 @@ require __DIR__ . '/../../shared/vendor/autoload.php';
 require __DIR__ . '/../vendor/autoload.php';
 
 use Shared\Core\Bootstrap\Application\Application;
+use Shared\Http\Response\JsonResponse;
 
 $application = Application::create(function ($app) {
-    //$app->get('/', \Api\Action\HomeAction::class);
+    $app->get('/', function (){return new JsonResponse(new stdClass());});
 });
 
-print_r('api');
-//$application->run();
+$application->run();

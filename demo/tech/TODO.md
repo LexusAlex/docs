@@ -86,6 +86,10 @@
 66. Если это библиотека то оставляем только папку scr остальное все убираем библиотека для контроля этого https://github.com/savinmikhail/dist-size-optimizer
 67. Про округление и цены на сайте https://t.me/ancient_web/759#
 68. Попробовать внедрить кеширование контейнера, но только это очень сложно протестировать
+69. Пакет для работы с cookie https://github.com/dflydev/dflydev-fig-cookies
+70. Добавить логирование запросов
+71. Добавить middleware для error handling
+72. Внедрять проверки в api
 
 На изучение:
 1. Что производительнее статические функции или статические методы https://deworker.pro/edu/series/interactive-site/installing-slim#comment-2348eedc-8045-44ba-8fa1-98137eb805a1
