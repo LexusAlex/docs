@@ -8,7 +8,6 @@
     "PHPUnit\\Framework\\Attributes\\DataProvider",
     "PHPUnit\\Framework\\Attributes\\RunInSeparateProcess",
     "Psr\\Container\\ContainerInterface"
-
   ],
   "scan-files": []
 }

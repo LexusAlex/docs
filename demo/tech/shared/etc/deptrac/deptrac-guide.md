@@ -7,7 +7,8 @@
 ```yaml
 deptrac:
   paths:
-    - ../src
+    - ../src/Core
+    - ../src/Http
     - ../tests
   exclude_files:
     - '.*/vendor/.*'
@@ -17,13 +18,18 @@ deptrac:
       collectors:
         - type: classLike
           value: ^Shared\\Core\\(?!Test)
+    - name: Http
+      collectors:
+        - type: classLike
+          value: ^Shared\\Http\\(?!Test)
     - name: Test
       collectors:
         - type: classLike
           value: ^Shared\\Core\\Test
   ruleset:
     Application: []
-    Test: [Application]
+    Http: []
+    Test: [Application, Http]
 ```
 
 ---
@@ -32,14 +38,16 @@ deptrac:
 
 ```yaml
 paths:
-  - ../src
+  - ../src/Core
+  - ../src/Http
   - ../tests
 ```
 
 Указывает deptrac в каких директориях сканировать PHP-файлы.
 
 Пути относительны от расположения конфига (`etc/deptrac.yaml`):
-- `../src` → `/shared/src/`
+- `../src/Core` → `/shared/src/Core/`
+- `../src/Http` → `/shared/src/Http/`
 - `../tests` → `/shared/tests/`
 
 ---
@@ -131,6 +139,24 @@ exclude_files:
 
 ---
 
+### Слой Http
+
+```yaml
+- name: Http
+  collectors:
+    - type: classLike
+      value: ^Shared\\Http\\(?!Test)
+```
+
+**Результат:** Все классы в namespace `Shared\Http\`, кроме тех, что содержат `Test`.
+
+**Какие классы попадают:**
+- ✅ `Shared\Http\Response\JsonResponse`
+- ✅ `Shared\Http\Response\HtmlResponse`
+- ❌ `Shared\Http\Test\Response\JsonResponseTest` (содержит Test)
+
+---
+
 ## ruleset — правила зависимостей
 
 ```yaml
@@ -144,7 +170,8 @@ ruleset:
 | Слой         | Разрешённые зависимости | Пояснение                    |
 |--------------|------------------------|------------------------------|
 | `Application`| `[]` (пусто)           | Не может зависеть ни от чего|
-| `Test`       | `[Application]`       | Может зависеть от Application|
+| `Http`       | `[]` (пусто)           | Не может зависеть ни от чего|
+| `Test`       | `[Application, Http]` | Может зависеть от Application и Http|
 
 **Важно:** Если слой A зависит от слоя B, это должно быть явно разрешено. Всё остальное — **violation**.
 
@@ -180,17 +207,18 @@ EnvironmentTest (Test) → SomeExternalClass (External)
 │                         PROJECT                              │
 ├─────────────────────────────────────────────────────────────┤
 │                                                              │
-│  ┌─────────────────────┐        ┌─────────────────────┐   │
-│  │    Application      │        │        Test          │   │
-│  │  (Core без Test)    │        │  (Core\Test)        │   │
-│  │                     │        │                     │   │
-│  │  Environment        │        │  EnvironmentTest    │   │
-│  │  EnvironmentInterface│◄───────┤ (зависит от)      │   │
-│  └─────────────────────┘        └─────────────────────┘   │
-│           ▲                              │                   │
-│           │      ПРАВИЛО:               │                   │
-│           └──────────────────────────────┘                   │
-│                  Test → [Application]                       │
+│  ┌─────────────────────┐    ┌─────────────────────┐         │
+│  │    Application      │    │        Http          │         │
+│  │  (Core без Test)    │    │  (Http без Test)    │         │
+│  │                     │    │                     │         │
+│  │  Environment        │    │  JsonResponse       │         │
+│  │  EnvironmentInterface│   │  HtmlResponse       │         │
+│  └─────────────────────┘    └─────────────────────┘         │
+│         ▲                              ▲                     │
+│         │      ПРАВИЛА:               │                     │
+│         │                             │                     │
+│         └─────────────────────────────┘                     │
+│                  Test → [Application, Http]                  │
 │                                                              │
 └─────────────────────────────────────────────────────────────┘
 ```

@@ -4,9 +4,6 @@
         "directories": [
             "../src"
         ],
-        "excludes": [
-            "Core/Test"
-        ]
     },
     "timeout": 10,
     "logs": {

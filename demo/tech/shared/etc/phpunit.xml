@@ -12,10 +12,13 @@
     </php>
     <testsuites>
         <testsuite name="default">
+            <directory>../tests</directory>
+        </testsuite>
+        <testsuite name="core">
             <directory>../src/Core/Test</directory>
         </testsuite>
-        <testsuite name="functional">
-            <directory>../tests</directory>
+        <testsuite name="http">
+            <directory>../src/Http/Test</directory>
         </testsuite>
     </testsuites>
 
@@ -24,8 +27,8 @@
             <directory suffix=".php">../src</directory>
         </include>
         <exclude>
-            <directory suffix=".php">../src/Core/Configuration</directory>
             <directory suffix=".php">../src/Core/Test</directory>
+            <directory suffix=".php">../src/Http/Test</directory>
         </exclude>
     </source>
 </phpunit>

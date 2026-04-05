@@ -1,6 +1,7 @@
 deptrac:
   paths:
-    - ../../src
+    - ../../src/Core
+    - ../../src/Http
     - ../../tests
   exclude_files:
     - '.*/vendor/.*'
@@ -11,10 +12,15 @@ deptrac:
       collectors:
         - type: classLike
           value: ^Shared\\Core\\(?!Test)
+    - name: Http
+      collectors:
+        - type: classLike
+          value: ^Shared\\Http\\(?!Test)
     - name: Test
       collectors:
         - type: classLike
           value: ^Shared\\Core\\Test
   ruleset:
     Application: []
-    Test: [Application]
+    Http: []
+    Test: [Application, Http]
