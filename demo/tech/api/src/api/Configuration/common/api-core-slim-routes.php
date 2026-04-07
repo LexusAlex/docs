@@ -11,4 +11,8 @@ return [
             return new JsonResponse(new \stdClass());
         });
     },
+
+    'test' => static function () {
+        return 123;
+    }
 ];

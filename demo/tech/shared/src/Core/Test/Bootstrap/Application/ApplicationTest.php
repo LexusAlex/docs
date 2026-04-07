@@ -40,7 +40,8 @@ final class ApplicationTest extends TestCase
     #[Test]
     public function createReturnsApplication(): void
     {
-        $application = Application::create(self::emptyRoutes(...));
+        $container = new ContainerFactory()->create();
+        $application = Application::create($container, self::emptyRoutes(...));
 
         self::assertInstanceOf(Application::class, $application);
     }
@@ -48,7 +49,8 @@ final class ApplicationTest extends TestCase
     #[Test]
     public function getAppReturnsSlimApp(): void
     {
-        $application = Application::create(self::emptyRoutes(...));
+        $container = new ContainerFactory()->create();
+        $application = Application::create($container, self::emptyRoutes(...));
 
         self::assertInstanceOf(App::class, $application->getApp());
     }
@@ -57,8 +59,10 @@ final class ApplicationTest extends TestCase
     public function routesCallbackIsCalled(): void
     {
         $routesCalled = false;
+        $container = new ContainerFactory()->create();
 
         $application = Application::create(
+            $container,
             static function (App $app) use (&$routesCalled): void {
                 $routesCalled = true;
             }
@@ -71,7 +75,8 @@ final class ApplicationTest extends TestCase
     #[Test]
     public function middlewareReturnsNewInstance(): void
     {
-        $application1 = Application::create(self::emptyRoutes(...));
+        $container = new ContainerFactory()->create();
+        $application1 = Application::create($container, self::emptyRoutes(...));
         $application2 = $application1->middleware(stdClass::class);
 
         self::assertNotSame($application1, $application2);
@@ -80,7 +85,8 @@ final class ApplicationTest extends TestCase
     #[Test]
     public function middlewareAccumulates(): void
     {
-        $application = Application::create(self::emptyRoutes(...))
+        $container = new ContainerFactory()->create();
+        $application = Application::create($container, self::emptyRoutes(...))
             ->middleware(stdClass::class)
             ->middleware(DateTime::class);
 
@@ -94,7 +100,8 @@ final class ApplicationTest extends TestCase
     public function middlewareCreatesNewInstance(string ...$middlewares): void
     {
         /** @var list<class-string> $middlewares */
-        $application = Application::create(self::emptyRoutes(...));
+        $container = new ContainerFactory()->create();
+        $application = Application::create($container, self::emptyRoutes(...));
 
         foreach ($middlewares as $middleware) {
             $application = $application->middleware($middleware);
@@ -134,8 +141,8 @@ final class ApplicationTest extends TestCase
     #[Test]
     public function createBuildsContainerWhenNotProvided(): void
     {
-        $container = null;
-        $application = Application::create(self::emptyRoutes(...), $container);
+        $container = new ContainerFactory()->create();
+        $application = Application::create($container, self::emptyRoutes(...));
 
         self::assertInstanceOf(Application::class, $application);
     }
@@ -144,7 +151,7 @@ final class ApplicationTest extends TestCase
     public function createUsesProvidedContainer(): void
     {
         $container = new ContainerFactory()->create();
-        $application = Application::create(self::emptyRoutes(...), $container);
+        $application = Application::create($container, self::emptyRoutes(...));
 
         self::assertSame($container, $application->getApp()->getContainer());
     }
@@ -154,7 +161,8 @@ final class ApplicationTest extends TestCase
     public function middlewareStoresCorrectClasses(string ...$middlewares): void
     {
         /** @var list<class-string> $middlewares */
-        $application = Application::create(self::emptyRoutes(...));
+        $container = new ContainerFactory()->create();
+        $application = Application::create($container, self::emptyRoutes(...));
 
         foreach ($middlewares as $middleware) {
             $application = $application->middleware($middleware);
@@ -188,7 +196,8 @@ final class ApplicationTest extends TestCase
     #[Test]
     public function middlewareArrayHasSequentialNumericKeys(): void
     {
-        $application = Application::create(self::emptyRoutes(...))
+        $container = new ContainerFactory()->create();
+        $application = Application::create($container, self::emptyRoutes(...))
             ->middleware(stdClass::class)
             ->middleware(DateTime::class);
 
