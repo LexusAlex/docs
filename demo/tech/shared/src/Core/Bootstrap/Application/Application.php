@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shared\Core\Bootstrap\Application;
 
 use Psr\Container\ContainerInterface;
+use Shared\Core\Bootstrap\ConfigurationLoader\ConfigurationLoader;
 use Slim\App;
 use Slim\Factory\AppFactory;
 
@@ -28,10 +29,14 @@ final readonly class Application
     /**
      * @param callable(App): void $routes
      */
-    public static function create(ContainerInterface $container, callable $routes): self
+    public static function create(ContainerInterface $container): self
     {
         $app = AppFactory::createFromContainer($container);
-        $routes($app);
+
+        $config = ConfigurationLoader::load();
+        if (isset($config['slimRoutesCallback'])) {
+            $config['slimRoutesCallback']($app);
+        }
 
         return new self($app, []);
     }

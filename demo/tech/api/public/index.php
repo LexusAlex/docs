@@ -6,14 +6,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Shared\Core\Bootstrap\Application\Application;
 use Shared\Core\Bootstrap\Container\ContainerFactory;
-use Shared\Http\Response\JsonResponse;
 
-$container = new ContainerFactory()->create();
-
-print_r($container->get('test'));
-
-$application = Application::create($container, function ($app) {
-    $app->get('/', function (){return new JsonResponse(new stdClass());});
-});
+$container = (new ContainerFactory())->create();
+$application = Application::create($container);
 
 $application->run();

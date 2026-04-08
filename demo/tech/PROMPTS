@@ -204,3 +204,8 @@ ui 127.0.0.1:80 и 127.0.0.1:443
 /home/alex/projects/docs/demo/tech/api/public/index.php в конфигурацию при этом жестко не прописывать в файле /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/Application/Application.php чтобы сделать его переиспользуемым и независящий от конфигурации.
 То есть создаем контейнер, потом приложение, потом добавляем маршруты в приложение и потом запускам приложние
 Нужно чтобы конфигурация была первична
+
+------------------------------------
+Давай попробуем вынести конфигурацию маршрутов в конфигурацию приложения как я это сделал тут /home/alex/projects/docs/demo/tech/api/src/api/Configuration/common/api-core-slim-routes.php то есть переработать файл /home/alex/projects/docs/demo/tech/api/public/index.php
+и приложение /home/alex/projects/docs/demo/tech/shared/src/Core/Bootstrap/Application/Application.php таким образом чтобы сначала
+создается контейнер потом приложение которое берет маршруты из конфигурации

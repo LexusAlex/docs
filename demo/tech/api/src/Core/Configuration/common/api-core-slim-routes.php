@@ -6,7 +6,7 @@ use Shared\Http\Response\JsonResponse;
 use Slim\App;
 
 return [
-    'slim-routes' => static function (App $app): void {
+    'slimRoutesCallback' => static function (App $app): void {
         $app->get('/', function () {
             return new JsonResponse(new \stdClass());
         });
