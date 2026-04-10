@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @psalm-suppress PropertyNotSetInConstructor
  */
 
-namespace Shared\Core\Test\Environment;
+namespace Shared\Core\Test\Bootstrap\Environment;
 
 use Override;
 use PHPUnit\Framework\Attributes\Test;

@@ -31,11 +31,10 @@ final readonly class Application
      */
     public static function create(ContainerInterface $container): self
     {
-        $app = AppFactory::createFromContainer($container);
-
-        $config = ConfigurationLoader::load();
-        if (isset($config['slimRoutesCallback'])) {
-            $config['slimRoutesCallback']($app);
+        if ($container->has(App::class)) {
+            $app = $container->get(App::class);
+        } else {
+            $app = AppFactory::createFromContainer($container);
         }
 
         return new self($app, []);
@@ -57,6 +56,16 @@ final readonly class Application
     public function getApp(): App
     {
         return $this->app;
+    }
+
+    public function registerRoutesFromConfig(ContainerInterface $container): self
+    {
+        if ($container->has('slim-routes-callback')) {
+            $routes = $container->get('slim-routes-callback');
+            $routes($this->app);
+        }
+
+        return $this;
     }
 
     public function run(): void

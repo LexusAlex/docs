@@ -8,5 +8,5 @@ use Psr\Container\ContainerInterface;
 
 interface ContainerFactoryInterface
 {
-    public function create(): ContainerInterface;
+    public function create(array $dependencies): ContainerInterface;
 }

@@ -6,8 +6,14 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Shared\Core\Bootstrap\Application\Application;
 use Shared\Core\Bootstrap\Container\ContainerFactory;
+use Shared\Core\Bootstrap\ConfigurationLoader\ConfigurationLoader;
 
-$container = (new ContainerFactory())->create();
+$config = ConfigurationLoader::load();
+
+$container = new ContainerFactory()->create($config);
+
 $application = Application::create($container);
 
-$application->run();
+$application
+    ->registerRoutesFromConfig($container)
+    ->run();

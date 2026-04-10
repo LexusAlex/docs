@@ -327,14 +327,18 @@ final class ContainerFactoryTest extends TestCase
 
     private function createContainer(): ContainerInterface
     {
-        return new ContainerFactory()->create();
+        $dependencies = ConfigurationLoader::load();
+
+        return new ContainerFactory()->create($dependencies);
     }
 
     private function createProductionContainer(): ContainerInterface
     {
         putenv('APPLICATION_ENVIRONMENT=production');
         ConfigurationLoader::projectRoot($this->fixturesPath . '/configs');
-        return new ContainerFactory()->create();
+        $dependencies = ConfigurationLoader::load();
+
+        return new ContainerFactory()->create($dependencies);
     }
 
     private function resetEnvironment(): void
