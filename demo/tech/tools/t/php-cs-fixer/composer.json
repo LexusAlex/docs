@@ -1,7 +1,7 @@
 {
     "type": "project",
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "^3.94.2"
+        "friendsofphp/php-cs-fixer": "^3.95.0"
     },
     "config": {
         "process-timeout": 0,
