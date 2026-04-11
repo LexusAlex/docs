@@ -14,5 +14,6 @@ $container = new ContainerFactory()->create($config);
 $application = Application::create($container);
 
 $application
+    ->registerMiddlewareFromConfig($container)
     ->registerRoutesFromConfig($container)
     ->run();

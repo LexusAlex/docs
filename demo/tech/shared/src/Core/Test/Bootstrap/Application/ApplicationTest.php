@@ -86,9 +86,15 @@ final class ApplicationTest extends TestCase
             ->middleware(stdClass::class)
             ->middleware(DateTime::class);
 
-        $routeCollector = $application->getApp()->getRouteCollector();
+        $reflection = new ReflectionClass($application);
+        $property = $reflection->getProperty('middlewares');
 
-        self::assertCount(0, $routeCollector->getRoutes());
+        /** @var list<class-string> $middlewares */
+        $middlewares = $property->getValue($application);
+
+        self::assertCount(2, $middlewares);
+        self::assertSame(stdClass::class, $middlewares[0]);
+        self::assertSame(DateTime::class, $middlewares[1]);
     }
 
     #[Test]
@@ -176,18 +182,124 @@ final class ApplicationTest extends TestCase
     }
 
     #[Test]
-    public function middlewareArrayHasSequentialNumericKeys(): void
+    public function registerMiddlewareFromConfigCallsCallback(): void
     {
-        $application = $this->application
-            ->middleware(stdClass::class)
-            ->middleware(DateTime::class);
+        $app = $this->createMock(App::class);
+        $app->expects(self::never())
+            ->method('addRoutingMiddleware');
 
-        $reflection = new ReflectionClass($application);
-        $property = $reflection->getProperty('middlewares');
+        $calledWith = null;
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('has')
+            ->with('slim-middleware')
+            ->willReturn(true);
+        $container->expects(self::once())
+            ->method('get')
+            ->with('slim-middleware')
+            ->willReturn(static function (App $passedApp) use (&$calledWith): void {
+                $calledWith = $passedApp;
+            });
 
-        /** @var array<int, class-string> $middlewares */
-        $middlewares = $property->getValue($application);
+        $application = Application::createWithApp($app, []);
+        $application->registerMiddlewareFromConfig($container);
 
-        self::assertSame([0, 1], array_keys($middlewares));
+        self::assertSame($app, $calledWith);
+    }
+
+    #[Test]
+    public function registerMiddlewareFromConfigSkipsWhenNotConfigured(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('has')
+            ->with('slim-middleware')
+            ->willReturn(false);
+
+        $app = $this->createMock(App::class);
+        $app->expects(self::never())
+            ->method('addRoutingMiddleware');
+
+        $application = Application::createWithApp($app, []);
+        $application->registerMiddlewareFromConfig($container);
+    }
+
+    #[Test]
+    public function registerRoutesFromConfigCallsCallback(): void
+    {
+        $app = $this->createMock(App::class);
+        $app->expects(self::never())
+            ->method('get');
+        $app->expects(self::never())
+            ->method('add');
+
+        $calledWith = null;
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('has')
+            ->with('slim-routes-callback')
+            ->willReturn(true);
+        $container->expects(self::once())
+            ->method('get')
+            ->with('slim-routes-callback')
+            ->willReturn(static function (App $passedApp) use (&$calledWith): void {
+                $calledWith = $passedApp;
+            });
+
+        $application = Application::createWithApp($app, []);
+        $application->registerRoutesFromConfig($container);
+
+        self::assertSame($app, $calledWith);
+    }
+
+    #[Test]
+    public function registerRoutesFromConfigReturnsSelf(): void
+    {
+        $app = $this->createMock(App::class);
+        $app->expects(self::never())
+            ->method('get');
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('has')
+            ->willReturn(false);
+
+        $application = Application::createWithApp($app, []);
+        $result = $application->registerRoutesFromConfig($container);
+
+        self::assertSame($application, $result);
+    }
+
+    #[Test]
+    public function registerMiddlewareFromConfigReturnsSelf(): void
+    {
+        $app = $this->createMock(App::class);
+        $app->expects(self::never())
+            ->method('addRoutingMiddleware');
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('has')
+            ->willReturn(false);
+
+        $application = Application::createWithApp($app, []);
+        $result = $application->registerMiddlewareFromConfig($container);
+
+        self::assertSame($application, $result);
+    }
+
+    #[Test]
+    public function registerRoutesFromConfigSkipsWhenNotConfigured(): void
+    {
+        $container = $this->createMock(ContainerInterface::class);
+        $container->expects(self::once())
+            ->method('has')
+            ->with('slim-routes-callback')
+            ->willReturn(false);
+
+        $app = $this->createMock(App::class);
+        $app->expects(self::never())
+            ->method('get');
+
+        $application = Application::createWithApp($app, []);
+        $application->registerRoutesFromConfig($container);
     }
 }

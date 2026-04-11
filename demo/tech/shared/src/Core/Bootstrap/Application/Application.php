@@ -64,6 +64,17 @@ final readonly class Application
         return $this;
     }
 
+    public function registerMiddlewareFromConfig(ContainerInterface $container): self
+    {
+        if ($container->has('slim-middleware')) {
+            /** @var callable $middleware */
+            $middleware = $container->get('slim-middleware');
+            $middleware($this->app);
+        }
+
+        return $this;
+    }
+
     public function run(): void
     {
         foreach ($this->middlewares as $middleware) {
