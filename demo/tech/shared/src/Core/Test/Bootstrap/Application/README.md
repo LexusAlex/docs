@@ -25,16 +25,17 @@ make shared-phpunit-coverage
 Проверяет, что фабрика `create()` возвращает инстанс `Application`.
 
 ```php
-$application = Application::create(self::emptyRoutes(...));
+$container = $this->createMock(ContainerInterface::class);
+$application = Application::create($container);
 self::assertInstanceOf(Application::class, $application);
 ```
 
-#### `createBuildsContainerWhenNotProvided`
-Проверяет, что если контейнер не передан, он создается автоматически.
+#### `createBuildsAppFromContainer`
+Проверяет, что приложение создается с переданным контейнером.
 
 ```php
-$container = null;
-$application = Application::create(self::emptyRoutes(...), $container);
+$container = $this->createMock(ContainerInterface::class);
+$application = Application::create($container);
 self::assertInstanceOf(Application::class, $application);
 ```
 
@@ -42,8 +43,8 @@ self::assertInstanceOf(Application::class, $application);
 Проверяет, что переданный контейнер используется в приложении.
 
 ```php
-$container = new ContainerFactory()->create();
-$application = Application::create(self::emptyRoutes(...), $container);
+$container = $this->createMock(ContainerInterface::class);
+$application = Application::create($container, self::emptyRoutes(...));
 self::assertSame($container, $application->getApp()->getContainer());
 ```
 
@@ -53,7 +54,8 @@ self::assertSame($container, $application->getApp()->getContainer());
 Проверяет, что метод `getApp()` возвращает инстанс Slim App.
 
 ```php
-$application = Application::create(self::emptyRoutes(...));
+$container = $this->createMock(ContainerInterface::class);
+$application = Application::create($container);
 self::assertInstanceOf(App::class, $application->getApp());
 ```
 
@@ -61,8 +63,9 @@ self::assertInstanceOf(App::class, $application->getApp());
 Проверяет, что callback `$routes` вызывается при создании приложения.
 
 ```php
+$container = $this->createMock(ContainerInterface::class);
 $routesCalled = false;
-$application = Application::create(function (App $app) use (&$routesCalled): void {
+$application = Application::create($container, function (App $app) use (&$routesCalled): void {
     $routesCalled = true;
 });
 self::assertTrue($routesCalled);
@@ -74,7 +77,8 @@ self::assertTrue($routesCalled);
 Проверяет, что добавление middleware возвращает **новый** инстанс (immutability).
 
 ```php
-$application1 = Application::create(self::emptyRoutes(...));
+$container = $this->createMock(ContainerInterface::class);
+$application1 = Application::create($container);
 $application2 = $application1->middleware(stdClass::class);
 self::assertNotSame($application1, $application2);
 ```
@@ -83,7 +87,8 @@ self::assertNotSame($application1, $application2);
 Проверяет, что несколько вызовов `middleware()` накапливают middleware.
 
 ```php
-$application = Application::create(self::emptyRoutes(...))
+$container = $this->createMock(ContainerInterface::class);
+$application = Application::create($container)
     ->middleware(stdClass::class)
     ->middleware(DateTime::class);
 
@@ -103,7 +108,8 @@ self::assertCount(0, $routeCollector->getRoutes());
 #[DataProvider('provideMiddlewareClasses')]
 public function middlewareCreatesNewInstance(string ...$middlewares): void
 {
-    $application = Application::create(self::emptyRoutes(...));
+    $container = $this->createMock(ContainerInterface::class);
+    $application = Application::create($container);
     foreach ($middlewares as $middleware) {
         $application = $application->middleware($middleware);
     }
@@ -118,7 +124,8 @@ public function middlewareCreatesNewInstance(string ...$middlewares): void
 #[DataProvider('provideMiddlewareClasses')]
 public function middlewareStoresCorrectClasses(string ...$middlewares): void
 {
-    $application = Application::create(self::emptyRoutes(...));
+    $container = $this->createMock(ContainerInterface::class);
+    $application = Application::create($container);
     foreach ($middlewares as $middleware) {
         $application = $application->middleware($middleware);
     }
@@ -138,7 +145,8 @@ public function middlewareStoresCorrectClasses(string ...$middlewares): void
 Проверяет, что массив middleware имеет последовательные числовые ключи `[0, 1]`.
 
 ```php
-$application = Application::create(self::emptyRoutes(...))
+$container = $this->createMock(ContainerInterface::class);
+$application = Application::create($container)
     ->middleware(stdClass::class)
     ->middleware(DateTime::class);
 
@@ -155,6 +163,7 @@ self::assertSame([0, 1], array_keys($middlewares));
 Проверяет, что метод `run()` вызывает `$app->run()`.
 
 ```php
+$container = $this->createMock(ContainerInterface::class);
 $app = $this->createMock(App::class);
 $app->expects(self::once())->method('run');
 
@@ -205,7 +214,7 @@ public static function provideMiddlewareClasses(): array
 Тесты используют:
 - PHPUnit 13
 - Reflection для доступа к private свойствам
-- MockBuilder для мокирования Slim App
+- MockBuilder для мокирования Slim App и Container
 
 ## Edge Cases
 

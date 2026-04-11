@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Shared\Core\Bootstrap\Application;
 
 use Psr\Container\ContainerInterface;
-use Shared\Core\Bootstrap\ConfigurationLoader\ConfigurationLoader;
 use Slim\App;
 use Slim\Factory\AppFactory;
 
@@ -26,15 +25,15 @@ final readonly class Application
         return new self($app, $middlewares);
     }
 
-    /**
-     * @param callable(App): void $routes
-     */
-    public static function create(ContainerInterface $container): self
+    public static function create(ContainerInterface $container, ?callable $routes = null): self
     {
-        if ($container->has(App::class)) {
-            $app = $container->get(App::class);
-        } else {
-            $app = AppFactory::createFromContainer($container);
+        /** @var App $app */
+        $app = $container->has(App::class)
+            ? $container->get(App::class)
+            : AppFactory::createFromContainer($container);
+
+        if (null !== $routes) {
+            $routes($app);
         }
 
         return new self($app, []);
@@ -61,6 +60,7 @@ final readonly class Application
     public function registerRoutesFromConfig(ContainerInterface $container): self
     {
         if ($container->has('slim-routes-callback')) {
+            /** @var callable $routes */
             $routes = $container->get('slim-routes-callback');
             $routes($this->app);
         }

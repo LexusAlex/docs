@@ -11,6 +11,9 @@ use Psr\Container\ContainerInterface;
 final class ContainerFactory implements ContainerFactoryInterface
 {
     #[Override]
+    /**
+     * @param array<mixed> $dependencies
+     */
     public function create(array $dependencies): ContainerInterface
     {
         $containerBuilder = new ContainerBuilder();

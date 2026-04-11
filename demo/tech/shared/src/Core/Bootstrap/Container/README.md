@@ -5,9 +5,11 @@
 ## Использование
 
 ```php
+use Shared\Core\Bootstrap\ConfigurationLoader\ConfigurationLoader;
 use Shared\Core\Bootstrap\Container\ContainerFactory;
 
-$container = (new ContainerFactory())->create();
+$dependencies = ConfigurationLoader::load();
+$container = (new ContainerFactory())->create($dependencies);
 
 // Получить сервис
 $service = $container->get(SomeService::class);

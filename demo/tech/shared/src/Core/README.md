@@ -9,6 +9,8 @@
 Работа с переменными окружения. Предоставляет унифицированный интерфейс для чтения переменных с поддержкой значений по умолчанию.
 
 ```php
+use Shared\Core\Bootstrap\Environment\Environment;
+
 $environment = new Environment();
 $value = $environment->get('DATABASE_HOST', 'localhost');
 ```
@@ -20,6 +22,8 @@ $value = $environment->get('DATABASE_HOST', 'localhost');
 Загрузчик конфигураций. Собирает и объединяет `.php` файлы из папок `Configuration/common/` и `Configuration/{environment}/`.
 
 ```php
+use Shared\Core\Bootstrap\ConfigurationLoader\ConfigurationLoader;
+
 ConfigurationLoader::projectRoot(__DIR__ . '/../../');
 $config = ConfigurationLoader::load();
 ```
@@ -32,10 +36,10 @@ $config = ConfigurationLoader::load();
 
 ### Container
 
-Фабрика для создания PHP-DI контейнера с автоматической загрузкой конфигураций.
+Фабрика для создания PHP-DI контейнера с загрузкой конфигураций.
 
 ```php
-$container = (new ContainerFactory())->create();
+$container = (new ContainerFactory())->create(ConfigurationLoader::load());
 $service = $container->get(SomeService::class);
 ```
 
@@ -44,7 +48,9 @@ $service = $container->get(SomeService::class);
 Фабрика для создания Slim-приложения с контейнером. Обеспечивает fluent interface для конфигурации приложения.
 
 ```php
-$application = Application::create(function (App $app) {
+$container = (new ContainerFactory())->create(ConfigurationLoader::load());
+
+$application = Application::create($container, function (App $app) {
     $app->get('/', HomeAction::class);
 })
 ->middleware(ErrorMiddleware::class)

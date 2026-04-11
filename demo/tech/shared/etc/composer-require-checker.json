@@ -7,7 +7,8 @@
     "PHPUnit\\Framework\\TestCase",
     "PHPUnit\\Framework\\Attributes\\DataProvider",
     "PHPUnit\\Framework\\Attributes\\RunInSeparateProcess",
-    "Psr\\Container\\ContainerInterface"
+    "Psr\\Container\\ContainerInterface",
+    "Psr\\Http\\Message\\ResponseFactoryInterface"
   ],
   "scan-files": []
 }

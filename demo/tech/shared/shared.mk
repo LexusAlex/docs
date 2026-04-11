@@ -13,8 +13,8 @@ shared-composer-update:
 	$(call RUN_IN_SERVICE,$(SHARED_SERVICE),composer update)
 shared-composer-install:
 	$(call RUN_IN_SERVICE,$(SHARED_SERVICE),composer install)
-shared-composer-phpunit-core:
+shared-phpunit-core:
 	$(call RUN_IN_SERVICE,$(SHARED_SERVICE),composer run phpunit-core)
-shared-composer-phpunit-http:
+shared-phpunit-http:
 	$(call RUN_IN_SERVICE,$(SHARED_SERVICE),composer run phpunit-http)
 SERVICE_NAME :=

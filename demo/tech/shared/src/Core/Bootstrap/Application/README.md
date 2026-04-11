@@ -9,9 +9,15 @@
 ## Быстрый старт
 
 ```php
+use Psr\Container\ContainerInterface;
 use Shared\Core\Bootstrap\Application\Application;
+use Shared\Core\Bootstrap\ConfigurationLoader\ConfigurationLoader;
+use Shared\Core\Bootstrap\Container\ContainerFactory;
+use Slim\App;
 
-$application = Application::create(function (App $app) {
+$container = (new ContainerFactory())->create(ConfigurationLoader::load());
+
+$application = Application::create($container, function (App $app) {
     $app->get('/', HomeAction::class);
     $app->post('/api/users', UserCreateAction::class);
     $app->get('/api/users/{id}', UserGetAction::class);
@@ -25,31 +31,33 @@ $application
 
 ## Особенности
 
-- **Автоматическое создание контейнера** — если контейнер не передан, создается автоматически через `ContainerFactory`
 - **Immutable** — метод `middleware()` возвращает новый инстанс, исходный объект не меняется
 - **Fluent interface** — методы возвращают `$this` для цепочки вызовов
+- Метод `registerRoutesFromConfig()` загружает маршруты из контейнера по ключу `slim-routes-callback`
 
 ## API
 
-### `Application::create(callable $routes, ?ContainerInterface $container = null): self`
+### `Application::create(ContainerInterface $container, ?callable $routes = null): self`
 
 Создает приложение с Slim.
 
 **Параметры:**
-- `$routes` — callable, который принимает `App` и регистрирует маршруты
-- `$container` — опциональный PSR-контейнер. Если не передан, создается автоматически
+- `$container` — PSR-контейнер с зависимостями
+- `$routes` — опциональный callable, который принимает `App` и регистрирует маршруты
 
 **Пример:**
-
+ 
 ```php
-$application = Application::create(function (App $app): void {
+$container = (new ContainerFactory())->create(ConfigurationLoader::load());
+
+// Без routes callback
+$application = Application::create($container);
+
+// С routes callback
+$application = Application::create($container, function (App $app): void {
     $app->get('/', HomeAction::class);
     $app->post('/api/users', UserCreateAction::class);
 });
-
-// С переданным контейнером
-$container = (new ContainerFactory())->create();
-$application = Application::create($routes, $container);
 ```
 
 ### `Application::middleware(string ...$middlewares): self`
@@ -126,7 +134,9 @@ Middleware хранятся в виде массива `list<class-string>`. П�
 ### Базовое приложение
 
 ```php
-$application = Application::create(function (App $app) {
+$container = (new ContainerFactory())->create(ConfigurationLoader::load());
+
+$application = Application::create($container, function (App $app) {
     $app->get('/', HomeAction::class);
 });
 
@@ -136,7 +146,9 @@ $application->run();
 ### С middleware
 
 ```php
-$application = Application::create(function (App $app) {
+$container = (new ContainerFactory())->create(ConfigurationLoader::load());
+
+$application = Application::create($container, function (App $app) {
     $app->get('/', HomeAction::class);
     $app->get('/api/users', UserListAction::class);
     $app->get('/api/users/{id}', UserGetAction::class);
@@ -150,14 +162,15 @@ $application = Application::create(function (App $app) {
 
 ```php
 $container = new MyCustomContainer();
-$application = Application::create($routes, $container);
+$application = Application::create($container, $routes);
 $application->run();
 ```
 
 ### Доступ к App для расширенной конфигурации
 
 ```php
-$application = Application::create($routes);
+$container = (new ContainerFactory())->create(ConfigurationLoader::load());
+$application = Application::create($container, $routes);
 
 // Добавляем middleware до запуска
 $app = $application->getApp();
