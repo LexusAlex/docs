@@ -39,7 +39,7 @@ final class ApplicationTest extends TestCase
         ConfigurationLoader::projectRoot(__DIR__ . '/fixtures/configs');
 
         $this->container = new ContainerFactory()->create(ConfigurationLoader::load());
-        $this->application = Application::create($this->container, self::emptyRoutes(...));
+        $this->application = Application::create($this->container);
     }
 
     #[Override]
@@ -58,22 +58,6 @@ final class ApplicationTest extends TestCase
     }
 
     #[Test]
-    public function routesCallbackIsCalled(): void
-    {
-        $routesCalled = false;
-
-        $application = Application::create(
-            $this->container,
-            static function (App $app) use (&$routesCalled): void {
-                $routesCalled = true;
-            }
-        );
-
-        self::assertInstanceOf(App::class, $application->getApp());
-        self::assertTrue($routesCalled);
-    }
-
-    #[Test]
     public function createUsesFactoryWhenAppNotInContainer(): void
     {
         $container = $this->createMock(ContainerInterface::class);
@@ -81,7 +65,7 @@ final class ApplicationTest extends TestCase
             ->method('has')
             ->willReturn(false);
 
-        $app = Application::create($container, null);
+        $app = Application::create($container);
 
         self::assertInstanceOf(App::class, $app->getApp());
     }
@@ -206,6 +190,4 @@ final class ApplicationTest extends TestCase
 
         self::assertSame([0, 1], array_keys($middlewares));
     }
-
-    private static function emptyRoutes(App $app): void {}
 }

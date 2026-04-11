@@ -60,15 +60,19 @@ self::assertInstanceOf(App::class, $application->getApp());
 ```
 
 #### `routesCallbackIsCalled`
-Проверяет, что callback `$routes` вызывается при создании приложения.
+Проверяет, что callback `$routes` сохраняется при создании и применяется в `registerRoutesFromConfig()`.
 
 ```php
 $container = $this->createMock(ContainerInterface::class);
-$routesCalled = false;
-$application = Application::create($container, function (App $app) use (&$routesCalled): void {
-    $routesCalled = true;
-});
-self::assertTrue($routesCalled);
+$routesCallback = function (App $app): void {
+    $app->get('/test', stdClass::class);
+};
+$application = Application::create($container, $routesCallback);
+
+// Routes применяются при registerRoutesFromConfig
+$application->registerRoutesFromConfig($container);
+$routes = $application->getApp()->getRouteCollector()->getRoutes();
+self::assertCount(1, $routes);
 ```
 
 ### Middleware
@@ -225,3 +229,4 @@ public static function provideMiddlewareClasses(): array
 - Immutability (возврат нового инстанса)
 - Корректность порядка middleware
 - Вызов методов add и run
+- Дублирование middleware (автоматически дедуплицируются)

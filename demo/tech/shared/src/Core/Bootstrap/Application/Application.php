@@ -25,16 +25,12 @@ final readonly class Application
         return new self($app, $middlewares);
     }
 
-    public static function create(ContainerInterface $container, ?callable $routes = null): self
+    public static function create(ContainerInterface $container): self
     {
         /** @var App $app */
         $app = $container->has(App::class)
             ? $container->get(App::class)
             : AppFactory::createFromContainer($container);
-
-        if (null !== $routes) {
-            $routes($app);
-        }
 
         return new self($app, []);
     }

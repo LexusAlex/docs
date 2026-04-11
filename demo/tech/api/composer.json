@@ -13,5 +13,14 @@
     "psr-4": {
       "Api\\": "src/"
     }
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": "../shared"
+    }
+  ],
+  "require": {
+    "tech/shared": "*"
   }
 }

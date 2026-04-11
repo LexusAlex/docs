@@ -34,6 +34,8 @@ $application
 - **Immutable** — метод `middleware()` возвращает новый инстанс, исходный объект не меняется
 - **Fluent interface** — методы возвращают `$this` для цепочки вызовов
 - Метод `registerRoutesFromConfig()` загружает маршруты из контейнера по ключу `slim-routes-callback`
+- Маршруты из `create()` и `registerRoutesFromConfig()` применяются вместе в едином потоке
+- Middleware автоматически дедуплицируются — дубликаты игнорируются
 
 ## API
 
@@ -120,7 +122,7 @@ $application = Application::create($routes)
 
 ### Хранение middleware
 
-Middleware хранятся в виде массива `list<class-string>`. При добавлении нового middleware создается новый инстанс с обновленным массивом.
+Middleware хранятся в виде массива `list<class-string>`. При добавлении нового middleware создается новый инстанс с обновленным массивом. Дубликаты автоматически удаляются через `array_unique()`.
 
 ### Запуск
 
