@@ -10,5 +10,5 @@
     "Psr\\Container\\ContainerInterface",
     "Psr\\Http\\Message\\ResponseFactoryInterface"
   ],
-  "scan-files": []
+  "scan-files": ["../src"]
 }
