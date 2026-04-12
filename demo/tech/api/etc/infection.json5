@@ -1,0 +1,28 @@
+{
+    "$schema": "../../tools/t/infection/vendor/infection/infection/resources/schema.json",
+    "source": {
+        "directories": [
+            "../src",
+            "../public"
+        ],
+    },
+    "timeout": 10,
+    "logs": {
+        "text": "../var/cache/infection/infection.log",
+        "html": "../var/cache/infection/infection.html",
+        "summary": "../var/cache/infection/summary.log",
+        "perMutator": "../var/cache/infection/per-mutator.md",
+        "stryker": {
+            "report": "/^\\d+\\.\\d+\\.x$/"
+        }
+    },
+    "phpUnit": {
+        "configDir": ".",
+        "customPath": "../../tools/t/phpunit/vendor/bin/phpunit"
+    },
+    "mutators": {
+        "@default": true
+    },
+    "minCoveredMsi": 100,
+    "minMsi": 100
+}

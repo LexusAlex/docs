@@ -1,0 +1,10 @@
+{
+  "symbol-whitelist": [
+    "Psr\\Http\\Message\\ResponseFactoryInterface",
+    "Slim\\CallableResolver",
+    "Slim\\Interfaces\\CallableResolverInterface",
+    "Slim\\Psr7\\Factory\\ResponseFactory",
+    "stdClass"
+  ],
+  "scan-files": ["../src","../public","../tests"]
+}

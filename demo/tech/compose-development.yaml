@@ -71,6 +71,7 @@ services:
     volumes:
       - ./api:/api
       - ./shared:/shared
+      - ./tools:/tools
   shared-php-cli:
     environment:
       <<: *env-shared
