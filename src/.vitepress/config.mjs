@@ -376,6 +376,7 @@ export default defineConfig({
             items: [
               { text: 'Linux',collapsed: true, link: '/base/infrastructure/linux/',
                 items: [
+                  { text: 'Изучение Linux', link: '/base/infrastructure/linux/learning-roadmap' },
                   { text: 'Права доступа', link: '/base/infrastructure/linux/rights/'},
                   { text: 'Команды',collapsed: true, link: '/base/infrastructure/linux/commands/',
                     items: [

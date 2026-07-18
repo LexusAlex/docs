@@ -11,9 +11,9 @@ const sectionRoot = path.join(
   sourceRoot,
   'base',
   'infrastructure',
-  'linux',
-  'commands'
+  'linux'
 )
+const roadmapFile = path.join(sectionRoot, 'learning-roadmap.md')
 
 const errors = []
 const requireFromVitePress = createRequire(import.meta.resolve('vitepress'))
@@ -119,6 +119,59 @@ function checkRiskyExamples(file, lines) {
   })
 }
 
+function checkRoadmap(file) {
+  if (!fs.existsSync(file)) {
+    errors.push('learning-roadmap.md: missing file')
+    return
+  }
+
+  const lines = fs.readFileSync(file, 'utf8').split(/\r?\n/)
+  const stages = []
+
+  lines.forEach((line, index) => {
+    const match = line.match(/^## Этап (\d+)\./)
+    if (match) stages.push({ number: Number(match[1]), line: index })
+  })
+
+  const stageNumbers = stages.map(({ number }) => number)
+  const expectedStageNumbers = Array.from({ length: 12 }, (_, index) => index + 1)
+  if (JSON.stringify(stageNumbers) !== JSON.stringify(expectedStageNumbers)) {
+    errors.push(
+      `learning-roadmap.md: expected stages 1-12, got ${stageNumbers.join(', ')}`
+    )
+  }
+
+  const requiredSections = [
+    '### Результат',
+    '### Изучить',
+    '### Практика',
+    '### Проверьте себя'
+  ]
+
+  stages.forEach((stage, index) => {
+    const end = stages[index + 1]?.line ?? lines.length
+    const stageLines = lines.slice(stage.line + 1, end)
+    for (const heading of requiredSections) {
+      const count = stageLines.filter((line) => line === heading).length
+      if (count !== 1) {
+        errors.push(
+          `learning-roadmap.md: stage ${stage.number} must contain one ${heading}`
+        )
+      }
+    }
+  })
+
+  const projects = lines
+    .map((line) => line.match(/^### Проект (\d+)\./)?.[1])
+    .filter(Boolean)
+    .map(Number)
+  if (JSON.stringify(projects) !== JSON.stringify([1, 2, 3, 4])) {
+    errors.push(
+      `learning-roadmap.md: expected projects 1-4, got ${projects.join(', ')}`
+    )
+  }
+}
+
 const markdownFiles = walkMarkdown(sectionRoot)
 
 for (const file of markdownFiles) {
@@ -128,7 +181,10 @@ for (const file of markdownFiles) {
   checkRiskyExamples(file, lines)
 }
 
-const sectionPrefix = '/base/infrastructure/linux/commands/'
+checkRoadmap(roadmapFile)
+
+const sectionPrefix = '/base/infrastructure/linux/'
+const roadmapRoute = `${sectionPrefix}learning-roadmap`
 const sidebarLinks = new Set()
 
 function collectSidebarLinks(items) {
@@ -157,6 +213,9 @@ const sectionSidebarLinks = [...sidebarLinks].filter((link) =>
 
 for (const route of expectedRoutes) {
   if (!sidebarLinks.has(route)) errors.push(`sidebar: missing ${route}`)
+}
+if (!sidebarLinks.has(roadmapRoute)) {
+  errors.push(`sidebar: missing ${roadmapRoute}`)
 }
 for (const route of sectionSidebarLinks) {
   if (!expectedRoutes.has(route)) errors.push(`sidebar: unknown ${route}`)
