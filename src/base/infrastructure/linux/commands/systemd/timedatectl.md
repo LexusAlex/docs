@@ -177,9 +177,9 @@ timedatectl show-timesync
 
 :::warning Часовые пояса
 Часовые пояса хранятся как ссылки в `/usr/share/zoneinfo/`. При обновлении системы часовые пояса могут обновиться.
+:::
+
 ## См. также
 
 - [hostnamectl](hostnamectl.md) — имя хоста
 - [localectl](localectl.md) — настройка локали
-
-:::

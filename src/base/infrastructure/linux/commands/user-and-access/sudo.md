@@ -191,6 +191,6 @@ journalctl | grep "sudo"
 ## См. также
 
 - [su](su.md) — переключение пользователя
-- [visudo](visudo.md) — редактирование sudoers
-- [sudoers](sudoers.md) — формат файла
-- [/var/log/auth.log](/var/log/auth.log.md) — лог аутентификации
+- `visudo` — редактирование sudoers
+- `/etc/sudoers` — формат файла
+- `/var/log/auth.log` — лог аутентификации

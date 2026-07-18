@@ -226,9 +226,9 @@ kubectl get pods -o json | jq '.items[] | {name: .metadata.name, status: .status
 
 :::tip
 Для сложных фильтров лучше использовать файл: `jq -f filter.jq data.json`.
+:::
+
 ## См. также
 
-- [curl](network/curl.md) — HTTP-запросы
-- [grep](search-files-and-commands/grep.md) — поиск в тексте
-
-:::
+- [curl](../network/curl.md) — HTTP-запросы
+- [grep](../search-files-and-commands/grep.md) — поиск в тексте

@@ -199,19 +199,19 @@ mv ~/Desktop/*.png ~/Documents/Images/
 find . -name "*.jpg" -exec mv {} /photos/ \;
 
 # Переименовать все .txt файлы в .txt.bak
-ls *.txt | xargs -I{} mv {} {}.bak
+find . -maxdepth 1 -type f -name "*.txt" -exec sh -c 'for file do mv -- "$file" "$file.bak"; done' sh {} +
 
 # Архивировать логи старше 30 дней
-find . -name "*.log" -mtime +30 | xargs -I{} mv {} /archive/
+find . -type f -name "*.log" -mtime +30 -exec mv -t /archive/ -- {} +
 
 # Переместить файлы, найденные по содержимому
-grep -rl "OLD_API" src/ | xargs -I{} mv {} /deprecated/
+grep -rlZ -- "OLD_API" src/ | xargs -0 -r mv -t /deprecated/ --
 
 # Переименовать файлы, заменяя пробелы на подчёркивания
 ls | grep " " | while read f; do mv "$f" "$(echo "$f" | tr ' ' '_')"; done
 
 # Переместить файлы больше 100МБ в отдельный каталог
-find . -type f -size +100M | xargs -I{} mv {} /large_files/
+find . -type f -size +100M -exec mv -t /large_files/ -- {} +
 
 # Переименовать фотографии по дате съёмки
 ls *.jpg | while read f; do mv "$f" "$(date -r "$f" +%Y%m%d_%H%M%S).jpg"; done
@@ -222,10 +222,10 @@ ls | awk -F. '{print $NF}' | sort -u | while read ext; do
 done
 
 # Переместить и сжать старые логи
-find /var/log -name "*.log" -mtime +7 | xargs -I{} sh -c 'gzip "{}" && mv "{}.gz" /archive/'
+find /var/log -type f -name "*.log" -mtime +7 -exec sh -c 'for file do gzip -- "$file" && mv -- "$file.gz" /archive/; done' sh {} +
 
 # Безопасное перемещение с предпросмотром
-find . -name "*.bak" | tee /dev/stderr | xargs -I{} mv {} /trash/
+find . -type f -name "*.bak" -print -exec mv -t /trash/ -- {} +
 ```
 
 ## Советы
@@ -244,9 +244,9 @@ find . -name "*.bak" | tee /dev/stderr | xargs -I{} mv {} /trash/
 
 :::tip
 Для пакетного переименования лучше использовать `rename` — это мощнее и быстрее циклов с `mv`.
+:::
+
 ## См. также
 
 - [cp](cp.md) — копирование файлов
 - [rename](rename.md) — пакетное переименование
-
-:::

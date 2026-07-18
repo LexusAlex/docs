@@ -167,13 +167,6 @@ find /var/www -type d -exec chown www-data:www-data {} \;
 chown alex: file.txt
 ```
 
-## См. также
-
-- [chmod](chmod.md) — изменение прав
-- [chgrp](chgrp.md) — изменение группы
-- [ls -l](ls -l.md) — просмотр владельца и прав
-- [find](find.md) — поиск файлов для изменения
-
 ## Связки с другими командами
 
 ```bash
@@ -207,3 +200,10 @@ find / -nouser 2>/dev/null | head -20
 # Массовое изменение группы для проекта
 find /project -type f -exec chown :developers {} \;
 ```
+
+## См. также
+
+- [chmod](chmod.md) — изменение прав
+- [chgrp](chgrp.md) — изменение группы
+- `ls -l` — просмотр владельца и прав
+- [find](../search-files-and-commands/find.md) — поиск файлов для изменения

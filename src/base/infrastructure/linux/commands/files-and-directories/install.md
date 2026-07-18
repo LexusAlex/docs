@@ -203,6 +203,5 @@ sudo install -m 644 config.ini /opt/myapp/etc/
 ## См. также
 
 - [cp](cp.md) — копирование файлов
-- [chmod](permissions/chmod.md) — изменение прав
-- [chown](permissions/chown.md) — изменение владельца
-
+- [chmod](../permissions/chmod.md) — изменение прав
+- [chown](../permissions/chown.md) — изменение владельца

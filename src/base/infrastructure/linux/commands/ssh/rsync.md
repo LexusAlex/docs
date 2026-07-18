@@ -272,11 +272,6 @@ rsync -avz -3 user@old-server:/home/ user@new-server:/home/
 
 :::tip Совет
 Используйте `-e "ssh -p PORT"` для подключения через нестандартный порт вместо `--rsh`.
-## См. также
-
-- [scp](scp.md) — копирование файлов
-- [ssh](ssh.md) — подключение
-
 :::
 
 ## Связки с другими командами
@@ -309,3 +304,8 @@ rsync -avz --delete src/ dest/ | tee sync.log | wc -l
 # Зеркалирование с уведомлением
 rsync -avz --delete ./site/ user@host:/var/www/html/ && ssh user@host 'echo "Deploy done" | mail -s "Deploy" admin@example.com'
 ```
+
+## См. также
+
+- [scp](scp.md) — копирование файлов
+- [ssh](ssh.md) — подключение

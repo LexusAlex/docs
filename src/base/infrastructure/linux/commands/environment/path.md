@@ -244,10 +244,10 @@ export PATH="$OLD_PATH"
 
 :::warning Права доступа
 Проверяйте права директорий в PATH. Директории с правами `o+w` (world-writable) представляют угрозу безопасности.
+:::
+
 ## См. также
 
 - [export](export.md) — установка переменных
 - [bashrc](bashrc.md) — файлы конфигурации
-- [which](search-files-and-commands/which.md) — поиск команд
-
-:::
+- [which](../search-files-and-commands/which.md) — поиск команд

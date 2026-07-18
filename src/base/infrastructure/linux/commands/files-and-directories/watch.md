@@ -167,7 +167,7 @@ watch -n 1 'tail -5 /var/log/nginx/access.log | cut -d" " -f1,7'
 ### Ожидание освобождения порта
 
 ```bash
-watch -g -n 2 'ss -tln | grep :8080 || echo "Порт свободен"'
+watch -g -n 2 "ss -H -ltn 'sport = :8080' | grep -q . || echo 'Порт свободен'"
 ```
 
 ### Проверка доступности серверов

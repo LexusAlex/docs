@@ -146,4 +146,4 @@ grep "developers" /etc/sudoers /etc/sudoers.d/*
 - [groupadd](groupadd.md) — создание группы
 - [groupmod](groupmod.md) — изменение группы
 - [usermod](usermod.md) — изменение пользователя
-- [gpasswd](gpasswd.md) — управление группой
+- `gpasswd` — управление группой

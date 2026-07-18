@@ -29,13 +29,13 @@ xargs [опции] [команда [начальные аргументы]]
 ### Базовое использование
 
 ```bash
-echo "file1.txt file2.txt" | xargs rm
+printf '%s\n' file1.txt file2.txt | xargs -r rm --
 ```
 
 ### С заполнителем
 
 ```bash
-echo "file1.txt file2.txt" | xargs -I {} mv {} /backup/
+printf '%s\n' file1.txt file2.txt | xargs -r -I {} mv -- {} /backup/
 ```
 
 ### Ограничение аргументов
@@ -47,13 +47,13 @@ echo {1..10} | xargs -n 3 echo
 ### Параллельное выполнение
 
 ```bash
-find . -name "*.png" | xargs -P 4 -I {} convert {} {}.webp
+find . -type f -name "*.png" -print0 | xargs -0 -r -P 4 -I {} sh -c 'convert "$1" "${1%.png}.webp"' _ {}
 ```
 
 ### С null-разделителем
 
 ```bash
-find . -name "*.log" -print0 | xargs -0 rm
+find . -type f -name "*.log" -print0 | xargs -0 -r rm --
 ```
 
 ### С подтверждением
@@ -77,7 +77,7 @@ echo "" | xargs -r echo "Выполнено"
 ### Множественные команды через shell
 
 ```bash
-find . -name "*.tmp" | xargs -I {} sh -c 'echo "Удаление: {}"; rm "{}"'
+find . -type f -name "*.tmp" -print0 | xargs -0 -r -I {} sh -c 'printf "Удаление: %s\n" "$1"; rm -- "$1"' _ {}
 ```
 
 ## Практические сценарии
@@ -85,37 +85,37 @@ find . -name "*.tmp" | xargs -I {} sh -c 'echo "Удаление: {}"; rm "{}"'
 ### Параллельное сжатие
 
 ```bash
-find . -name "*.log" -print0 | xargs -0 -P $(nproc) gzip
+find . -type f -name "*.log" -print0 | xargs -0 -r -P "$(nproc)" gzip --
 ```
 
-### Поиск вопределённных файлах
+### Поиск в определённых файлах
 
 ```bash
-git ls-files | xargs grep "TODO"
+git ls-files -z | xargs -0 -r grep -n -- "TODO"
 ```
 
 ### Массовое переименование
 
 ```bash
-ls *.txt | xargs -I {} bash -c 'mv "$1" "${1%.txt}.md"' _ {}
+find . -maxdepth 1 -type f -name "*.txt" -print0 | xargs -0 -r -I {} bash -c 'mv -- "$1" "${1%.txt}.md"' _ {}
 ```
 
 ### Массовое изменение прав
 
 ```bash
-find /var/www -type f -print0 | xargs -0 chmod 644
+find /var/www -type f -print0 | xargs -0 -r chmod 644 --
 ```
 
 ### Пакетный git add
 
 ```bash
-git status --porcelain | awk '{print $2}' | xargs git add
+git add -A
 ```
 
 ### Удаление старых контейнеров Docker
 
 ```bash
-docker ps -aq --filter "status=exited" | xargs docker rm
+docker ps -aq --filter "status=exited" | xargs -r docker rm
 ```
 
 :::tip
@@ -126,42 +126,45 @@ docker ps -aq --filter "status=exited" | xargs docker rm
 Без `-0` `xargs` разделяет ввод по пробелам. Файлы с пробелами в именах будут обработаны некорректно.
 :::
 
+## Связки с другими командами
+
+```bash
+# Архивировать логи, содержащие ошибки; имена передаются через NUL
+find . -type f -name "*.log" -exec grep -lZ -- "error" {} + |
+    tar --null -T - -czf error-logs.tar.gz
+
+# Показать зомби и их родителей: отправлять сигнал самому зомби бесполезно
+ps -eo pid=,ppid=,stat=,cmd= | awk '$3 ~ /^Z/ {print}'
+
+# Параллельный SSH-опрос непустых строк без комментариев
+sed -e '/^[[:space:]]*#/d' -e '/^[[:space:]]*$/d' hosts.txt |
+    xargs -r -P 5 -I {} ssh -- {} uptime
+
+# Параллельное сжатие файлов
+find . -type f -name "*.bak" -print0 | xargs -0 -r -P 4 gzip --
+
+# Удалить висящие Docker-образы
+docker images -f "dangling=true" -q | xargs -r docker rmi
+
+# Показать заголовки всех CSV-файлов
+find . -maxdepth 1 -type f -name "*.csv" -exec sh -c \
+    'printf "=== %s ===\n" "$1"; head -n 1 -- "$1"' _ {} \;
+
+# Проверить синтаксис всей конфигурации nginx
+sudo nginx -t
+
+# Найти и удалить файлы старше 90 дней
+find /tmp -type f -mtime +90 -print0 | xargs -0 -r rm -f --
+
+# Количество строк во всех Go-файлах проекта
+find . -type f -name "*.go" -print0 | xargs -0 -r wc -l -- | tail -n 1
+
+# Пакетное преобразование изображений в WebP
+find . -type f -name "*.png" -print0 |
+    xargs -0 -r -P "$(nproc)" -I {} sh -c 'cwebp -q 80 "$1" -o "${1%.png}.webp"' _ {}
+```
+
 ## См. также
 
 - [find](find.md) — поиск файлов
 - [grep](grep.md) — поиск текста
-
-
-## Связки с другими командами
-
-```bash
-# Архивировать логи, содержащие ошибки
-find . -name "*.log" | xargs grep -l "error" | xargs tar -czf error-logs.tar.gz
-
-# Завершить зомби-процессы
-ps aux | grep zombie | awk '{print $2}' | xargs kill -9
-
-# Параллельный SSH-опрос нескольких хостов
-cat hosts.txt | xargs -I{} -P 5 ssh {} 'uptime'
-
-# Параллельное сжатие файлов
-find . -name "*.bak" | xargs -P 4 gzip
-
-# Удалить висящие Docker-образы
-docker images -f "dangling=true" -q | xargs docker rmi
-
-# Показать заголовки всех CSV-файлов
-ls *.csv | xargs -I{} sh -c 'echo "=== {} ===" && head -1 {}'
-
-# Массовая проверка синтаксиса конфигов
-find /etc/nginx -name "*.conf" -print0 | xargs -0 sudo nginx -t -c
-
-# Найти и удалить файлы старше 90 дней
-find /tmp -type f -mtime +90 -print0 | xargs -0 rm -f
-
-# Количество строк во всех Go-файлах проекта
-find . -name "*.go" -print0 | xargs -0 wc -l | tail -1
-
-# Пакетное преобразование изображений в WebP
-find . -name "*.png" -print0 | xargs -0 -P $(nproc) -I {} sh -c 'cwebp -q 80 "$1" -o "${1%.png}.webp"' _
-```

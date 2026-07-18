@@ -217,5 +217,4 @@ tree -sh -D /var/log --dirsfirst
 ## См. также
 
 - [ls](ls.md) — содержимое директории
-- [find](search-files-and-commands/find.md) — поиск файлов
-
+- [find](../search-files-and-commands/find.md) — поиск файлов

@@ -13,11 +13,15 @@
 | Сравнить два файла | `diff` | `diff file1 file2` |
 | Создать файл | `touch` | `touch newfile.txt` |
 | Копировать с правами | `install` | `install -m 755 script.sh /usr/local/bin/` |
-| Безопасно удалить файл | `shred` | `shred -u sensitive.txt` |
+| Перезаписать и удалить файл на обычном HDD | `shred` | `shred -u sensitive.txt` |
 | Создать архив | `tar` | `tar -czf archive.tar.gz /path/` |
 | Распаковать архив | `tar` | `tar -xzf archive.tar.gz` |
 | Символьная ссылка | `ln` | `ln -s /path/to/file link_name` |
 | Переименовать файлы массово | `rename` | `rename 's/.txt/.md/' *.txt` |
+
+:::warning Ограничения shred
+`shred` не гарантирует удаление данных на SSD, CoW-файловых системах, снапшотах и резервных копиях. Для таких носителей используйте шифрование и штатные средства безопасного стирания устройства.
+:::
 
 ## Процессы
 
@@ -25,7 +29,7 @@
 |--------|---------|--------|
 | Посмотреть процессы | `ps` | `ps aux` |
 | Убить процесс по имени | `pkill` | `pkill nginx` |
-| Убить процесс по порту | `lsof` + `kill` | `kill $(lsof -ti:8080)` |
+| Завершить процесс по TCP-порту | `lsof` + `kill` | `lsof -tiTCP:8080 -sTCP:LISTEN \| xargs -r kill -TERM --` |
 | Запустить в фоне | `nohup` | `nohup ./script.sh &` |
 | Посмотреть что ест CPU | `top` | `top -c` |
 | Убить все процессы по имени | `killall` | `killall chrome` |
@@ -40,7 +44,7 @@
 |--------|---------|--------|
 | Проверить доступность хоста | `ping` | `ping -c 3 8.8.8.8` |
 | Посмотреть открытые порты | `ss` | `ss -tlnp` |
-| Кто слушает порт 80 | `ss` | `ss -tlnp \| grep :80` |
+| Кто слушает порт 80 | `ss` | `sudo ss -ltnp 'sport = :80'` |
 | Скачать файл | `wget` | `wget https://example.com/file.zip` |
 | HTTP-запрос | `curl` | `curl -s https://api.example.com` |
 | Посмотреть DNS | `dig` | `dig example.com` |

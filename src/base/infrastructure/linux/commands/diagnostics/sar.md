@@ -223,9 +223,9 @@ sar -b -f /var/log/sysstat/sa17
 
 :::warning Бинарные файлы
 Файлы `saNN` бинарные. Используйте `sar -f` для чтения, а не `cat`.
+:::
+
 ## См. также
 
-- [vmstat](monitoring/vmstat.md) — статистика памяти
-- [iostat](monitoring/iostat.md) — статистика ввода-вывода
-
-:::
+- [vmstat](../monitoring/vmstat.md) — статистика памяти
+- [iostat](../monitoring/iostat.md) — статистика ввода-вывода

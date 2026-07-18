@@ -154,13 +154,6 @@ ps aux | cut -d' ' -f1 | sort -u
 
 :::tip
 Опция `--output-delimiter` позволяет преобразовать разделитель: `cut -d',' -f1-3 --output-delimiter='|' data.csv`.
-## См. также
-
-- [awk](awk.md) — обработка текста
-- [sed](sed.md) — потоковый редактор
-- [tr](tr.md) — замена символов
-- [sort](sort.md) — сортировка
-
 :::
 
 ## Связки с другими командами
@@ -181,3 +174,10 @@ cat access.log | cut -d' ' -f1 | sort | uniq -c | sort -rn
 # Частота входов по пользователям
 last | cut -d' ' -f1 | sort | uniq -c | sort -rn
 ```
+
+## См. также
+
+- [awk](awk.md) — обработка текста
+- [sed](sed.md) — потоковый редактор
+- [tr](tr.md) — замена символов
+- [sort](sort.md) — сортировка

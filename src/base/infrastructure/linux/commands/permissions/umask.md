@@ -178,5 +178,5 @@ grep UMASK /etc/login.defs
 
 - [chmod](chmod.md) — изменение прав
 - [chown](chown.md) — изменение владельца
-- [/etc/profile](/etc/profile.md) — системные настройки
-- [~/.bashrc](~/.bashrc.md) — настройки пользователя
+- `/etc/profile` — системные настройки
+- `~/.bashrc` — настройки пользователя

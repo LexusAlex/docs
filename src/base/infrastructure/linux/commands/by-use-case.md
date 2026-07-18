@@ -1,145 +1,195 @@
-# Команды по задачам
+# Сценарии диагностики Linux
 
-Альтернативный справочник: команды organized по сценариям использования, а не по категориям.
+Runbook-справочник для типовых инцидентов. В отличие от [шпаргалки](cheat-sheet.md) и навигатора [«Как сделать...»](how-to.md), здесь команды расположены в порядке проверки: от наблюдения симптома к поиску причины и безопасному действию.
 
-## Мониторинг и диагностика
+:::warning
+Не перезапускайте службы и не удаляйте данные до сбора состояния и логов. Сначала сохраните вывод диагностических команд, затем меняйте систему и повторяйте проверку.
+:::
 
-### Что происходит в системе?
-- `top` / `htop` — процессы в реальном времени
-- `ps aux` — список всех процессов
-- `free -h` — использование памяти
-- `uptime` — загрузка CPU (load average)
-- `vmstat 1 5` — статистика CPU/памяти/IO
+## Заканчивается место на диске
 
-### Что ест диск?
-- `df -h` — место на дисках
-- `du -sh * | sort -rh` — размер папок
-- `find / -type f -size +100M` — большие файлы
-- `lsof +D /path` — открытые файлы в директории
+### 1. Определить файловую систему и тип исчерпания
 
-### Что ест сеть?
-- `ss -tlnp` — слушающие порты
-- `ss -tn state established | wc -l` — активные соединения
-- `iftop` / `nload` — трафик в реальном времени
-- `tcpdump -i eth0` — захват пакетов
+```bash
+df -hT
+df -ih
+```
 
-### Что упало?
-- `systemctl --failed` — упавшие службы
-- `journalctl -p err --since "1 hour ago"` — ошибки за час
-- `dmesg | tail -20` — сообщения ядра
+`df -hT` показывает занятые байты, `df -ih` — inode. Свободные гигабайты не помогут, если закончились inode из-за большого количества мелких файлов.
 
-## Поиск и фильтрация
+### 2. Найти крупные каталоги и файлы
 
-### Найти файл
-- `find / -name "filename"` — по имени
-- `locate filename` — по базе (быстро)
-- `find . -name "*.log" -mtime +30` — старые логи
+```bash
+sudo du -xhd1 /var | sort -h
+sudo find /var -xdev -type f -size +1G -printf '%s %p\n' | sort -rn | head -n 20
+```
 
-### Найти в файлах
-- `grep -r "text" /path/` — рекурсивный поиск
-- `grep -rn "TODO" --include="*.py"` — в Python-файлах
-- `grep -rl "password" /etc/` — только имена файлов
+Опция `-x`/`-xdev` не позволяет случайно уйти в другие файловые системы. Повторяйте `du` для найденного крупного каталога, постепенно сужая поиск.
 
-### Найти команду
-- `which python3` — путь к команде
-- `whereis nginx` — бинарник + man + исходники
-- `type cd` — тип команды (builtin/file)
+### 3. Проверить удалённые, но открытые файлы
 
-## Безопасность
+```bash
+sudo lsof +L1
+journalctl --disk-usage
+```
 
-### Кто в системе?
-- `who` — текущие пользователи
-- `last -10` — последние входы
-- `lastb` — неудачные попытки (нужен root)
+Если процесс продолжает держать удалённый лог, место освободится только после корректного переоткрытия файла или перезапуска соответствующей службы. Не завершайте процесс, пока не оцените влияние.
 
-### Кто что делает?
-- `ps aux | grep username` — процессы пользователя
-- `lsof -u username` — открытые файлы пользователя
-- `w` — кто вошёл и что делает
+### 4. Проверить результат очистки
 
-### Права доступа
-- `chmod 755 file` — изменить права
-- `chown user:group file` — изменить владельца
-- `ls -la` — посмотреть права
+```bash
+df -hT
+df -ih
+```
 
-### Файрвол
-- `ufw status` — статус (Ubuntu)
-- `iptables -L -n` — правила
-- `ss -tlnp` — открытые порты
+См. [df](monitoring/df.md), [du](monitoring/du.md), [find](search-files-and-commands/find.md) и [lsof](diagnostics/lsof.md).
 
-## Сеть
+## Сайт не отвечает
 
-### Проверить связь
-- `ping -c 3 host` — проверить доступность
-- `traceroute host` — маршрут
-- `mtr host` — непрерывная трассировка
+### 1. Зафиксировать симптом с клиентской стороны
 
-### DNS
-- `dig domain.com` — DNS-запрос
-- `dig +short domain.com` — только IP
-- `dig -x IP` — обратный DNS
+```bash
+curl -sS -o /dev/null -w 'HTTP %{http_code}, connect=%{time_connect}s, total=%{time_total}s\n' \
+  https://example.com
+```
 
-### HTTP
-- `curl -sI https://example.com` — заголовки
-- `curl -s url | jq` — JSON-ответ
-- `wget -c url` — скачать файл (продолжить)
+Код `000` означает, что HTTP-ответ не получен: отдельно проверяйте DNS, маршрут, TLS и доступность порта.
 
-### Сканирование
-- `nmap -sT 192.168.1.1` — сканирование портов
-- `nmap -sn 192.168.1.0/24` — кто в сети
-- `ss -tlnp` — локальные слушающие порты
+### 2. Проверить службу и слушающие сокеты
 
-## Архивы и бэкапы
+```bash
+sudo systemctl status nginx --no-pager
+sudo ss -ltnp 'sport = :80'
+sudo ss -ltnp 'sport = :443'
+```
 
-### Создать архив
-- `tar -czf archive.tar.gz /path/` — tar.gz
-- `tar -cjf archive.tar.bz2 /path/` — tar.bz2
-- `tar -cJf archive.tar.xz /path/` — tar.xz
-- `zip -r archive.zip /path/` — zip
+Если порт не слушается, переходите к журналу и проверке конфигурации. Если слушается только loopback-адрес, внешний трафик до службы не дойдёт.
 
-### Распаковать
-- `tar -xzf archive.tar.gz` — tar.gz
-- `tar -xjf archive.tar.bz2` — tar.bz2
-- `unzip archive.zip` — zip
+### 3. Проверить локальный ответ и журнал
 
-### Синхронизация
-- `rsync -avz src/ dest/` — локальная синхронизация
-- `rsync -avz src/ user@host:/dest/` — удалённая
-- `scp file user@host:/path/` — копирование по SSH
+```bash
+curl -sS -I http://127.0.0.1/
+sudo journalctl -u nginx --since '-15 min' --no-pager
+sudo nginx -t
+```
 
-## Планирование
+Исправляйте первую содержательную ошибку в журнале или проверке конфигурации. После изменения конфигурации повторите `nginx -t` и только затем применяйте её.
 
-### Запланировать задачу
-- `crontab -e` — cron (повторяющаяся)
-- `at now + 30 minutes` — одноразовая
-- `systemd-run --on-calendar="*-*-* 03:00:00"` — systemd-timer
+### 4. Отделить проблему приложения от сети
 
-### Запустить в фоне
-- `nohup ./script.sh &` — игнорировать SIGHUP
-- `tmux` / `screen` — терминальный мультиплексор
-- `disown` — отвязать от текущей сессии
+```bash
+dig +short example.com
+ip route get 1.1.1.1
+sudo nft list ruleset
+```
 
-## Пакеты
+См. [curl](network/curl.md), [ss](network/ss.md), [journalctl](systemd/journalctl.md) и [nftables](firewall/nftables.md).
 
-### Debian/Ubuntu
-- `apt update && apt upgrade` — обновить всё
-- `apt install pkg` — установить
-- `apt remove pkg` — удалить
-- `apt search keyword` — найти
+## Служба systemd не запускается
 
-### RHEL/Fedora
-- `dnf update` — обновить
-- `dnf install pkg` — установить
-- `dnf remove pkg` — удалить
+### 1. Получить состояние и последние сообщения
 
-## systemd
+```bash
+sudo systemctl status myapp.service --no-pager
+sudo journalctl -u myapp.service -b -n 100 --no-pager
+```
 
-### Управление службами
-- `systemctl start/stop/restart nginx` — управление
-- `systemctl enable/disable nginx` — автозапуск
-- `systemctl status nginx` — статус
+Запишите `Result`, код завершения и первую ошибку процесса. Последующие сообщения часто являются следствием первоначальной причины.
 
-### Логи
-- `journalctl -u nginx -f` — следить за логом
-- `journalctl -u nginx --since today` — логи за сегодня
-- `journalctl -p err` — только ошибки
+### 2. Проверить фактический unit и зависимости
+
+```bash
+systemctl cat myapp.service
+systemctl show myapp.service -p FragmentPath -p User -p Group -p ExecStart
+systemctl list-dependencies myapp.service
+```
+
+Проверяйте существование исполняемого файла, права пользователя службы, рабочий каталог, переменные окружения и доступность зависимых ресурсов.
+
+### 3. Проверить unit перед применением
+
+```bash
+systemd-analyze verify /etc/systemd/system/myapp.service
+sudo systemctl daemon-reload
+sudo systemctl restart myapp.service
+sudo systemctl status myapp.service --no-pager
+```
+
+`reset-failed` очищает только состояние failed и не устраняет причину сбоя.
+
+См. [systemctl](systemd/systemctl.md), [journalctl](systemd/journalctl.md) и [systemd-analyze](systemd/systemd-analyze.md).
+
+## Высокая нагрузка или система тормозит
+
+### 1. Определить вид нагрузки
+
+```bash
+uptime
+vmstat 1 5
+free -h
+iostat -xz 1 5
+```
+
+Load average включает не только выполняющиеся задачи, но и процессы в непрерываемом ожидании I/O. Сопоставляйте его с очередью `r`, ожиданием `wa`, swap и задержками устройств.
+
+### 2. Найти процессы-кандидаты
+
+```bash
+ps -eo pid,ppid,user,stat,%cpu,%mem,etime,cmd --sort=-%cpu | head -n 20
+ps -eo pid,ppid,user,stat,%cpu,%mem,etime,cmd --sort=-%mem | head -n 20
+```
+
+Высокий CPU сам по себе не означает неисправность. Сначала выясните роль процесса, длительность нагрузки и ожидаемое поведение приложения.
+
+### 3. Проверить сообщения ядра и I/O
+
+```bash
+sudo journalctl -k -p warning --since '-30 min' --no-pager
+dmesg -T | tail -n 50
+```
+
+Ищите OOM, ошибки дисков, файловых систем, сети и драйверов. Не отправляйте `SIGKILL`, пока процесс может корректно завершиться через `SIGTERM`.
+
+См. [uptime](monitoring/uptime.md), [vmstat](monitoring/vmstat.md), [iostat](monitoring/iostat.md), [ps](processes/ps.md) и [kill](processes/kill.md).
+
+## Нет сетевого доступа
+
+### 1. Проверить интерфейс, адрес и маршрут
+
+```bash
+ip -br address
+ip route
+ip route get 1.1.1.1
+```
+
+### 2. Проверить доступность по уровням
+
+```bash
+ping -c 3 GATEWAY_IP
+ping -c 3 1.1.1.1
+dig example.com
+curl -sS -I https://example.com
+```
+
+Если доступен IP, но не имя — исследуйте DNS. Если не доступен шлюз — проверяйте локальный интерфейс и сеть. Если DNS и маршрут работают, но HTTP нет — проверяйте TLS, прокси и фильтрацию портов.
+
+### 3. Посмотреть сокеты и маршрут пакетов
+
+```bash
+ss -s
+traceroute example.com
+sudo tcpdump -ni any host 1.1.1.1
+```
+
+Ограничивайте `tcpdump` фильтром и временем работы: захват может содержать чувствительные данные.
+
+См. [ip](network/ip.md), [ping](network/ping.md), [dig](network/dig.md), [traceroute](network/traceroute.md) и [tcpdump](network/tcpdump.md).
+
+## Общий порядок работы
+
+1. Зафиксируйте время, симптом и исходный вывод команд.
+2. Сузьте проблему до подсистемы: процесс, память, диск, сеть или конфигурация.
+3. Сформулируйте одну проверяемую гипотезу.
+4. Выполните одно обратимое изменение.
+5. Повторите исходную проверку и сохраните результат.
+6. Если действие не помогло, откатите его перед следующей гипотезой.

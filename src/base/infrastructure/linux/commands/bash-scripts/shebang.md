@@ -175,9 +175,9 @@ echo "Path: $BASH"
 
 :::warning Пустая строка после shebang
 Всегда оставляйте пустую строку после shebang. Некоторые системы требуют newline после строки интерпретатора.
+:::
+
 ## См. также
 
 - [variables](variables.md) — переменные
 - [arguments](arguments.md) — аргументы скрипта
-
-:::

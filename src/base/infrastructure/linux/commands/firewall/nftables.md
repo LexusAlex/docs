@@ -174,7 +174,7 @@ sudo nft add rule ip nat prerouting tcp dport dnat to tcp dport map @dnat_map
 
 ```bash
 # Сохранить правила
-sudo nft list ruleset > /etc/nftables.conf
+sudo nft list ruleset | sudo tee /etc/nftables.conf >/dev/null
 
 # Загрузить правила
 sudo nft -f /etc/nftables.conf
@@ -281,9 +281,9 @@ sudo nft add rule inet filter input tcp flags & (fin|syn|rst|ack) == syn ct stat
 
 :::warning Миграция
 При миграции с iptables убедитесь, что все модули совместимы. Некоторые сложные правила iptables требуют адаптации для nftables.
+:::
+
 ## См. также
 
 - [iptables](iptables.md) — классический файрвол
 - [ufw](ufw.md) — простой интерфейс
-
-:::

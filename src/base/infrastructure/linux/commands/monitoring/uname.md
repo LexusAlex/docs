@@ -172,7 +172,7 @@ fi
 
 ## См. также
 
-- [hostnamectl](hostnamectl.md) — информация о хосте
-- [lsb_release](lsb_release.md) — информация о дистрибутиве
-- [/proc/version](/proc/version.md) — версия ядра
-- [arch](arch.md) — архитектура (псевдоним для `uname -m`)
+- [hostnamectl](../systemd/hostnamectl.md) — информация о хосте
+- `lsb_release` — информация о дистрибутиве
+- `/proc/version` — версия ядра
+- `arch` — архитектура (псевдоним для `uname -m`)

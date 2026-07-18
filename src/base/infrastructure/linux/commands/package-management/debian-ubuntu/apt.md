@@ -101,16 +101,23 @@ sudo add-apt-repository ppa:ondrej/php
 sudo apt update
 ```
 
-### Добавление репозитория
+### Добавление стороннего репозитория
 
 ```bash
-echo "deb https://example.com/repo stable main" | sudo tee /etc/apt/sources.list.d/example.list
-```
+# Создать каталог ключей с системными правами
+sudo install -m 0755 -d /etc/apt/keyrings
 
-### Добавление GPG-ключа
+# Скачать и преобразовать ключ для конкретного репозитория
+curl -fsSL https://example.com/key.gpg |
+    sudo gpg --dearmor --yes -o /etc/apt/keyrings/example.gpg
 
-```bash
-curl -fsSL https://example.com/key.gpg | sudo gpg --dearmor -o /etc/apt/trusted.gpg.d/example.gpg
+# Сверить fingerprint с опубликованным владельцем репозитория
+gpg --show-keys --fingerprint /etc/apt/keyrings/example.gpg
+
+# Ограничить доверие ключа только этой записью репозитория
+echo "deb [signed-by=/etc/apt/keyrings/example.gpg] https://example.com/repo stable main" |
+    sudo tee /etc/apt/sources.list.d/example.list >/dev/null
+sudo apt update
 ```
 
 ## apt vs apt-get
@@ -154,4 +161,3 @@ apt install -s nginx
 - [apt-get](apt-get.md) — низкоуровневый apt
 - [apt-cache](apt-cache.md) — информация о пакетах
 - [dpkg](dpkg.md) — установка .deb
-

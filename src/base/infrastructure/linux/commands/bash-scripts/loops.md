@@ -210,9 +210,9 @@ done
 
 :::warning Параллельное выполнение
 При использовании `&` для параллельных задач ограничивайте количество: `for ...; do process & [[ $(jobs -r) -ge 4 ]] && wait -n; done`.
+:::
+
 ## См. также
 
 - [conditions](conditions.md) — условия
 - [variables](variables.md) — переменные
-
-:::

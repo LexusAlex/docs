@@ -104,8 +104,9 @@ chmod 600 ~/.ssh/id_rsa
 ### Рекурсивно
 
 ```bash
-chmod -R 755 /var/www/html
-chmod -R u+rw /home/alex
+# X добавляет execute каталогам и уже исполняемым файлам, но не всем обычным файлам
+chmod -R u=rwX,go=rX /var/www/html
+chmod -R u+rwX /home/alex
 ```
 
 ### Подробный вывод
@@ -179,8 +180,9 @@ chmod 644 ~/.ssh/authorized_keys
 ### Права для веб-сервера
 
 ```bash
-chmod -R 755 /var/www/html
-chmod -R 644 /var/www/html/*.html
+# Каталогам нужен execute-бит для обхода, обычным файлам — нет
+find /var/www/html -type d -exec chmod 755 {} +
+find /var/www/html -type f -exec chmod 644 {} +
 ```
 
 ### Права для скриптов
@@ -213,13 +215,6 @@ find /path -type f -exec chmod 644 {} \;
 # Для директорий
 find /path -type d -exec chmod 755 {} \;
 ```
-
-## См. также
-
-- [chown](chown.md) — изменение владельца
-- [chgrp](chgrp.md) — изменение группы
-- [umask](umask.md) — маска по умолчанию
-- [ls -l](ls -l.md) — просмотр прав
 
 ## Связки с другими командами
 
@@ -254,3 +249,10 @@ find /etc -name "*.conf" -perm /o+w -exec chmod o-w {} \;
 # Установить sticky bit на директорию
 chmod +t /shared && ls -ld /shared
 ```
+
+## См. также
+
+- [chown](chown.md) — изменение владельца
+- [chgrp](chgrp.md) — изменение группы
+- [umask](umask.md) — маска по умолчанию
+- `ls -l` — просмотр прав

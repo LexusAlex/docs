@@ -146,44 +146,42 @@ trap 'echo "Получен SIGHUP"; reload_config' SIGHUP
 `SIGKILL` (9) нельзя перехватить или проигнорировать. Процесс будет принудительно завершён ядром без очистки ресурсов.
 :::
 
+## Связки с другими командами
+
+:::warning Зомби-процессы
+Зомби уже завершил выполнение, поэтому `kill`, включая `SIGKILL`, на него не действует. Найдите PPID зомби и исправьте ожидание через `wait()` в родительском процессе; перезапускайте родительскую службу только после оценки последствий.
+:::
+
+```bash
+# Корректно остановить все процессы nginx
+pgrep -x nginx | xargs -r kill -TERM --
+
+# Показать PID, PPID, состояние и команду зомби-процессов
+ps -eo pid=,ppid=,stat=,cmd= | awk '$3 ~ /^Z/ {print}'
+
+# Отправить SIGTERM процессам конкретного Python-скрипта
+pkill -TERM -f 'python.*old_script'
+
+# Корректно остановить процесс, слушающий TCP-порт 8080
+lsof -tiTCP:8080 -sTCP:LISTEN | xargs -r kill -TERM --
+
+# Корректно остановить запущенные Docker-контейнеры
+docker ps -q | xargs -r docker stop
+
+# Graceful shutdown: SIGTERM, ожидание 10 секунд, затем SIGKILL
+pid=$(pgrep -xo myapp) || exit 1
+kill -TERM "$pid"
+if ! timeout 10 tail --pid="$pid" -f /dev/null; then
+    kill -KILL "$pid"
+fi
+
+# Перезагрузить конфигурацию всех процессов nginx (SIGHUP)
+pgrep -x nginx | xargs -r kill -HUP --
+```
+
 ## См. также
 
 - [pgrep](pgrep.md) — поиск PID по имени
 - [pkill](pkill.md) — отправка сигнала по шаблону
 - [killall](killall.md) — убить по имени
 - [ps](ps.md) — список процессов
-
-
-## Связки с другими командами
-
-```bash
-# Корректно остановить все процессы nginx
-pgrep nginx | xargs kill -TERM
-
-# Найти и убить зомби-процессы
-ps aux | grep "[z]ombie" | awk '{print $2}' | xargs kill -9
-
-# Убить конкретный Python-скрипт по шаблону
-ps aux | grep "python.*old_script" | awk '{print $2}' | xargs kill
-
-# Убить процесс, занимающий порт 8080
-lsof -ti:8080 | xargs kill -9
-
-# Очистить все зомби-процессы (с подавлением ошибок)
-ps aux | grep defunct | awk '{print $2}' | xargs kill -9 2>/dev/null
-
-# Остановить все Docker-контейнеры
-docker ps -q | xargs docker kill
-
-# Убить процессы по шаблону командной строки
-pkill -f "sleep 999" && echo "Killed"
-
-# Graceful shutdown: SIGTERM, ожидание 10 секунд, затем SIGKILL
-PID=$(pgrep -x myapp); kill -TERM "$PID"; timeout 10 tail --pid="$PID" -f /dev/null; kill -0 "$PID" 2>/dev/null && kill -KILL "$PID"
-
-# Убить все процессы пользователя, кроме текущего сеанса
-pgrep -u testuser | grep -v $$ | xargs kill -TERM
-
-# Перезагрузить конфигурацию всех процессов nginx (SIGHUP)
-pgrep -x nginx | xargs kill -HUP
-```

@@ -262,9 +262,9 @@ esac
 
 :::warning .bash_profile и .bashrc
 Если вы используете `~/.bash_profile`, не забудьте добавить в него `source ~/.bashrc`, иначе настройки из `.bashrc` не будут применены в login shell.
+:::
+
 ## См. также
 
 - [export](export.md) — установка переменных
 - [alias](path.md) — псевдонимы команд
-
-:::

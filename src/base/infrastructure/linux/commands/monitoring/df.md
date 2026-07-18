@@ -148,26 +148,6 @@ df -h / | awk 'NR==2 {print $4, "available on /"}'
 Раздел может быть заполнен не только данными, но и inodes. Проверяйте `df -i` при ошибках "No space left on device".
 :::
 
-## См. также
-
-- [du](du.md) — размер директорий
-- [lsblk](disks-and-mount/lsblk.md) — блочные устройства
-- [mount](disks-and-mount/mount.md) — точки монтирования
-
-
-### Логирование использования дисков
-
-```bash
-df -h > /var/log/disk_usage_$(date +%Y%m%d).log
-```
-
-### Автоматическая проверка
-
-```bash
-#!/bin/bash
-df -h | awk 'NR>1 && $5+0 > 90 {print "ALERT:", $6, $5, "full"}'
-```
-
 ## Связки с другими командами
 
 ```bash
@@ -200,4 +180,24 @@ df -h | awk 'NR>1 && $4~/G/ && $4+0 < 1 {print $6, $4, "left"}'
 
 # Логирование использования дисков с временной меткой
 echo "=== $(date) ===" >> /var/log/disk_history.log; df -h >> /var/log/disk_history.log
+```
+
+## См. также
+
+- [du](du.md) — размер директорий
+- [lsblk](../disks-and-mount/lsblk.md) — блочные устройства
+- [mount](../disks-and-mount/mount.md) — точки монтирования
+
+
+### Логирование использования дисков
+
+```bash
+df -h > /var/log/disk_usage_$(date +%Y%m%d).log
+```
+
+### Автоматическая проверка
+
+```bash
+#!/bin/bash
+df -h | awk 'NR>1 && $5+0 > 90 {print "ALERT:", $6, $5, "full"}'
 ```

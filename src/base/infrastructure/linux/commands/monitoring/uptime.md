@@ -149,7 +149,7 @@ Load average учитывает не только CPU, но и процессы,
 
 ## См. также
 
-- [w](w.md) — кто залогинен и что делает
+- [w](../user-and-access/w.md) — кто залогинен и что делает
 - `top` / `htop` — мониторинг процессов
-- [nproc](nproc.md) — количество процессоров
-- [/proc/loadavg](/proc/loadavg.md) — файл с load average
+- `nproc` — количество процессоров
+- `/proc/loadavg` — файл с load average

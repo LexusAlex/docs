@@ -204,9 +204,9 @@ Anacron обеспечивает выполнение пропущенных з�
 
 :::warning Переменные окружения
 Cron выполняет команды с минимальным набором переменных окружения. Всегда указывайте `PATH`, `SHELL` и другие необходимые переменные в начале crontab.
+:::
+
 ## См. также
 
 - [systemd-timers](systemd-timers.md) — таймеры systemd
-- [systemctl](systemd/systemctl.md) — управление таймерами
-
-:::
+- [systemctl](../systemd/systemctl.md) — управление таймерами

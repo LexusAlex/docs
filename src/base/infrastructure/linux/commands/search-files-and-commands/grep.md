@@ -139,10 +139,10 @@ ps aux | grep nginx | grep -v grep
 cat /var/log/syslog | grep -i error | tail -20
 
 # Найти лог-файлы, содержащие OOM
-find . -name "*.log" | xargs grep -l "OOM"
+find . -type f -name "*.log" -exec grep -l -- "OOM" {} +
 
 # Кто слушает порт 80
-ss -tlnp | grep :80
+ss -ltnp 'sport = :80'
 
 # Ошибки и исключения в логах Docker (включая stderr)
 docker logs container 2>&1 | grep -i exception
@@ -177,4 +177,3 @@ last | grep -i "still logged in"
 - [sed](../viewing-and-processing-text/sed.md) — замена текста
 - [awk](../viewing-and-processing-text/awk.md) — обработка текста
 - [xargs](xargs.md) — построение аргументов
-

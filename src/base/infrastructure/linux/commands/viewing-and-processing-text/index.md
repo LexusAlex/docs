@@ -32,7 +32,7 @@
 cat access.log | awk '{print $1}' | sort | uniq -c | sort -rn | head -10
 
 # Строки в файлах .py без комментариев
-find . -name "*.py" | xargs grep -v "^#" | wc -l
+find . -type f -name "*.py" -exec grep -h -v "^#" -- {} + | wc -l
 
 # Последние ошибки из лога
 tail -100 /var/log/syslog | grep -i error | sort | uniq -c | sort -rn

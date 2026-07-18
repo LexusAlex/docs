@@ -156,4 +156,4 @@ getent group sudo | cut -d: -f4 | tr ',' '\n'
 - [id](id.md) — подробная информация о пользователе
 - [usermod](usermod.md) — изменение пользователя
 - [groupadd](groupadd.md) — создание группы
-- [getent](getent.md) — получение записей из баз данных
+- `getent` — получение записей из баз данных

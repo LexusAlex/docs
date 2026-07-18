@@ -40,7 +40,7 @@
 | [locate](search-files-and-commands/locate.md) | Быстрый поиск | `locate nginx.conf` |
 | [which](search-files-and-commands/which.md) | Путь к команде | `which python3` |
 | [grep](search-files-and-commands/grep.md) | Поиск в тексте | `grep -r "TODO" .` |
-| [xargs](search-files-and-commands/xargs.md) | Аргументы из stdin | `find . -name "*.log" \| xargs rm` |
+| [xargs](search-files-and-commands/xargs.md) | Аргументы из stdin | `printf '%s\n' file1 file2 \| xargs -r wc -l --` |
 
 ## Процессы
 
@@ -48,7 +48,7 @@
 |---------|----------|--------|
 | [ps](processes/ps.md) | Список процессов | `ps aux` |
 | [top](monitoring/top.md) | Монитор процессов | `top -c` |
-| [kill](processes/kill.md) | Убить процесс | `kill -9 PID` |
+| [kill](processes/kill.md) | Корректно завершить процесс | `kill -TERM PID` |
 | [pkill](processes/pkill.md) | Убить по имени | `pkill nginx` |
 | [pgrep](processes/pgrep.md) | Найти PID | `pgrep -x nginx` |
 | [nohup](processes/nohup.md) | Фоновый запуск | `nohup ./script.sh &` |
@@ -131,7 +131,7 @@ du -sh * | sort -rh | head -10
 find /var/log -name "*.log" -mtime +30 -exec rm {} \;
 
 # Убить процесс по порту
-kill $(lsof -ti:8080)
+lsof -tiTCP:8080 -sTCP:LISTEN | xargs -r kill -TERM --
 
 # Топ-10 IP в логах
 awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -10
@@ -140,7 +140,10 @@ awk '{print $1}' access.log | sort | uniq -c | sort -rn | head -10
 tail -f /var/log/syslog | grep --line-buffered error
 
 # Проверить все серверы из списка
-for h in $(cat hosts.txt); do ssh $h 'uptime'; done
+while IFS= read -r host; do
+    [[ -z $host || $host == \#* ]] && continue
+    ssh -- "$host" uptime
+done < hosts.txt
 
 # Бэкап базы данных
 mysqldump -u root db | gzip > backup_$(date +%F).sql.gz

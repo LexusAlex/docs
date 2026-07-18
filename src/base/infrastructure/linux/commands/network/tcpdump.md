@@ -244,5 +244,4 @@ tcpdump -n -i eth0 "tcp port 443 and (tcp[((tcp[12] & 0xf0) >> 2)] = 0x16)"
 
 - [nmap](nmap.md) — сканирование портов
 - [ss](ss.md) — сетевые сокеты
-- [wireshark](diagnostics/lsof.md) — анализ трафика
-
+- `Wireshark` — анализ трафика

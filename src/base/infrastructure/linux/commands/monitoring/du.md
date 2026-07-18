@@ -149,28 +149,6 @@ du -sh /var/log > /tmp/size_$(date +%Y%m%d).txt
 `du` показывает размер на диске, а не фактический размер файлов. Используйте `--apparent-size` для получения реального размера.
 :::
 
-## См. также
-
-- [df](df.md) — дисковое пространство
-- [ls](files-and-directories/ls.md) — содержимое директорий
-- [find](search-files-and-commands/find.md) — поиск файлов
-
-
-### Анализ использования пространства
-
-```bash
-#!/bin/bash
-echo "Top 10 largest directories:"
-du -h --max-depth=1 / 2>/dev/null | sort -hr | head -10
-```
-
-### Проверка перед резервным копированием
-
-```bash
-du -sh /home/user/Documents
-# Оценка размера для резервной копии
-```
-
 ## Связки с другими командами
 
 ```bash
@@ -203,4 +181,26 @@ du -sh --exclude='log' /var/* | sort -rh | head -10
 
 # Автоматическая очистка при нехватке места (если < 5 ГБ свободно)
 AVAIL=$(df -h / | awk 'NR==2 {print $4}'); if [[ "$AVAIL" == *G* ]] && (( ${AVAIL%G} < 5 )); then find /tmp -type f -mtime +7 -delete; echo "Cleaned /tmp"; fi
+```
+
+## См. также
+
+- [df](df.md) — дисковое пространство
+- [ls](../files-and-directories/ls.md) — содержимое директорий
+- [find](../search-files-and-commands/find.md) — поиск файлов
+
+
+### Анализ использования пространства
+
+```bash
+#!/bin/bash
+echo "Top 10 largest directories:"
+du -h --max-depth=1 / 2>/dev/null | sort -hr | head -10
+```
+
+### Проверка перед резервным копированием
+
+```bash
+du -sh /home/user/Documents
+# Оценка размера для резервной копии
 ```

@@ -250,11 +250,6 @@ systemctl --user start myapp
 
 :::warning mask vs disable
 `disable` отключает автозапуск, но позволяет запустить сервис вручную. `mask` полностью блокирует сервис — даже ручной запуск станет невозможен.
-## См. также
-
-- [journalctl](journalctl.md) — чтение логов
-- [systemd-analyze](systemd-analyze.md) — анализ загрузки
-
 :::
 
 ## Связки с другими командами
@@ -290,3 +285,8 @@ journalctl -u nginx --since "1 hour ago" | grep -c error
 # Перезапуск всех сервисов с ошибками
 systemctl --failed --no-pager | grep failed | awk '{print $2}' | xargs -I {} sudo systemctl restart {}
 ```
+
+## См. также
+
+- [journalctl](journalctl.md) — чтение логов
+- [systemd-analyze](systemd-analyze.md) — анализ загрузки

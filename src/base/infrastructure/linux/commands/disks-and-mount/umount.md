@@ -187,10 +187,10 @@ sudo umount /mnt/data
 
 :::tip findmnt
 Используйте `findmnt` вместо `mount | grep` — он показывает информацию в удобном формате и поддерживает фильтрацию.
+:::
+
 ## См. также
 
 - [mount](mount.md) — монтирование
-- [lsof](diagnostics/lsof.md) — открытые файлы
-- [fuser](processes/ps.md) — процессы использующие файл
-
-:::
+- [lsof](../diagnostics/lsof.md) — открытые файлы
+- `fuser` — процессы использующие файл

@@ -1,5 +1,8 @@
 import { defineConfig } from 'vitepress'
 
+export const tokenizeSearch = (text) =>
+  text.toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? []
+
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   base: '/docs/',
@@ -7,9 +10,17 @@ export default defineConfig({
   lang: 'ru-RU',
   description: "Modern documentation",
   titleTemplate: 'Lexusalex Docs',
+  // В других разделах пока остаются старые битые ссылки. Для Linux-команд
+  // проверка строгая: любая новая битая ссылка останавливает сборку.
+  ignoreDeadLinks: [
+    (_link, source) =>
+      !source.replaceAll('\\', '/').includes(
+        'base/infrastructure/linux/commands/'
+      )
+  ],
   metaChunk: true,
   cleanUrls: true,
-  ignoreDeadLinks: true,
+
   vite: {
     build: {
       chunkSizeWarningLimit: 1000
@@ -71,29 +82,14 @@ export default defineConfig({
               }
             }
           }
+        },
+        miniSearch: {
+          options: {
+            // Разделители становятся границами токенов: /etc/fstab → etc, fstab.
+            // Дефисы сохраняются для запросов rm -rf и systemctl --failed.
+            tokenize: tokenizeSearch
+          }
         }
-      },
-      miniSearch: {
-        /**
-         * Кастомный токенизатор.
-         * 1. Приводит текст к нижнему регистру.
-         * 2. Удаляет все символы, КРОМЕ кириллицы, латиницы, цифр, пробелов и дефисов.
-         * 3. Разбивает строку на слова по пробелам.
-         */
-        tokenize: (text) =>
-            text
-                .toLowerCase()
-                // Регулярное выражение, которое оставляет только нужные символы
-                .replace(/[^а-яёa-z0-9\s-]/g, '')
-                .trim()
-                .split(/\s+/)
-                .filter(word => word.length > 0),
-
-        // Указываем, по каким полям искать. 'title' - H1, 'titles' - H2/H3, 'content' - остальной текст.
-        fields: ['title', 'titles', 'content'],
-
-        // Какие поля возвращать в результатах поиска.
-        storeFields: ['title', 'titles']
       }
     },
     sidebar:

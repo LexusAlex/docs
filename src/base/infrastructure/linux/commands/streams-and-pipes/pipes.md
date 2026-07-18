@@ -102,7 +102,7 @@ tee >(gzip > output.gz) >(sha256sum > checksum.txt) < input.txt
 ### 13. Pipe с xargs
 
 ```bash
-find /tmp -name "*.log" | xargs rm
+find /tmp -type f -name "*.log" -delete
 ```
 
 ### 14. Pipe с while read
@@ -200,9 +200,9 @@ Pipe создаёт subshell для каждой команды. Перемен�
 
 :::warning Именованные pipes
 FIFO блокируют открытие до тех пор, пока обе стороны (читатель и писатель) не откроют pipe. Убедитесь, что оба процесса запущены.
+:::
+
 ## См. также
 
 - [redirection](redirection.md) — перенаправление
-- [xargs](search-files-and-commands/xargs.md) — построение аргументов
-
-:::
+- [xargs](../search-files-and-commands/xargs.md) — построение аргументов

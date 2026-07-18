@@ -185,9 +185,9 @@ sudo localectl set-locale LANG=ru_RU.UTF-8
 
 :::warning Переменная LC_ALL
 `LC_ALL` имеет наивысший приоритет, но её не следует устанавливать в конфигурационных файлах — она предназначена для временного переопределения в скриптах.
+:::
+
 ## См. также
 
 - [hostnamectl](hostnamectl.md) — имя хоста
 - [timedatectl](timedatectl.md) — настройка времени
-
-:::

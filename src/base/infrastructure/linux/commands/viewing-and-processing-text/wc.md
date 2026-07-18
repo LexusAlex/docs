@@ -79,8 +79,8 @@ wc -l *.log | tail -1
 find . -name "*.py" -exec wc -l {} + | tail -1
 
 # Подсчёт строк по типам файлов
-find . -type f -name "*.js" | xargs wc -l | tail -1
-find . -type f -name "*.ts" | xargs wc -l | tail -1
+find . -type f -name "*.js" -exec wc -l -- {} + | tail -n 1
+find . -type f -name "*.ts" -exec wc -l -- {} + | tail -n 1
 ```
 
 ### Мониторинг логов
@@ -135,19 +135,13 @@ wc -L file.txt
 
 :::tip
 Комбинация `sort | uniq -c | sort -rn` часто используется вместе с `wc` для анализа частотности.
-## См. также
-
-- [grep](search-files-and-commands/grep.md) — подсчёт совпадений
-- [sort](sort.md) — сортировка
-- [uniq](uniq.md) — уникальные строки
-
 :::
 
 ## Связки с другими командами
 
 ```bash
 # Python-файлы, отсортированные по количеству строк
-find . -name "*.py" | xargs wc -l | sort -rn | head
+find . -type f -name "*.py" -exec wc -l -- {} + | sort -rn | head
 
 # Общее количество строк в системном логе
 cat /var/log/syslog | wc -l
@@ -164,3 +158,9 @@ cat /etc/passwd | wc -l
 # Количество import-строк во всех Python-файлах
 grep -r "import" --include="*.py" | wc -l
 ```
+
+## См. также
+
+- [grep](../search-files-and-commands/grep.md) — подсчёт совпадений
+- [sort](sort.md) — сортировка
+- [uniq](uniq.md) — уникальные строки

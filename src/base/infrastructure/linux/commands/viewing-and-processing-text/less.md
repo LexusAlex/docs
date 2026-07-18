@@ -150,10 +150,10 @@ curl -s https://api.example.com/data | python3 -m json.tool | less
 
 :::tip
 Для ANSI-цветов (например, вывод `git diff --color`) всегда используйте `less -R`, иначе цветовые коды будут отображаться как мусор.
+:::
+
 ## См. также
 
 - [more](more.md) — постраничный просмотр (устаревший)
 - [cat](cat.md) — вывод файла
 - [tail](tail.md) — конец файла
-
-:::

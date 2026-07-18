@@ -212,11 +212,11 @@ sudo iptables -t nat -A POSTROUTING -s 192.168.1.0/24 -o eth0 -j SNAT --to-sourc
 
 ```bash
 # Сохранить правила
-sudo iptables-save > /etc/iptables/rules.v4
-sudo iptables-save -t nat > /etc/iptables/nat-rules.v4
+sudo iptables-save | sudo tee /etc/iptables/rules.v4 >/dev/null
+sudo iptables-save -t nat | sudo tee /etc/iptables/nat-rules.v4 >/dev/null
 
 # Восстановить правила
-sudo iptables-restore < /etc/iptables/rules.v4
+sudo iptables-restore /etc/iptables/rules.v4
 
 # Автозагрузка (Debian/Ubuntu)
 sudo apt install iptables-persistent
@@ -291,15 +291,15 @@ sudo iptables -P INPUT DROP
 :::
 
 :::tip Сохранение правил
-Правила iptables не сохраняются между перезагрузками. Всегда сохраняйте их: `sudo iptables-save > /etc/iptables/rules.v4`.
+Правила iptables не сохраняются между перезагрузками. Всегда сохраняйте их: `sudo iptables-save | sudo tee /etc/iptables/rules.v4 >/dev/null`.
 :::
 
 :::warning iptables vs nftables
 iptables постепенно заменяется на nftables. Для новых систем рассмотрите использование nft.
+:::
+
 ## См. также
 
 - [nftables](nftables.md) — современная замена
 - [ufw](ufw.md) — простой интерфейс
-- [ss](network/ss.md) — сетевые сокеты
-
-:::
+- [ss](../network/ss.md) — сетевые сокеты

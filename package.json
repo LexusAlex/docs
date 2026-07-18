@@ -6,6 +6,8 @@
   "scripts": {
     "docs:dev": "vitepress dev src",
     "docs:build": "vitepress build src",
-    "docs:preview": "vitepress preview src"
+    "docs:preview": "vitepress preview src",
+    "docs:check-linux": "node scripts/check-linux-docs.mjs",
+    "docs:check": "node scripts/check-linux-docs.mjs && vitepress build src"
   }
 }

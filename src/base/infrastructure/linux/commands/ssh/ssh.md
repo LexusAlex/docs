@@ -286,13 +286,6 @@ mkdir -p ~/.ssh/sockets
 
 :::tip Совет
 Добавьте `AddKeysToAgent yes` в `~/.ssh/config`, чтобы ключи автоматически добавлялись в ssh-agent при первом использовании.
-## См. также
-
-- [ssh-keygen](ssh-keygen.md) — генерация ключей
-- [ssh-copy-id](ssh-copy-id.md) — копирование ключа
-- [ssh-agent](ssh-agent.md) — агент ключей
-- [scp](scp.md) — копирование файлов
-
 :::
 
 ## Связки с другими командами
@@ -311,7 +304,7 @@ ssh user@host 'free -m | awk "/Mem:/{printf \"%.1f%%\", \$3/\$2*100}"'
 ssh user@host 'last -5'
 
 # Проверка порта 80 на удалённом сервере
-ssh user@host 'ss -tlnp | grep :80'
+ssh user@host "ss -ltnp 'sport = :80'"
 
 # Интерактивный htop на удалённом сервере
 ssh -t user@host 'htop'
@@ -328,3 +321,10 @@ ssh user@host 'uptime' | awk -F'load average:' '{print $2}'
 # Проверка статуса nginx на удалённом сервере
 ssh user@host 'sudo systemctl status nginx'
 ```
+
+## См. также
+
+- [ssh-keygen](ssh-keygen.md) — генерация ключей
+- [ssh-copy-id](ssh-copy-id.md) — копирование ключа
+- [ssh-agent](ssh-agent.md) — агент ключей
+- [scp](scp.md) — копирование файлов

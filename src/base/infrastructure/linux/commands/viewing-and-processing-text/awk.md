@@ -168,13 +168,6 @@ awk '{printf "%s ", $0} END {print ""}' multi_line.txt
 `awk` использует собственные регулярные выражения, которые немного отличаются от `grep` или `sed`.
 :::
 
-## См. также
-
-- [sed](sed.md) — потоковый редактор
-- [cut](cut.md) — выбор столбцов
-- [sort](sort.md) — сортировка
-
-
 ## Связки с другими командами
 
 ```bash
@@ -202,3 +195,9 @@ cat /var/log/auth.log | awk '/Failed/{print $(NF-3)}' | sort | uniq -c | sort -r
 # Использование CPU по Docker-контейнерам
 docker stats --no-stream | awk 'NR>1 {print $2, $3}'
 ```
+
+## См. также
+
+- [sed](sed.md) — потоковый редактор
+- [cut](cut.md) — выбор столбцов
+- [sort](sort.md) — сортировка

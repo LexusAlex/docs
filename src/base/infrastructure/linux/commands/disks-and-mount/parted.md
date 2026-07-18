@@ -225,9 +225,9 @@ sudo parted -a none /dev/sdb mkpart primary ext4 0% 100%
 
 :::warning Несовместимость
 `parted` может изменить таблицу разделов при каждом запуске. Для простых операций лучше использовать `fdisk` (MBR) или `gdisk` (GPT).
+:::
+
 ## См. также
 
 - [fdisk](fdisk.md) — разметка (MBR)
 - [lsblk](lsblk.md) — блочные устройства
-
-:::

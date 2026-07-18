@@ -87,7 +87,7 @@ ss -s
 ### Соединения на порту
 
 ```bash
-ss -tlnp | grep :80
+ss -ltnp 'sport = :80'
 ```
 
 ### Установленные соединения
@@ -161,7 +161,7 @@ ss -to
 ### Проверка запущенного сервиса
 
 ```bash
-ss -tlnp | grep :8080
+ss -ltnp 'sport = :8080'
 ```
 
 ### Подсчёт соединений
@@ -196,18 +196,11 @@ ss -tln | grep -q ":22 " && echo "SSH запущен"
 Для просмотра процессов (`-p`) нужны права root или capability `CAP_NET_ADMIN`.
 :::
 
-## См. также
-
-- [ip](ip.md) — конфигурация сети
-- [netstat](nc.md) — сетевые соединения
-- [lsof](diagnostics/lsof.md) — открытые файлы
-
-
 ## Связки с другими командами
 
 ```bash
 # Кто слушает порт 80
-ss -tlnp | grep :80 | awk '{print $4, $6}'
+ss -H -ltnp 'sport = :80' | awk '{print $4, $6}'
 
 # Все слушающие порты (уникальные, отсортированные)
 ss -tlnp | awk 'NR>1 {print $4}' | sed 's/.*://' | sort -un
@@ -236,3 +229,9 @@ ss -tn | awk 'NR>1 {print $5}' | cut -d: -f1 | sort | uniq -c | sort -rn | head 
 # Проверка, слушает ли порт, с выводом PID
 ss -tlnp | awk -v port=":3306" '$4 ~ port {print $4, $6}'
 ```
+
+## См. также
+
+- [ip](ip.md) — конфигурация сети
+- [netstat](nc.md) — сетевые соединения
+- [lsof](../diagnostics/lsof.md) — открытые файлы

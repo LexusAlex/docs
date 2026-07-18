@@ -146,13 +146,6 @@ pgrep -u testuser | xargs kill -TERM
 Паттерн в `pgrep` — это регулярное выражение, а не glob. Точка `.` совпадает с любым символом.
 :::
 
-## См. также
-
-- [pkill](pkill.md) — отправка сигнала по шаблону
-- [kill](kill.md) — отправка сигнала по PID
-- [ps](ps.md) — список процессов
-
-
 ## Связки с другими командами
 
 ```bash
@@ -186,3 +179,9 @@ while true; do pgrep -x myapp > /dev/null || echo "ALERT: myapp down at $(date)"
 # Получить самый новый PID процесса и показать его открытые файлы
 lsof -p $(pgrep -n node)
 ```
+
+## См. также
+
+- [pkill](pkill.md) — отправка сигнала по шаблону
+- [kill](kill.md) — отправка сигнала по PID
+- [ps](ps.md) — список процессов

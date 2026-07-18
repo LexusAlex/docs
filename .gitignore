@@ -21,3 +21,4 @@ Thumbs.db
 # VitePress
 /node_modules/
 /.vitepress/cache
+.plan/

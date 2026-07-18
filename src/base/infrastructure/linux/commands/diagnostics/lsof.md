@@ -231,18 +231,12 @@ watch -n 1 'lsof -i -n -P | grep -c ESTABLISHED'
 
 :::tip Быстрый поиск процесса на порту
 ```bash
-lsof -i :PORT -t | xargs kill
+lsof -tiTCP:8080 -sTCP:LISTEN | xargs -r kill -TERM --
 ```
 :::
 
 :::warning Производительность
 На системах с большим количеством открытых файлов lsof может работать медленно. Используйте фильтры для ограничения вывода.
-## См. также
-
-- [strace](strace.md) — трассировка вызовов
-- [ss](network/ss.md) — сетевые сокеты
-- [ps](processes/ps.md) — список процессов
-
 :::
 
 ## Связки с другими командами
@@ -264,7 +258,7 @@ lsof +D /var/log | wc -l
 lsof -p $(pgrep -o nginx) | wc -l
 
 # Убить процесс, занимающий порт 8080
-lsof -i :8080 -t | xargs kill -9
+lsof -tiTCP:8080 -sTCP:LISTEN | xargs -r kill -TERM --
 
 # Найти удалённые файлы, которые всё ещё открыты (утечка дискового пространства)
 lsof | grep deleted | awk '{print $1, $2, $7}'
@@ -281,3 +275,9 @@ watch -n 2 'lsof -i -n -P | grep -c ESTABLISHED'
 # Найти утечки файловых дескрипторов (процессы с >1000 открытыми файлами)
 for pid in $(ps -eo pid --no-headers); do count=$(lsof -p "$pid" 2>/dev/null | wc -l); [ "$count" -gt 1000 ] && echo "PID $pid: $count files"; done
 ```
+
+## См. также
+
+- [strace](strace.md) — трассировка вызовов
+- [ss](../network/ss.md) — сетевые сокеты
+- [ps](../processes/ps.md) — список процессов

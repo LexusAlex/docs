@@ -211,5 +211,5 @@ passwd -Sa | awk '$2 == "P" && $3 < systime()/86400 {print $1}'
 
 - [useradd](useradd.md) — создание пользователя
 - [usermod](usermod.md) — изменение пользователя
-- [chpasswd](chpasswd.md) — пакетное изменение паролей
-- [/etc/shadow](/etc/shadow.md) — файл с паролями
+- `chpasswd` — пакетное изменение паролей
+- `/etc/shadow` — файл с паролями

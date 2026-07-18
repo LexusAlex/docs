@@ -195,12 +195,6 @@ wait
 Рекурсивная загрузка (`-r`) может создать огромное количество запросов. Всегда ограничивайте глубину (`-l`) и используйте `--wait`.
 :::
 
-## См. также
-
-- [curl](curl.md) — HTTP-запросы
-- [scp](ssh/scp.md) — копирование по SSH
-
-
 ## Связки с другими командами
 
 ```bash
@@ -208,7 +202,7 @@ wait
 wget -qO- https://api.github.com/repos/user/repo/releases/latest | jq '.tag_name'
 
 # Параллельная загрузка URL из файла (4 потока)
-cat urls.txt | xargs -P 4 wget -q
+xargs -r -d '\n' -n 1 -P 4 wget -q -- < urls.txt
 
 # Проверить HTTP-статус без загрузки тела
 wget -qO /dev/null -S https://example.com 2>&1 | grep "HTTP/"
@@ -236,3 +230,8 @@ done < urls.txt
 # Скачать только файлы определённого размера (> 1MB)
 wget -r -l 1 -np https://example.com/files/ 2>&1 | grep -E "^\s*[0-9]" | awk '$2 > 1048576 {print $NF}'
 ```
+
+## См. также
+
+- [curl](curl.md) — HTTP-запросы
+- [scp](../ssh/scp.md) — копирование по SSH

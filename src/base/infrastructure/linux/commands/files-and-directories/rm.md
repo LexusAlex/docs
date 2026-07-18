@@ -136,17 +136,13 @@ rm -f .*.swp .*.swo
 
 ## Опасность `rm -rf`
 
-```bash
-# НИКОГДА НЕ ЗАПУСКАЙТЕ:
-rm -rf /              # Удалит ВСЮ файловую систему
-rm -rf ~              # Удалит домашний каталог
-rm -rf *              # Удалит всё в текущем каталоге
-rm -rf .              # Удалит текущий каталог (и всё внутри)
-rm -rf /*             # Удалит всё от корня
-```
-
 :::danger
-Команда `rm -rf` не перемещает файлы в корзину — они удаляются безвозвратно. Восстановление крайне сложно и не гарантировано.
+`rm -rf` не перемещает файлы в корзину: восстановление крайне сложно и не гарантировано.
+
+- GNU `rm` по умолчанию отказывается обрабатывать `/`; снять эту защиту может опция `--no-preserve-root`.
+- Аргументы `.` и `..` GNU `rm` также удалять отказывается.
+- `rm -rf ~` удаляет содержимое домашнего каталога, а `rm -rf /*` обходит защиту корня за счёт раскрытия шаблона в отдельные пути.
+- Шаблон `*` не включает скрытые имена, поэтому `rm -rf *` удаляет не всё содержимое текущего каталога, но всё равно остаётся опасной командой.
 :::
 
 ## Безопасные альтернативы
@@ -222,37 +218,32 @@ rm -ri files_to_delete/
 
 ```bash
 # Удалить временные файлы старше 7 дней
-find . -name "*.tmp" -mtime +7 -exec rm {} \;
+find . -type f -name "*.tmp" -mtime +7 -exec rm -f -- {} +
 
-# Удалить файлы больше 1ГБ
-find . -type f -size +1G | xargs rm -f
+# Удалить файлы больше 1 ГБ
+find . -type f -size +1G -exec rm -f -- {} +
 
-# Завершить зомби-процессы
-ps aux | grep zombie | awk '{print $2}' | xargs kill -9
-
-# Удалить все Docker-контейнеры
-docker ps -aq | xargs docker rm -f
+# Удалить все Docker-контейнеры; при пустом списке docker не запускается
+docker ps -aq | xargs -r docker rm -f --
 
 # Удалить все .pyc файлы рекурсивно
-find . -name "*.pyc" -type f | xargs rm -f
+find . -type f -name "*.pyc" -delete
 
-# Очистить кеш npm
-npm cache ls 2>/dev/null | awk '{print $1}' | xargs npm cache clean
+# Проверить и привести кеш npm в согласованное состояние
+npm cache verify
 
-# Удалить пустые директории
-find . -type d -empty | xargs rmdir 2>/dev/null
+# Удалить пустые директории, начиная с самых глубоких
+find . -depth -type d -empty -delete
 
-# Удалить файлы, найденные по содержимому (содержат "deprecated")
-grep -rl "deprecated" src/ | xargs rm -f
+# Удалить файлы, найденные по содержимому; NUL-разделители сохраняют любые имена
+grep -rlZ -- "deprecated" src/ | xargs -0 -r rm -f --
 
-# Очистить старые логи и показать что удалено
-find /var/log -name "*.log" -mtime +30 -exec rm -v {} \;
+# Очистить старые логи и показать, что удалено
+find /var/log -type f -name "*.log" -mtime +30 -exec rm -v -- {} +
 
-# Удалить все контейнеры и образы Docker
-docker ps -aq | xargs docker rm -f && docker images -q | xargs docker rmi -f
-
-# Безопасное удаление с предпросмотром
-find . -name "*.bak" | tee /dev/stderr | xargs rm -f
+# Сначала просмотреть резервные копии, затем отдельной командой удалить их
+find . -type f -name "*.bak" -print
+find . -type f -name "*.bak" -delete
 ```
 
 ## Советы
@@ -271,10 +262,10 @@ find . -name "*.bak" | tee /dev/stderr | xargs rm -f
 
 :::tip
 Добавьте `alias rm='rm -i'` в `.bashrc` — это заставит `rm` спрашивать подтверждение перед каждым удалением.
+:::
+
 ## См. также
 
 - [rmdir](rmdir.md) — удаление пустых директорий
 - [shred](shred.md) — безопасное удаление
-- [find](search-files-and-commands/find.md) — поиск файлов для удаления
-
-:::
+- [find](../search-files-and-commands/find.md) — поиск файлов для удаления

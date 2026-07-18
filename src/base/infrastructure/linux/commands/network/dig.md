@@ -206,13 +206,6 @@ echo "NS: $(dig +short $domain NS)"
 Записи `ANY` могут не возвращать все записи из-за кэширования и политик DNS-серверов.
 :::
 
-## См. также
-
-- [nslookup](nslookup.md) — DNS-запросы
-- [host](host.md) — DNS-запросы
-- [curl](curl.md) — HTTP-запросы
-
-
 ## Связки с другими командами
 
 ```bash
@@ -223,9 +216,11 @@ dig +short example.com | head -1
 dig +short example.com MX | sort -n
 
 # Пакетный DNS-запрос для списка доменов из файла
-for domain in $(cat domains.txt); do
-  echo -n "$domain: "; dig +short $domain
-done
+while IFS= read -r domain; do
+  [[ -z $domain || $domain == \#* ]] && continue
+  printf '%s: ' "$domain"
+  dig +short "$domain"
+done < domains.txt
 
 # DNS-резолвинг + проверка HTTP-статуса каждого IP
 dig +short example.com | xargs -I{} curl -s -o /dev/null -w "{}: %{http_code}\n" http://{}
@@ -251,3 +246,9 @@ done
 echo "SPF:"; dig +short example.com TXT | grep "v=spf1"
 echo "DMARC:"; dig +short _dmarc.example.com TXT
 ```
+
+## См. также
+
+- [nslookup](nslookup.md) — DNS-запросы
+- [host](host.md) — DNS-запросы
+- [curl](curl.md) — HTTP-запросы

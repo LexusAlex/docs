@@ -177,13 +177,6 @@ ip link set eth0.100 up
 Изменения, сделанные через `ip`, не сохраняются после перезагрузки. Для постоянной настройки используйте `/etc/network/interfaces` или NetworkManager.
 :::
 
-## См. также
-
-- [ss](ss.md) — сокеты
-- [ping](ping.md) — проверка доступности
-- [traceroute](traceroute.md) — трассировка маршрута
-
-
 ## Связки с другими командами
 
 ```bash
@@ -217,3 +210,9 @@ ip neigh show | awk '$4 != "FAILED" && $4 != "INCOMPLETE" {print $1, $5}'
 # Проверка MTU всех интерфейсов
 ip -br link | awk '{print $1}' | xargs -I{} sh -c 'echo -n "{}: "; ip link show {} | grep mtu | awk "{print \$5}"'
 ```
+
+## См. также
+
+- [ss](ss.md) — сокеты
+- [ping](ping.md) — проверка доступности
+- [traceroute](traceroute.md) — трассировка маршрута

@@ -179,7 +179,7 @@ lscpu | grep -i "cache"
 
 ## См. также
 
-- [/proc/cpuinfo](/proc/cpuinfo.md) — детальная информация о CPU
-- [nproc](nproc.md) — количество доступных процессоров
-- [lshw](lshw.md) — полная информация об оборудовании
-- [dmidecode](dmidecode.md) — информация DMI/SMBIOS
+- `/proc/cpuinfo` — детальная информация о CPU
+- `nproc` — количество доступных процессоров
+- `lshw` — полная информация об оборудовании
+- `dmidecode` — информация DMI/SMBIOS

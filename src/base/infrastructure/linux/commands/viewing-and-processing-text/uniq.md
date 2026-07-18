@@ -141,11 +141,6 @@ sort list.txt | uniq -d | wc -l
 
 :::tip
 Для подсчёта уникальных значений без вывода: `sort file.txt | uniq | wc -l`.
-## См. также
-
-- [sort](sort.md) — сортировка (обычно используется перед uniq)
-- [cut](cut.md) — выбор столбцов
-
 :::
 
 ## Связки с другими командами
@@ -166,3 +161,8 @@ dmesg | awk '{print $4}' | sed 's/\[.*\]//' | sort | uniq -c | sort -rn
 # IP-адреса с неудачными попытками входа
 cat /var/log/auth.log | grep "Failed" | awk '{print $(NF-3)}' | sort | uniq -c | sort -rn
 ```
+
+## См. также
+
+- [sort](sort.md) — сортировка (обычно используется перед uniq)
+- [cut](cut.md) — выбор столбцов

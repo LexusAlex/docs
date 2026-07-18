@@ -202,13 +202,6 @@ sed 's/[^,]*/"&"/g' data.csv
 Разделитель в команде `s` может быть любым символом. Удобно использовать `|` или `#` для путей: `sed 's|/old/path|/new/path|g'`.
 :::
 
-## См. также
-
-- [awk](awk.md) — обработка текста
-- [grep](search-files-and-commands/grep.md) — поиск по шаблону
-- [tr](tr.md) — замена символов
-
-
 ## Связки с другими командами
 
 ```bash
@@ -236,3 +229,9 @@ cat file.csv | sed 's/,/|/g' | column -t -s '|'
 # Показать события от ошибки до разрешения
 journalctl | sed -n '/error/I,/resolved/Ip'
 ```
+
+## См. также
+
+- [awk](awk.md) — обработка текста
+- [grep](../search-files-and-commands/grep.md) — поиск по шаблону
+- [tr](tr.md) — замена символов

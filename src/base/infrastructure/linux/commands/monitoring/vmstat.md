@@ -194,5 +194,5 @@ vmstat 1 | awk '$1 > 4 {print "High CPU queue:", $1}'
 
 - [free](free.md) — информация о памяти
 - [iostat](iostat.md) — статистика ввода-вывода
-- [mpstat](mpstat.md) — статистика по процессорам
-- [sar](sar.md) — сбор и анализ статистики системы
+- `mpstat` — статистика по процессорам
+- [sar](../diagnostics/sar.md) — сбор и анализ статистики системы

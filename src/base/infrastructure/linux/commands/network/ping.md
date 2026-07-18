@@ -160,13 +160,6 @@ done
 Flood-режим (`-f`) генерирует огромный трафик. Используйте только для тестирования в изолированной сети.
 :::
 
-## См. также
-
-- [traceroute](traceroute.md) — трассировка маршрута
-- [mtr](mtr.md) — непрерывная трассировка
-- [dig](dig.md) — DNS-запросы
-
-
 ## Связки с другими командами
 
 ```bash
@@ -194,9 +187,10 @@ ping -c 60 8.8.8.8 | while read line; do echo "$(date '+%H:%M:%S') $line"; done 
 ping -c 1 -s 1472 -M do 8.8.8.8 > /dev/null 2>&1 && echo "MTU 1500 OK" || echo "MTU < 1500"
 
 # Пинг всех хостов из файла и вывод только доступных
-for host in $(cat hosts.txt); do
-  ping -c 1 -W 1 $host > /dev/null 2>&1 && echo "$host доступен"
-done
+while IFS= read -r host; do
+  [[ -z $host || $host == \#* ]] && continue
+  ping -c 1 -W 1 "$host" > /dev/null 2>&1 && printf '%s доступен\n' "$host"
+done < hosts.txt
 
 # Среднее время отклика для нескольких хостов
 for host in 8.8.8.8 1.1.1.1 9.9.9.9; do
@@ -204,3 +198,9 @@ for host in 8.8.8.8 1.1.1.1 9.9.9.9; do
   echo "$host: среднее $avg мс"
 done
 ```
+
+## См. также
+
+- [traceroute](traceroute.md) — трассировка маршрута
+- [mtr](mtr.md) — непрерывная трассировка
+- [dig](dig.md) — DNS-запросы

@@ -170,6 +170,6 @@ w -h | grep "pts/" | awk '{print $1, $3}'
 ## См. также
 
 - [who](who.md) — кто залогинен
-- [uptime](uptime.md) — время работы и нагрузка
-- [top](top.md) — мониторинг процессов
+- [uptime](../monitoring/uptime.md) — время работы и нагрузка
+- [top](../monitoring/top.md) — мониторинг процессов
 - [last](last.md) — история входов

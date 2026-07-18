@@ -125,9 +125,10 @@ done
 ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_new
 
 # Копирование на серверы
-for host in $(cat servers.txt); do
-    ssh-copy-id -i ~/.ssh/id_ed25519_new.pub user@$host
-done
+while IFS= read -r host; do
+    [[ -z $host || $host == \#* ]] && continue
+    ssh-copy-id -i ~/.ssh/id_ed25519_new.pub "user@$host"
+done < servers.txt
 ```
 
 ### Настройка доступа без ввода пароля
@@ -225,9 +226,9 @@ PasswordAuthentication no
 
 :::tip Совет
 Используйте `ssh-copy-id -n` для проверки, что будет сделано, прежде чем фактически копировать ключ на продакшен-сервер.
+:::
+
 ## См. также
 
 - [ssh](ssh.md) — подключение
 - [ssh-keygen](ssh-keygen.md) — генерация ключей
-
-:::

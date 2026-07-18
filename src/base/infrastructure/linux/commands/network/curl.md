@@ -219,13 +219,6 @@ status=$(curl -s -o /dev/null -w "%{http_code}" https://api.example.com/health)
 Будьте осторожны с `-k`: отключение проверки SSL делает соединение уязвимым для MITM-атак.
 :::
 
-## См. также
-
-- [wget](wget.md) — скачивание файлов
-- [jq](../viewing-and-processing-text/jq.md) — обработка JSON
-- [ss](ss.md) — сетевые соединения
-
-
 ## Связки с другими командами
 
 ```bash
@@ -255,9 +248,11 @@ curl -w "@curl-format.txt" -s -o /dev/null https://example.com
 curl -s https://example.com | sed 's/<[^>]*>//g' | head -20
 
 # Проверить HTTP-статус для списка URL из файла
-for url in $(cat urls.txt); do
-  curl -s -o /dev/null -w "$url: %{http_code}\n" "$url"
-done
+while IFS= read -r url; do
+  [[ -z $url || $url == \#* ]] && continue
+  status=$(curl -s -o /dev/null -w '%{http_code}' -- "$url")
+  printf '%s: %s\n' "$url" "$status"
+done < urls.txt
 
 # Повторные попытки при ошибках (3 попытки с задержкой 5 сек)
 curl -s --retry 3 --retry-delay 5 https://api.example.com/data
@@ -266,3 +261,9 @@ curl -s --retry 3 --retry-delay 5 https://api.example.com/data
 echo "Server 1:"; curl -s -o /dev/null -w "%{time_total}s\n" https://server1.example.com
 echo "Server 2:"; curl -s -o /dev/null -w "%{time_total}s\n" https://server2.example.com
 ```
+
+## См. также
+
+- [wget](wget.md) — скачивание файлов
+- [jq](../viewing-and-processing-text/jq.md) — обработка JSON
+- [ss](ss.md) — сетевые соединения

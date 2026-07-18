@@ -195,7 +195,7 @@ cp --backup=numbered important.conf /etc/important.conf
 find . -name "*.conf" -exec cp {} /backup/ \;
 
 # Скопировать все .txt файлы в каталог назначения
-ls *.txt | xargs -I{} cp {} /dest/
+find . -maxdepth 1 -type f -name "*.txt" -exec cp -t /dest/ -- {} +
 
 # Скопировать каталог на удалённый сервер через SSH
 tar -czf - dir/ | ssh user@host "tar -xzf - -C /remote/path"
@@ -207,13 +207,13 @@ rsync -avz --include='*.conf' --exclude='*' src/ dest/
 cp important.conf "important.conf.$(date +%Y%m%d_%H%M%S).bak"
 
 # Скопировать файлы, найденные по содержимому
-grep -rl "TODO" src/ | xargs -I{} cp {} /backup/todos/
+grep -rlZ -- "TODO" src/ | xargs -0 -r cp -t /backup/todos/ --
 
 # Скопировать структуру каталогов без файлов
-find . -type d | xargs -I{} mkdir -p /backup/{}
+find . -type d -exec sh -c 'for dir do mkdir -p -- "/backup/${dir#./}"; done' sh {} +
 
 # Скопировать только файлы больше 1МБ
-find . -type f -size +1M | xargs -I{} cp {} /large_files/
+find . -type f -size +1M -exec cp -t /large_files/ -- {} +
 
 # Синхронизировать и показать разницу
 rsync -avc --dry-run source/ dest/ && cp -ru source/ dest/
@@ -243,6 +243,5 @@ find . -name "*.conf" -exec cp --parents {} /backup/ \;
 ## См. также
 
 - [mv](mv.md) — перемещение файлов
-- [rsync](ssh/rsync.md) — синхронизация файлов
+- [rsync](../ssh/rsync.md) — синхронизация файлов
 - [install](install.md) — копирование с правами
-

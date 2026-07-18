@@ -249,11 +249,6 @@ ssh user@server "sudo systemctl restart myapp"
 
 :::tip Совет
 Для копирования через bastion-сервер используйте SSH-конфигурацию с `ProxyJump` вместо сложных команд `scp`.
-## См. также
-
-- [rsync](rsync.md) — синхронизация файлов
-- [ssh](ssh.md) — подключение
-
 :::
 
 ## Альтернативы
@@ -308,3 +303,8 @@ for h in host1 host2 host3; do scp app.tar.gz user@$h:/opt/; done
 # Проверить целостность скопированного файла
 ssh user@host 'md5sum /opt/app.tar.gz' && md5sum app.tar.gz
 ```
+
+## См. также
+
+- [rsync](rsync.md) — синхронизация файлов
+- [ssh](ssh.md) — подключение

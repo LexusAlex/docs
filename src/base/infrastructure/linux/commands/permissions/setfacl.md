@@ -242,7 +242,7 @@ find /project/ -type f -exec setfacl -m g:dev:rw {} \;
 ### setfacl + xargs — ACL для списка файлов
 
 ```bash
-cat file_list.txt | xargs -I {} setfacl -m u:guest:r {}
+xargs -r -d '\n' setfacl -m u:guest:r -- < file_list.txt
 ```
 
 ### setfacl + stat — проверка наличия ACL

@@ -171,5 +171,5 @@ getent group developers
 
 - [chown](chown.md) — изменение владельца и группы
 - [chmod](chmod.md) — изменение прав
-- [groupadd](groupadd.md) — создание группы
-- [ls -l](ls -l.md) — просмотр группы
+- [groupadd](../user-and-access/groupadd.md) — создание группы
+- `ls -l` — просмотр группы

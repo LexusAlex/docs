@@ -46,5 +46,5 @@
 | Инвертировать поиск | `grep -v pattern file` |
 
 ::: tip
-Команда `grep` описана в разделе [Просмотр и обработка текста](/base/infrastructure/linux/commands/viewing-and-processing-text/grep).
+Команда `grep` описана в разделе [Просмотр и обработка текста](../viewing-and-processing-text/).
 :::

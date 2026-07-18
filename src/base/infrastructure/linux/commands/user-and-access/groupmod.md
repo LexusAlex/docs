@@ -170,4 +170,4 @@ crontab -l | grep "developers"
 - [groupadd](groupadd.md) — создание группы
 - [groupdel](groupdel.md) — удаление группы
 - [usermod](usermod.md) — изменение пользователя
-- [chgrp](chgrp.md) — изменение группы файлов
+- [chgrp](../permissions/chgrp.md) — изменение группы файлов

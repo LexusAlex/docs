@@ -485,4 +485,4 @@ clean:
 ## См. также
 
 - [bash-scripts](../bash-scripts/) — скрипты для автоматизации
-- [git](../../tools/vcs/git/) — система контроля версий
+- [git](/base/tools/vcs/git/) — система контроля версий

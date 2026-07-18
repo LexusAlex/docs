@@ -156,4 +156,4 @@ groupadd -g 1001 migrated_group
 - [groupdel](groupdel.md) — удаление группы
 - [groupmod](groupmod.md) — изменение группы
 - [useradd](useradd.md) — создание пользователя
-- [gpasswd](gpasswd.md) — управление группой
+- `gpasswd` — управление группой

@@ -185,6 +185,6 @@ echo "Script running as: $(id -un) (UID: $(id -u))"
 ## См. также
 
 - [groups](groups.md) — группы пользователя
-- [whoami](whoami.md) — имя текущего пользователя
+- `whoami` — имя текущего пользователя
 - [who](who.md) — кто залогинен
-- [/etc/passwd](/etc/passwd.md) — информация о пользователях
+- `/etc/passwd` — информация о пользователях

@@ -118,10 +118,10 @@ killall -v node
 killall -s HUP mydaemon
 ```
 
-### Очистка зависших процессов
+### Корректное завершение зависших процессов
 
 ```bash
-killall -9 zombie-process
+killall -TERM stuck-worker
 ```
 
 ### Завершение процессов перед деплоем
@@ -143,4 +143,3 @@ killall -TERM myapp && sleep 5 && killall -KILL myapp 2>/dev/null
 - [kill](kill.md) — отправка сигнала по PID
 - [pkill](pkill.md) — отправка сигнала по шаблону
 - [pgrep](pgrep.md) — поиск PID
-

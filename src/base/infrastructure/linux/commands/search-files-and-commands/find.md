@@ -129,56 +129,92 @@ find /var/www -type f -exec chmod 644 {} + \
 ### Безопасная обработка файлов с пробелами
 
 ```bash
-find . -name "*.log" -print0 | xargs -0 rm
+find . -type f -name "*.log" -print0 | xargs -0 -r rm --
 ```
 
 ## Связки с другими командами
 
 ```bash
 # Удалить все .log файлы
-find . -name "*.log" -exec rm {} \;
+find . -type f -name "*.log" -exec rm -f -- {} +
 
-# Архивировать файлы старше 30 дней
-find . -type f -mtime +30 | xargs tar -czf old.tar.gz
+# Архивировать файлы старше 30 дней, сохраняя любые символы в именах
+find . -type f -mtime +30 -print0 | tar --null -T - -czf old.tar.gz
 
 # Найти .tmp файлы, содержащие слово "error"
-find . -name "*.tmp" -exec grep -l "error" {} \;
+find . -type f -name "*.tmp" -exec grep -l -- "error" {} +
 
-# Показать размер больших файлов (больше 100МБ)
-find . -type f -size +100M -exec ls -lh {} \; | awk '{print $5, $9}'
+# Показать размер больших файлов (больше 100 МБ)
+find . -type f -size +100M -printf '%s %p\n'
 
 # Найти конфигурационные файлы с портом 80
-find . -name "*.conf" | xargs grep -l "port 80"
+find . -type f -name "*.conf" -exec grep -l -- "port 80" {} +
 
 # Архивировать сегодняшние логи
-find /var/log -name "*.log" -mtime -1 | xargs tar -czf logs.tar.gz
+find /var/log -type f -name "*.log" -mtime -1 -print0 |
+    tar --null -T - -czf logs.tar.gz
 
 # Удалить все пустые файлы
-find . -type f -empty | xargs rm -f
+find . -type f -empty -delete
 
 # Python-файлы, отсортированные по количеству строк
-find . -name "*.py" | xargs wc -l | sort -rn | head
+find . -type f -name "*.py" -exec wc -l -- {} + | sort -rn | head
 
-# Найти файлы, изменённые за последний час, и показать их размер
-find . -type f -mmin -60 -exec ls -lh {} \; | awk '{print $5, $9, $NF}'
+# Найти файлы, изменённые за последний час, и показать байты и путь
+find . -type f -mmin -60 -printf '%s %p\n'
 
 # Изменить права на все .sh файлы рекурсивно
-find . -name "*.sh" -exec chmod +x {} +
+find . -type f -name "*.sh" -exec chmod +x -- {} +
 
 # Найти дубликаты файлов по содержимому (через md5)
-find . -type f -exec md5sum {} \; | sort | uniq -w32 -d
+find . -type f -exec md5sum -- {} \; | sort | uniq -w32 -d
 
-# Найти файлы без владельца и показать их
-find . -nouser -o -nogroup | xargs ls -la
+# Найти файлы без владельца или группы и показать их
+find . \( -nouser -o -nogroup \) -exec ls -ld -- {} +
 ```
 
 :::tip
-Используйте `-print0` с `xargs -0` для безопасной обработки файлов с пробелами и спецсимволами в именах.
+Для пакетной обработки предпочитайте `-exec … {} +`. Если нужен `xargs`, используйте `-print0 | xargs -0 -r`, чтобы сохранить любые имена и не запускать команду при пустом вводе.
 :::
 
 :::warning
 Избегайте `find /` без ограничений — это сканирует всю файловую систему. Используйте конкретные директории и `-maxdepth` для ускорения поиска.
 :::
+
+## Связки с другими командами (дополнительные)
+
+```bash
+# Удалить логи старше 30 дней
+find . -type f -name "*.log" -mtime +30 -exec rm -f -- {} +
+
+# Удалить временные файлы
+find . -type f -name "*.tmp" -delete
+
+# Python-файлы, отсортированные по количеству строк
+find . -type f -name "*.py" -exec wc -l -- {} + | sort -rn | head
+
+# Найти файлы больше 100 МБ и показать байты и путь
+find . -type f -size +100M -printf '%s %p\n'
+
+# Архивировать логи за сегодня
+find /var/log -type f -name "*.log" -mtime -1 -print0 |
+    tar --null -T - -czf today-logs.tar.gz
+
+# Удалить все пустые файлы
+find . -type f -empty -delete
+
+# Проверить синтаксис всей конфигурации nginx
+sudo nginx -t
+
+# Количество файлов, изменённых за неделю
+find . -type f -mtime -7 -printf '.' | wc -c
+
+# 10 самых больших изображений
+find . -type f -name "*.jpg" -printf '%s %p\n' | sort -rn | head -n 10
+
+# Найти файлы без владельца или группы и вывести подробности
+find / \( -nouser -o -nogroup \) -exec ls -ld -- {} + 2>/dev/null
+```
 
 ## См. также
 
@@ -186,38 +222,3 @@ find . -nouser -o -nogroup | xargs ls -la
 - [xargs](xargs.md) — построение аргументов
 - [grep](grep.md) — поиск текста в файлах
 - [ls](../files-and-directories/ls.md) — просмотр директорий
-
-
-## Связки с другими командами (дополнительные)
-
-```bash
-# Удалить логи старше 30 дней
-find . -name "*.log" -mtime +30 -exec rm {} \;
-
-# Удалить временные файлы через xargs
-find . -type f -name "*.tmp" | xargs rm -f
-
-# Python-файлы, отсортированные по количеству строк
-find . -name "*.py" | xargs wc -l | sort -rn | head
-
-# Найти файлы больше 100 МБ и показать их размер
-find . -type f -size +100M -exec ls -lh {} \; | awk '{print $5, $9}'
-
-# Архивировать логи за сегодня
-find /var/log -name "*.log" -mtime -1 | xargs tar -czf today-logs.tar.gz
-
-# Удалить все пустые файлы
-find . -type f -empty | xargs rm -f
-
-# Проверить конфиги nginx на синтаксис
-find . -name "*.conf" | xargs grep -l "port" | xargs sudo nginx -t -c
-
-# Количество файлов, изменённых за неделю
-find . -type f -mtime -7 | wc -l
-
-# 10 самых больших изображений
-find . -name "*.jpg" -exec du -sh {} + | sort -rh | head -10
-
-# Найти файлы без владельца и вывести подробности
-find / -nouser -o -nogroup 2>/dev/null | xargs ls -la 2>/dev/null
-```

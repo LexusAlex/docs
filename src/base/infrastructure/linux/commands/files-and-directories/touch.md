@@ -202,5 +202,4 @@ touch test_dir/.hidden
 ## См. также
 
 - [mkdir](mkdir.md) — создание директорий
-- [stat](monitoring/lsblk.md) — информация о файле
-
+- `stat` — информация о файле

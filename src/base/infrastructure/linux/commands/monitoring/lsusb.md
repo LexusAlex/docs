@@ -171,6 +171,6 @@ lsusb -v | grep -i "maxpower"
 ## См. также
 
 - [lspci](lspci.md) — информация о PCI-устройствах
-- [usb-devices](usb-devices.md) — подробная информация об USB
+- `usb-devices` — подробная информация об USB
 - [dmesg](dmesg.md) — сообщения ядра о подключении
-- [/sys/bus/usb/](/sys/bus/usb/.md) — файловая система sysfs для USB
+- `/sys/bus/usb/` — файловая система sysfs для USB

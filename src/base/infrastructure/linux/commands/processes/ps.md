@@ -161,14 +161,6 @@ ps --ppid 1234
 Поле `COMMAND` может быть обрезано. Используйте `-o cmd --cols 200` для полного вывода.
 :::
 
-## См. также
-
-- [pgrep](pgrep.md) — поиск PID по имени
-- [top](monitoring/top.md) — процессы в реальном времени
-- [kill](kill.md) — отправка сигнала
-- [pstree](pstree.md) — дерево процессов
-
-
 ## Связки с другими командами
 
 ```bash
@@ -202,3 +194,10 @@ ps --ppid $(pgrep -o sshd) -o pid,ppid,%cpu,%mem,cmd
 # Список процессов, работающих дольше 1 часа, с использованием памяти
 ps -eo pid,etime,%mem,cmd --sort=-%mem | awk 'NR>1 && $2~/^([0-9]+-)?([0-9]{2}):/ {print}'
 ```
+
+## См. также
+
+- [pgrep](pgrep.md) — поиск PID по имени
+- [top](../monitoring/top.md) — процессы в реальном времени
+- [kill](kill.md) — отправка сигнала
+- [pstree](pstree.md) — дерево процессов

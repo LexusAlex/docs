@@ -135,8 +135,8 @@ cat important.conf | tee important.conf.bak | sed 's/old/new/g' > important.conf
 
 :::tip
 Используйте `/dev/tty` для вывода на терминал в середине пайпа: `command | tee /dev/tty | processing`.
+:::
+
 ## См. также
 
 - [cat](cat.md) — вывод файла
-
-:::

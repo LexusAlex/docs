@@ -37,7 +37,7 @@
 | Задача | Команда | Пример |
 |--------|---------|--------|
 | Найти PID по имени | `pgrep` | `pgrep nginx` |
-| Убить по PID | `kill` | `kill -9 1234` |
+| Завершить по PID | `kill` | `kill -TERM 1234` |
 | Убить по имени | `pkill` | `pkill nginx` |
 | Убить все по имени | `killall` | `killall nginx` |
 | Запустить с приоритетом | `nice` | `nice -n 10 ./task.sh` |

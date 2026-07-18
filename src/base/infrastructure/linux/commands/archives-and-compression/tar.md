@@ -151,5 +151,4 @@ tar -tvf archive.tar | awk '{print $3, $NF}' | sort -n
 - [gzip](gzip.md) — сжатие gzip
 - [bzip2](bzip2.md) — сжатие bzip2
 - [xz](xz.md) — сжатие xz
-- [rsync](ssh/rsync.md) — синхронизация файлов
-
+- [rsync](../ssh/rsync.md) — синхронизация файлов

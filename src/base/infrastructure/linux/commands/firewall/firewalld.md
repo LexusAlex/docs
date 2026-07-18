@@ -264,9 +264,9 @@ sudo firewall-cmd --reload
 
 :::warning Rich rules vs direct rules
 Rich rules — предпочтительный способ для сложных правил. Direct rules — для прямого доступа к iptables/nftables, используйте только при необходимости.
+:::
+
 ## См. также
 
 - [iptables](iptables.md) — классический файрвол
 - [nftables](nftables.md) — современный файрвол
-
-:::

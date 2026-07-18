@@ -257,11 +257,6 @@ MaxRetentionSec=3month
 
 :::warning Очистка журнала
 Регулярно очищайте журнал: `sudo journalctl --vacuum-time=30d` — иначе он может занять значительное место на диске.
-## См. также
-
-- [systemctl](systemctl.md) — управление службами
-- [dmesg](monitoring/dmesg.md) — сообщения ядра
-
 :::
 
 ## Связки с другими командами
@@ -297,3 +292,8 @@ journalctl -p err --since today -o cat | sort | uniq -c | sort -rn | head -10
 # Логи перезагрузок системы
 journalctl -b | head -5 && journalctl --list-boots
 ```
+
+## См. также
+
+- [systemctl](systemctl.md) — управление службами
+- [dmesg](../monitoring/dmesg.md) — сообщения ядра

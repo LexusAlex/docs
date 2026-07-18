@@ -206,11 +206,6 @@ strace -e trace=file -f ./app 2>&1 | grep ENOENT
 
 :::warning Права доступа
 Для присоединения к чужим процессам (`-p PID`) требуются root-права или `CAP_SYS_PTRACE`.
-## См. также
-
-- [ltrace](ltrace.md) — трассировка библиотечных вызовов
-- [lsof](lsof.md) — открытые файлы
-
 :::
 
 ## Связки с другими командами
@@ -243,3 +238,8 @@ strace -o trace.log -f ./app & sleep 5 && grep -c "EACCES" trace.log
 # Время выполнения системных вызовов (медленные операции)
 strace -T -p PID 2>&1 | awk -F'<|>' '$NF+0 > 0.1 {print}' | head -20
 ```
+
+## См. также
+
+- [ltrace](ltrace.md) — трассировка библиотечных вызовов
+- [lsof](lsof.md) — открытые файлы

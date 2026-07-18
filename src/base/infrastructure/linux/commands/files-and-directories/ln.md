@@ -237,5 +237,4 @@ sudo ldconfig
 ## См. также
 
 - [cp](cp.md) — копирование файлов
-- [find](search-files-and-commands/find.md) — поиск ссылок
-
+- [find](../search-files-and-commands/find.md) — поиск ссылок

@@ -214,7 +214,7 @@ ls -lt | head -20
 ls -la | awk '{print $5, $9}' | sort -rn | head
 
 # Подсчитать количество строк во всех .log файлах
-ls *.log | xargs wc -l
+find . -maxdepth 1 -type f -name "*.log" -exec wc -l -- {} +
 
 # Все файлы, отсортированные по размеру (исключая строку total)
 ls -la | grep -v "^total" | sort -k5 -rn
@@ -254,10 +254,10 @@ ls -la | awk '{print $1, $9}' | while read perm name; do stat -c "%a %n" "$name"
 
 :::tip
 Псевдоним `alias ll='ls -alF'` и `alias la='ls -A'` добавьте в `~/.bashrc` для ускорения работы.
+:::
+
 ## См. также
 
-- [find](search-files-and-commands/find.md) — поиск файлов по критериям
+- [find](../search-files-and-commands/find.md) — поиск файлов по критериям
 - [tree](tree.md) — дерево директорий
-- [du](monitoring/du.md) — размер файлов и директорий
-
-:::
+- [du](../monitoring/du.md) — размер файлов и директорий

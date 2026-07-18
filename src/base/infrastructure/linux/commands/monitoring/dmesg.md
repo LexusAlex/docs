@@ -203,7 +203,7 @@ dmesg | grep -i "thermal\|temperature"
 
 ## См. также
 
-- [journalctl](journalctl.md) — системный журнал systemd
-- [/var/log/kern.log](/var/log/kern.log.md) — лог ядра
-- [syslog](syslog.md) — системный лог
-- [/proc/kmsg](/proc/kmsg.md) — сообщения ядра
+- [journalctl](../systemd/journalctl.md) — системный журнал systemd
+- `/var/log/kern.log` — лог ядра
+- `syslog` — системный лог
+- `/proc/kmsg` — сообщения ядра

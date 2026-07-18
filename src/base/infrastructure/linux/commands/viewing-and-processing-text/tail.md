@@ -131,10 +131,10 @@ ps aux | tail -6
 
 :::tip
 Для мониторинга в реальном времени с подсветкой используйте: `tail -f log | ccze` или `tail -f log | colortail`.
+:::
+
 ## См. также
 
 - [head](head.md) — начало файла
 - [cat](cat.md) — вывод файла
-- [grep](search-files-and-commands/grep.md) — поиск в файле
-
-:::
+- [grep](../search-files-and-commands/grep.md) — поиск в файле

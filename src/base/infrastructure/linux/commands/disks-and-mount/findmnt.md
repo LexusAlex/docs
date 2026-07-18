@@ -227,9 +227,9 @@ findmnt -o TARGET,OPTIONS | grep -E "noexec|nosuid|nodev"
 
 :::warning --real
 По умолчанию `findmnt` показывает все ФС, включая pseudo (proc, sysfs). Используйте `--real` для отображения только реальных файловых систем.
+:::
+
 ## См. также
 
 - [mount](mount.md) — монтирование
 - [lsblk](lsblk.md) — блочные устройства
-
-:::
