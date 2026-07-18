@@ -1,26 +1,30 @@
 import { defineConfig } from 'vitepress'
 
-const SEARCH_TOKEN_PATTERN =
-  /--?[\p{L}\p{N}]+(?:[._-][\p{L}\p{N}]+)*|[\p{L}\p{N}]+(?:[+#._-][\p{L}\p{N}+#_-]+)*/gu
-const RU_KEYBOARD = 'йцукенгшщзхъфывапролджэячсмитьбю'
-const EN_KEYBOARD = "qwertyuiop[]asdfghjkl;'zxcvbnm,."
-
-function swapKeyboardLayout(token) {
-  const isRussian = /^[а-я]+$/u.test(token)
-  const isEnglish = /^[a-z]+$/u.test(token)
-  if (!isRussian && !isEnglish) return null
-
-  const source = isRussian ? RU_KEYBOARD : EN_KEYBOARD
-  const target = isRussian ? EN_KEYBOARD : RU_KEYBOARD
-
-  return [...token].map((character) => target[source.indexOf(character)]).join('')
-}
-
 export function tokenizeSearch(text, fieldName) {
+  // VitePress сериализует эту функцию отдельно от config.mjs, поэтому все
+  // зависимости должны оставаться внутри её тела.
+  const tokenPattern =
+    /--?[\p{L}\p{N}]+(?:[._-][\p{L}\p{N}]+)*|[\p{L}\p{N}]+(?:[+#._-][\p{L}\p{N}+#_-]+)*/gu
+  const russianKeyboard = 'йцукенгшщзхъфывапролджэячсмитьбю'
+  const englishKeyboard = "qwertyuiop[]asdfghjkl;'zxcvbnm,."
+
+  function swapKeyboardLayout(token) {
+    const isRussian = /^[а-я]+$/u.test(token)
+    const isEnglish = /^[a-z]+$/u.test(token)
+    if (!isRussian && !isEnglish) return null
+
+    const sourceKeyboard = isRussian ? russianKeyboard : englishKeyboard
+    const targetKeyboard = isRussian ? englishKeyboard : russianKeyboard
+
+    return [...token]
+      .map((character) => targetKeyboard[sourceKeyboard.indexOf(character)])
+      .join('')
+  }
+
   const source = String(text)
     .normalize('NFKC')
     .toLocaleLowerCase('ru-RU')
-  const tokens = source.match(SEARCH_TOKEN_PATTERN) ?? []
+  const tokens = source.match(tokenPattern) ?? []
   const expanded = new Set()
   const addKeyboardVariants = fieldName === 'title' || fieldName === 'titles'
 

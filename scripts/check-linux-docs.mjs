@@ -185,6 +185,22 @@ for (const [input, expected] of tokenizerCases) {
   }
 }
 
+try {
+  const serializedTokenizer = Function(
+    '"use strict"; return (' + tokenizeSearch.toString() + ')'
+  )()
+  const serializedTokens = serializedTokenizer('Bash-скрипты')
+  if (!serializedTokens.includes('скрипты')) {
+    errors.push('serialized search tokenizer: missing скрипты token')
+  }
+  const titleTokens = serializedTokenizer('Bash-скрипты', 'title')
+  if (!titleTokens.includes('crhbgns')) {
+    errors.push('serialized search tokenizer: missing keyboard-layout token')
+  }
+} catch (error) {
+  errors.push('serialized search tokenizer: ' + error)
+}
+
 const miniSearchConfig = siteConfig.themeConfig.search.options.miniSearch
 const searchIndex = new MiniSearch({
   fields: ['title', 'titles', 'text'],
