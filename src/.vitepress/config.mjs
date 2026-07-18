@@ -1,7 +1,51 @@
 import { defineConfig } from 'vitepress'
 
-export const tokenizeSearch = (text) =>
-  text.toLowerCase().match(/[\p{L}\p{N}-]+/gu) ?? []
+const SEARCH_TOKEN_PATTERN =
+  /--?[\p{L}\p{N}]+(?:[._-][\p{L}\p{N}]+)*|[\p{L}\p{N}]+(?:[+#._-][\p{L}\p{N}+#_-]+)*/gu
+const RU_KEYBOARD = 'йцукенгшщзхъфывапролджэячсмитьбю'
+const EN_KEYBOARD = "qwertyuiop[]asdfghjkl;'zxcvbnm,."
+
+function swapKeyboardLayout(token) {
+  const isRussian = /^[а-я]+$/u.test(token)
+  const isEnglish = /^[a-z]+$/u.test(token)
+  if (!isRussian && !isEnglish) return null
+
+  const source = isRussian ? RU_KEYBOARD : EN_KEYBOARD
+  const target = isRussian ? EN_KEYBOARD : RU_KEYBOARD
+
+  return [...token].map((character) => target[source.indexOf(character)]).join('')
+}
+
+export function tokenizeSearch(text, fieldName) {
+  const source = String(text)
+    .normalize('NFKC')
+    .toLocaleLowerCase('ru-RU')
+  const tokens = source.match(SEARCH_TOKEN_PATTERN) ?? []
+  const expanded = new Set()
+  const addKeyboardVariants = fieldName === 'title' || fieldName === 'titles'
+
+  for (const token of tokens) {
+    const bare = token.replace(/^--?/u, '')
+    const variants = token.startsWith('-')
+      ? [token, bare, ...bare.split(/[._-]+/u)]
+      : [token, ...token.split(/[._-]+/u)]
+
+    for (const variant of variants) {
+      if (!variant) continue
+
+      expanded.add(variant)
+      const withoutYo = variant.replaceAll('ё', 'е')
+      expanded.add(withoutYo)
+
+      if (addKeyboardVariants) {
+        const keyboardVariant = swapKeyboardLayout(withoutYo)
+        if (keyboardVariant) expanded.add(keyboardVariant)
+      }
+    }
+  }
+
+  return [...expanded]
+}
 
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
@@ -83,11 +127,20 @@ export default defineConfig({
             }
           }
         },
+        detailedView: true,
         miniSearch: {
           options: {
-            // Разделители становятся границами токенов: /etc/fstab → etc, fstab.
-            // Дефисы сохраняются для запросов rm -rf и systemctl --failed.
+            // Составные имена индексируются и целиком, и по частям:
+            // Bash-скрипты → Bash-скрипты, Bash, скрипты.
             tokenize: tokenizeSearch
+          },
+          searchOptions: {
+            // Поиск по началу слова и опечаткам, но без шумного fuzzy для 1–3 символов.
+            prefix: true,
+            fuzzy: (term) => ([...term].length >= 4 ? 0.2 : false),
+            // Заголовок важнее хлебных крошек, а они важнее основного текста.
+            boost: { title: 8, titles: 4, text: 1 },
+            weights: { fuzzy: 0.35, prefix: 0.6 }
           }
         }
       }

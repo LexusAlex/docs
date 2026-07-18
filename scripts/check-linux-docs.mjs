@@ -1,4 +1,5 @@
 import fs from 'node:fs'
+import { createRequire } from 'node:module'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -15,6 +16,8 @@ const sectionRoot = path.join(
 )
 
 const errors = []
+const requireFromVitePress = createRequire(import.meta.resolve('vitepress'))
+const MiniSearch = requireFromVitePress('minisearch')
 
 function walkMarkdown(directory) {
   return fs.readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
@@ -161,8 +164,16 @@ for (const route of sectionSidebarLinks) {
 
 const tokenizerCases = new Map([
   ['/etc/fstab', ['etc', 'fstab']],
-  ['rm -rf', ['rm', '-rf']],
-  ['systemctl --failed', ['systemctl', '--failed']]
+  ['rm -rf', ['rm', '-rf', 'rf']],
+  ['systemctl --failed', ['systemctl', '--failed', 'failed']],
+  ['Bash-скрипты', ['bash-скрипты', 'bash', 'скрипты']],
+  ['ssh-copy-id', ['ssh-copy-id', 'ssh', 'copy', 'id']],
+  ['Всё ещё', ['всё', 'все', 'ещё', 'еще']],
+  ['C++ и node.js', ['c++', 'и', 'node.js', 'node', 'js']],
+  [
+    'Пользователи-и-группы',
+    ['пользователи-и-группы', 'пользователи', 'и', 'группы']
+  ]
 ])
 
 for (const [input, expected] of tokenizerCases) {
@@ -171,6 +182,45 @@ for (const [input, expected] of tokenizerCases) {
     errors.push(
       `search tokenizer: ${JSON.stringify(input)} returned ${JSON.stringify(actual)}`
     )
+  }
+}
+
+const miniSearchConfig = siteConfig.themeConfig.search.options.miniSearch
+const searchIndex = new MiniSearch({
+  fields: ['title', 'titles', 'text'],
+  storeFields: ['title', 'titles'],
+  searchOptions: {
+    fuzzy: 0.2,
+    prefix: true,
+    boost: { title: 4, text: 2, titles: 1 },
+    ...miniSearchConfig.searchOptions
+  },
+  ...miniSearchConfig.options
+})
+
+searchIndex.addAll([
+  { id: 'bash', title: 'Bash-скрипты', titles: [], text: '' },
+  {
+    id: 'users',
+    title: 'Пользователи-и-группы',
+    titles: [],
+    text: ''
+  },
+  { id: 'yo', title: 'Всё ещё работает', titles: [], text: '' },
+  { id: 'ssh', title: 'ssh-copy-id', titles: [], text: '' }
+])
+
+for (const [query, expectedId] of [
+  ['скрипты', 'bash'],
+  ['crhbgns', 'bash'],
+  ['груп', 'users'],
+  ['пользоватили', 'users'],
+  ['все еще', 'yo'],
+  ['copy', 'ssh']
+]) {
+  const found = searchIndex.search(query).some(({ id }) => id === expectedId)
+  if (!found) {
+    errors.push(`local search: ${JSON.stringify(query)} did not find ${expectedId}`)
   }
 }
 
