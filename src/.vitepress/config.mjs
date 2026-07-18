@@ -216,14 +216,15 @@ export default defineConfig({
                           { text: 'Node',collapsed: true, link: '/base/frontend/javascript/vanilla/event-target/node/'}
                         ]
                       },
-                      { text: 'Event',collapsed: true, link: '/base/frontend/javascript/vanilla/event/'}
+                      { text: 'Event',collapsed: true, link: '/base/frontend/javascript/vanilla/event/'},
+                      { text: 'Promise', link: '/base/frontend/javascript/vanilla/promise/'}
                     ]},
                   { text: 'typescript', link: '/base/frontend/javascript/typescript/' },
                   { text: 'Фреймворки',collapsed: true, link: '/base/frontend/javascript/frameworks/',
                     items: [
                       { text: 'Vue.js',collapsed: true, link: '/base/frontend/javascript/frameworks/vue-js/',
                         items: [
-                          { text: 'Концепции', link: '/base/frontend/javascript/frameworks/vue-js/concept'}
+                          { text: 'Концепции', link: '/base/frontend/javascript/frameworks/vue-js/concepts'}
                         ]
                       },
                     ]
@@ -253,7 +254,7 @@ export default defineConfig({
                               { text: 'yii-runner-http', link: '/base/backend/php/frameworks/yii3/packages/yii-runner-http'}
                             ]
                           },
-                          { text: 'Как это работает', link: '/base/backend/php/frameworks/yii3/hoe-to-work',}
+                          { text: 'Как это работает', link: '/base/backend/php/frameworks/yii3/how-to-work',}
                         ]
                       }
                     ]
@@ -278,6 +279,13 @@ export default defineConfig({
                         ]
                       },
                       { text: 'Пользователи', link: '/base/db/sql/mariadb/users'},
+                      { text: 'Права и привилегии', link: '/base/db/sql/mariadb/rights'},
+                      { text: 'Роли', link: '/base/db/sql/mariadb/roles'},
+                      { text: 'Утилиты',collapsed: true, link: '/base/db/sql/mariadb/utilities/',
+                        items: [
+                          { text: 'mysqldump', link: '/base/db/sql/mariadb/utilities/mysqldump'}
+                        ]
+                      },
                       { text: 'Удаление',collapsed: true, link: '/base/db/sql/mariadb/remove/',
                         items: [
                           { text: 'Ubuntu 24.04 LTS', link: '/base/db/sql/mariadb/remove/ubuntu-24-04-lts',}
@@ -315,6 +323,7 @@ export default defineConfig({
             items: [
               { text: 'Linux',collapsed: true, link: '/base/infrastructure/linux/',
                 items: [
+                  { text: 'Права доступа', link: '/base/infrastructure/linux/rights/'},
                   { text: 'Команды',collapsed: true, link: '/base/infrastructure/linux/commands/',
                     items: [
                       { text: 'Файлы и каталоги',collapsed: true, link: '/base/infrastructure/linux/commands/files-and-directories/' },
