@@ -326,24 +326,264 @@ export default defineConfig({
                   { text: 'Права доступа', link: '/base/infrastructure/linux/rights/'},
                   { text: 'Команды',collapsed: true, link: '/base/infrastructure/linux/commands/',
                     items: [
-                      { text: 'Файлы и каталоги',collapsed: true, link: '/base/infrastructure/linux/commands/files-and-directories/' },
+                      { text: 'Файлы и каталоги',collapsed: true, link: '/base/infrastructure/linux/commands/files-and-directories/',
+                        items: [
+                          { text: 'ls', link: '/base/infrastructure/linux/commands/files-and-directories/ls'},
+                          { text: 'cd', link: '/base/infrastructure/linux/commands/files-and-directories/cd'},
+                          { text: 'pwd', link: '/base/infrastructure/linux/commands/files-and-directories/pwd'},
+                          { text: 'tree', link: '/base/infrastructure/linux/commands/files-and-directories/tree'},
+                          { text: 'touch', link: '/base/infrastructure/linux/commands/files-and-directories/touch'},
+                          { text: 'mkdir', link: '/base/infrastructure/linux/commands/files-and-directories/mkdir'},
+                          { text: 'cp', link: '/base/infrastructure/linux/commands/files-and-directories/cp'},
+                          { text: 'mv', link: '/base/infrastructure/linux/commands/files-and-directories/mv'},
+                          { text: 'rm', link: '/base/infrastructure/linux/commands/files-and-directories/rm'},
+                          { text: 'rmdir', link: '/base/infrastructure/linux/commands/files-and-directories/rmdir'},
+                          { text: 'ln', link: '/base/infrastructure/linux/commands/files-and-directories/ln'},
+                          { text: 'install', link: '/base/infrastructure/linux/commands/files-and-directories/install'},
+                          { text: 'shred', link: '/base/infrastructure/linux/commands/files-and-directories/shred'},
+                          { text: 'rename', link: '/base/infrastructure/linux/commands/files-and-directories/rename'}
+                        ]
+                      },
                       { text: 'Просмотр и обработка текста',collapsed: true, link: '/base/infrastructure/linux/commands/viewing-and-processing-text/',
                         items: [
+                          { text: 'cat', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/cat'},
+                          { text: 'less', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/less'},
+                          { text: 'more', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/more'},
+                          { text: 'head', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/head'},
+                          { text: 'tail', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/tail'},
+                          { text: 'wc', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/wc'},
+                          { text: 'cut', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/cut'},
+                          { text: 'sort', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/sort'},
+                          { text: 'uniq', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/uniq'},
+                          { text: 'tr', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/tr'},
+                          { text: 'sed', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/sed'},
+                          { text: 'awk', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/awk'},
+                          { text: 'diff', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/diff'},
+                          { text: 'tee', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/tee'},
+                          { text: 'column', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/column'},
+                          { text: 'jq', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/jq'},
                           { text: 'grep', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/grep'}
                         ]
                       },
-                      { text: 'Получение информации о системе и мониторинг',collapsed: true, link: '/base/infrastructure/linux/commands/monitoring/' },
-                      { text: 'Управление пользователями и правами доступа',collapsed: true, link: '/base/infrastructure/linux/commands/user-and-access/' },
-                      { text: 'Управление процессами',collapsed: true, link: '/base/infrastructure/linux/commands/processes/' },
-                      { text: 'Сеть',collapsed: true, link: '/base/infrastructure/linux/commands/network/' },
-                      { text: 'Архивы и сжатие',collapsed: true, link: '/base/infrastructure/linux/commands/archives-and-compression/' },
-                      { text: 'Управление пакетами',collapsed: true, link: '/base/infrastructure/linux/commands/package-management/',
+                      { text: 'Перенаправление потоков и конвейеры',collapsed: true, link: '/base/infrastructure/linux/commands/streams-and-pipes/',
                         items: [
-                          { text: 'Debian/Ubuntu',collapsed: true, link: '/base/infrastructure/linux/commands/package-management/debian-ubuntu/'}
+                          { text: 'Перенаправление', link: '/base/infrastructure/linux/commands/streams-and-pipes/redirection'},
+                          { text: 'Конвейеры', link: '/base/infrastructure/linux/commands/streams-and-pipes/pipes'}
                         ]
                       },
-                      { text: 'Поиск файлов и команд',collapsed: true, link: '/base/infrastructure/linux/commands/search-files-and-commands/'},
-                      { text: 'Справка и документация',collapsed: true, link: '/base/infrastructure/linux/commands/reference/'}
+                      { text: 'Поиск файлов и команд',collapsed: true, link: '/base/infrastructure/linux/commands/search-files-and-commands/',
+                        items: [
+                          { text: 'find', link: '/base/infrastructure/linux/commands/search-files-and-commands/find'},
+                          { text: 'locate', link: '/base/infrastructure/linux/commands/search-files-and-commands/locate'},
+                          { text: 'which', link: '/base/infrastructure/linux/commands/search-files-and-commands/which'},
+                          { text: 'whereis', link: '/base/infrastructure/linux/commands/search-files-and-commands/whereis'},
+                          { text: 'type', link: '/base/infrastructure/linux/commands/search-files-and-commands/type'},
+                          { text: 'xargs', link: '/base/infrastructure/linux/commands/search-files-and-commands/xargs'}
+                        ]
+                      },
+                      { text: 'Пользователи и группы',collapsed: true, link: '/base/infrastructure/linux/commands/user-and-access/',
+                        items: [
+                          { text: 'useradd', link: '/base/infrastructure/linux/commands/user-and-access/useradd'},
+                          { text: 'userdel', link: '/base/infrastructure/linux/commands/user-and-access/userdel'},
+                          { text: 'usermod', link: '/base/infrastructure/linux/commands/user-and-access/usermod'},
+                          { text: 'passwd', link: '/base/infrastructure/linux/commands/user-and-access/passwd'},
+                          { text: 'groupadd', link: '/base/infrastructure/linux/commands/user-and-access/groupadd'},
+                          { text: 'groupdel', link: '/base/infrastructure/linux/commands/user-and-access/groupdel'},
+                          { text: 'groupmod', link: '/base/infrastructure/linux/commands/user-and-access/groupmod'},
+                          { text: 'groups', link: '/base/infrastructure/linux/commands/user-and-access/groups'},
+                          { text: 'id', link: '/base/infrastructure/linux/commands/user-and-access/id'},
+                          { text: 'who', link: '/base/infrastructure/linux/commands/user-and-access/who'},
+                          { text: 'w', link: '/base/infrastructure/linux/commands/user-and-access/w'},
+                          { text: 'last', link: '/base/infrastructure/linux/commands/user-and-access/last'},
+                          { text: 'su', link: '/base/infrastructure/linux/commands/user-and-access/su'},
+                          { text: 'sudo', link: '/base/infrastructure/linux/commands/user-and-access/sudo'}
+                        ]
+                      },
+                      { text: 'Права доступа',collapsed: true, link: '/base/infrastructure/linux/commands/permissions/',
+                        items: [
+                          { text: 'chmod', link: '/base/infrastructure/linux/commands/permissions/chmod'},
+                          { text: 'chown', link: '/base/infrastructure/linux/commands/permissions/chown'},
+                          { text: 'chgrp', link: '/base/infrastructure/linux/commands/permissions/chgrp'},
+                          { text: 'umask', link: '/base/infrastructure/linux/commands/permissions/umask'},
+                          { text: 'getfacl', link: '/base/infrastructure/linux/commands/permissions/getfacl'},
+                          { text: 'setfacl', link: '/base/infrastructure/linux/commands/permissions/setfacl'}
+                        ]
+                      },
+                      { text: 'Управление процессами',collapsed: true, link: '/base/infrastructure/linux/commands/processes/',
+                        items: [
+                          { text: 'ps', link: '/base/infrastructure/linux/commands/processes/ps'},
+                          { text: 'pgrep', link: '/base/infrastructure/linux/commands/processes/pgrep'},
+                          { text: 'pidof', link: '/base/infrastructure/linux/commands/processes/pidof'},
+                          { text: 'pstree', link: '/base/infrastructure/linux/commands/processes/pstree'},
+                          { text: 'kill', link: '/base/infrastructure/linux/commands/processes/kill'},
+                          { text: 'killall', link: '/base/infrastructure/linux/commands/processes/killall'},
+                          { text: 'pkill', link: '/base/infrastructure/linux/commands/processes/pkill'},
+                          { text: 'nice', link: '/base/infrastructure/linux/commands/processes/nice'},
+                          { text: 'renice', link: '/base/infrastructure/linux/commands/processes/renice'},
+                          { text: 'nohup', link: '/base/infrastructure/linux/commands/processes/nohup'},
+                          { text: 'bg', link: '/base/infrastructure/linux/commands/processes/bg'},
+                          { text: 'fg', link: '/base/infrastructure/linux/commands/processes/fg'},
+                          { text: 'jobs', link: '/base/infrastructure/linux/commands/processes/jobs'},
+                          { text: 'timeout', link: '/base/infrastructure/linux/commands/processes/timeout'}
+                        ]
+                      },
+                      { text: 'Мониторинг системы',collapsed: true, link: '/base/infrastructure/linux/commands/monitoring/',
+                        items: [
+                          { text: 'top', link: '/base/infrastructure/linux/commands/monitoring/top'},
+                          { text: 'htop', link: '/base/infrastructure/linux/commands/monitoring/htop'},
+                          { text: 'free', link: '/base/infrastructure/linux/commands/monitoring/free'},
+                          { text: 'vmstat', link: '/base/infrastructure/linux/commands/monitoring/vmstat'},
+                          { text: 'iostat', link: '/base/infrastructure/linux/commands/monitoring/iostat'},
+                          { text: 'df', link: '/base/infrastructure/linux/commands/monitoring/df'},
+                          { text: 'du', link: '/base/infrastructure/linux/commands/monitoring/du'},
+                          { text: 'uptime', link: '/base/infrastructure/linux/commands/monitoring/uptime'},
+                          { text: 'uname', link: '/base/infrastructure/linux/commands/monitoring/uname'},
+                          { text: 'lspci', link: '/base/infrastructure/linux/commands/monitoring/lspci'},
+                          { text: 'lsusb', link: '/base/infrastructure/linux/commands/monitoring/lsusb'},
+                          { text: 'lscpu', link: '/base/infrastructure/linux/commands/monitoring/lscpu'},
+                          { text: 'dmesg', link: '/base/infrastructure/linux/commands/monitoring/dmesg'}
+                        ]
+                      },
+                      { text: 'Диски и монтирование',collapsed: true, link: '/base/infrastructure/linux/commands/disks-and-mount/',
+                        items: [
+                          { text: 'lsblk', link: '/base/infrastructure/linux/commands/disks-and-mount/lsblk'},
+                          { text: 'fdisk', link: '/base/infrastructure/linux/commands/disks-and-mount/fdisk'},
+                          { text: 'parted', link: '/base/infrastructure/linux/commands/disks-and-mount/parted'},
+                          { text: 'mkfs', link: '/base/infrastructure/linux/commands/disks-and-mount/mkfs'},
+                          { text: 'mount', link: '/base/infrastructure/linux/commands/disks-and-mount/mount'},
+                          { text: 'umount', link: '/base/infrastructure/linux/commands/disks-and-mount/umount'},
+                          { text: 'fsck', link: '/base/infrastructure/linux/commands/disks-and-mount/fsck'},
+                          { text: 'blkid', link: '/base/infrastructure/linux/commands/disks-and-mount/blkid'},
+                          { text: 'findmnt', link: '/base/infrastructure/linux/commands/disks-and-mount/findmnt'},
+                          { text: 'swapon', link: '/base/infrastructure/linux/commands/disks-and-mount/swapon'},
+                          { text: 'swapoff', link: '/base/infrastructure/linux/commands/disks-and-mount/swapoff'}
+                        ]
+                      },
+                      { text: 'Архивы и сжатие',collapsed: true, link: '/base/infrastructure/linux/commands/archives-and-compression/',
+                        items: [
+                          { text: 'tar', link: '/base/infrastructure/linux/commands/archives-and-compression/tar'},
+                          { text: 'gzip', link: '/base/infrastructure/linux/commands/archives-and-compression/gzip'},
+                          { text: 'gunzip', link: '/base/infrastructure/linux/commands/archives-and-compression/gunzip'},
+                          { text: 'bzip2', link: '/base/infrastructure/linux/commands/archives-and-compression/bzip2'},
+                          { text: 'xz', link: '/base/infrastructure/linux/commands/archives-and-compression/xz'},
+                          { text: 'zip', link: '/base/infrastructure/linux/commands/archives-and-compression/zip'},
+                          { text: 'unzip', link: '/base/infrastructure/linux/commands/archives-and-compression/unzip'},
+                          { text: '7z', link: '/base/infrastructure/linux/commands/archives-and-compression/7z'}
+                        ]
+                      },
+                      { text: 'Сеть',collapsed: true, link: '/base/infrastructure/linux/commands/network/',
+                        items: [
+                          { text: 'ip', link: '/base/infrastructure/linux/commands/network/ip'},
+                          { text: 'ss', link: '/base/infrastructure/linux/commands/network/ss'},
+                          { text: 'ping', link: '/base/infrastructure/linux/commands/network/ping'},
+                          { text: 'traceroute', link: '/base/infrastructure/linux/commands/network/traceroute'},
+                          { text: 'dig', link: '/base/infrastructure/linux/commands/network/dig'},
+                          { text: 'nslookup', link: '/base/infrastructure/linux/commands/network/nslookup'},
+                          { text: 'host', link: '/base/infrastructure/linux/commands/network/host'},
+                          { text: 'curl', link: '/base/infrastructure/linux/commands/network/curl'},
+                          { text: 'wget', link: '/base/infrastructure/linux/commands/network/wget'},
+                          { text: 'nc', link: '/base/infrastructure/linux/commands/network/nc'},
+                          { text: 'nmap', link: '/base/infrastructure/linux/commands/network/nmap'},
+                          { text: 'tcpdump', link: '/base/infrastructure/linux/commands/network/tcpdump'},
+                          { text: 'mtr', link: '/base/infrastructure/linux/commands/network/mtr'}
+                        ]
+                      },
+                      { text: 'Файрвол',collapsed: true, link: '/base/infrastructure/linux/commands/firewall/',
+                        items: [
+                          { text: 'iptables', link: '/base/infrastructure/linux/commands/firewall/iptables'},
+                          { text: 'nftables', link: '/base/infrastructure/linux/commands/firewall/nftables'},
+                          { text: 'ufw', link: '/base/infrastructure/linux/commands/firewall/ufw'},
+                          { text: 'firewalld', link: '/base/infrastructure/linux/commands/firewall/firewalld'}
+                        ]
+                      },
+                      { text: 'SSH',collapsed: true, link: '/base/infrastructure/linux/commands/ssh/',
+                        items: [
+                          { text: 'ssh', link: '/base/infrastructure/linux/commands/ssh/ssh'},
+                          { text: 'ssh-keygen', link: '/base/infrastructure/linux/commands/ssh/ssh-keygen'},
+                          { text: 'ssh-copy-id', link: '/base/infrastructure/linux/commands/ssh/ssh-copy-id'},
+                          { text: 'ssh-agent', link: '/base/infrastructure/linux/commands/ssh/ssh-agent'},
+                          { text: 'scp', link: '/base/infrastructure/linux/commands/ssh/scp'},
+                          { text: 'rsync', link: '/base/infrastructure/linux/commands/ssh/rsync'}
+                        ]
+                      },
+                      { text: 'Управление пакетами',collapsed: true, link: '/base/infrastructure/linux/commands/package-management/',
+                        items: [
+                          { text: 'Debian/Ubuntu',collapsed: true, link: '/base/infrastructure/linux/commands/package-management/debian-ubuntu/',
+                            items: [
+                              { text: 'apt', link: '/base/infrastructure/linux/commands/package-management/debian-ubuntu/apt'},
+                              { text: 'apt-get', link: '/base/infrastructure/linux/commands/package-management/debian-ubuntu/apt-get'},
+                              { text: 'apt-cache', link: '/base/infrastructure/linux/commands/package-management/debian-ubuntu/apt-cache'},
+                              { text: 'dpkg', link: '/base/infrastructure/linux/commands/package-management/debian-ubuntu/dpkg'},
+                              { text: 'snap', link: '/base/infrastructure/linux/commands/package-management/debian-ubuntu/snap'}
+                            ]
+                          },
+                          { text: 'RHEL/Fedora',collapsed: true, link: '/base/infrastructure/linux/commands/package-management/rhel-fedora/',
+                            items: [
+                              { text: 'dnf', link: '/base/infrastructure/linux/commands/package-management/rhel-fedora/dnf'},
+                              { text: 'yum', link: '/base/infrastructure/linux/commands/package-management/rhel-fedora/yum'},
+                              { text: 'rpm', link: '/base/infrastructure/linux/commands/package-management/rhel-fedora/rpm'}
+                            ]
+                          }
+                        ]
+                      },
+                      { text: 'Текстовые редакторы',collapsed: true, link: '/base/infrastructure/linux/commands/text-editors/',
+                        items: [
+                          { text: 'nano', link: '/base/infrastructure/linux/commands/text-editors/nano'},
+                          { text: 'vim', link: '/base/infrastructure/linux/commands/text-editors/vim'}
+                        ]
+                      },
+                      { text: 'Переменные окружения',collapsed: true, link: '/base/infrastructure/linux/commands/environment/',
+                        items: [
+                          { text: 'export', link: '/base/infrastructure/linux/commands/environment/export'},
+                          { text: 'env', link: '/base/infrastructure/linux/commands/environment/env'},
+                          { text: 'printenv', link: '/base/infrastructure/linux/commands/environment/printenv'},
+                          { text: 'PATH', link: '/base/infrastructure/linux/commands/environment/path'},
+                          { text: 'bashrc', link: '/base/infrastructure/linux/commands/environment/bashrc'}
+                        ]
+                      },
+                      { text: 'systemd и службы',collapsed: true, link: '/base/infrastructure/linux/commands/systemd/',
+                        items: [
+                          { text: 'systemctl', link: '/base/infrastructure/linux/commands/systemd/systemctl'},
+                          { text: 'journalctl', link: '/base/infrastructure/linux/commands/systemd/journalctl'},
+                          { text: 'systemd-analyze', link: '/base/infrastructure/linux/commands/systemd/systemd-analyze'},
+                          { text: 'hostnamectl', link: '/base/infrastructure/linux/commands/systemd/hostnamectl'},
+                          { text: 'timedatectl', link: '/base/infrastructure/linux/commands/systemd/timedatectl'},
+                          { text: 'localectl', link: '/base/infrastructure/linux/commands/systemd/localectl'}
+                        ]
+                      },
+                      { text: 'Планирование задач',collapsed: true, link: '/base/infrastructure/linux/commands/cron-and-timers/',
+                        items: [
+                          { text: 'crontab', link: '/base/infrastructure/linux/commands/cron-and-timers/crontab'},
+                          { text: 'systemd-timers', link: '/base/infrastructure/linux/commands/cron-and-timers/systemd-timers'}
+                        ]
+                      },
+                      { text: 'Bash-скрипты',collapsed: true, link: '/base/infrastructure/linux/commands/bash-scripts/',
+                        items: [
+                          { text: 'shebang', link: '/base/infrastructure/linux/commands/bash-scripts/shebang'},
+                          { text: 'Переменные', link: '/base/infrastructure/linux/commands/bash-scripts/variables'},
+                          { text: 'Условия', link: '/base/infrastructure/linux/commands/bash-scripts/conditions'},
+                          { text: 'Циклы', link: '/base/infrastructure/linux/commands/bash-scripts/loops'},
+                          { text: 'Функции', link: '/base/infrastructure/linux/commands/bash-scripts/functions'},
+                          { text: 'Аргументы', link: '/base/infrastructure/linux/commands/bash-scripts/arguments'}
+                        ]
+                      },
+                      { text: 'Диагностика',collapsed: true, link: '/base/infrastructure/linux/commands/diagnostics/',
+                        items: [
+                          { text: 'strace', link: '/base/infrastructure/linux/commands/diagnostics/strace'},
+                          { text: 'ltrace', link: '/base/infrastructure/linux/commands/diagnostics/ltrace'},
+                          { text: 'lsof', link: '/base/infrastructure/linux/commands/diagnostics/lsof'},
+                          { text: 'sar', link: '/base/infrastructure/linux/commands/diagnostics/sar'}
+                        ]
+                      },
+                      { text: 'Справка и документация',collapsed: true, link: '/base/infrastructure/linux/commands/reference/',
+                        items: [
+                          { text: 'man', link: '/base/infrastructure/linux/commands/reference/man'},
+                          { text: 'info', link: '/base/infrastructure/linux/commands/reference/info'},
+                          { text: 'apropos', link: '/base/infrastructure/linux/commands/reference/apropos'},
+                          { text: 'whatis', link: '/base/infrastructure/linux/commands/reference/whatis'},
+                          { text: 'tldr', link: '/base/infrastructure/linux/commands/reference/tldr'}
+                        ]
+                      }
                     ]
                   },
                 ]
