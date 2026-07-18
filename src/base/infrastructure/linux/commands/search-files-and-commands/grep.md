@@ -1,5 +1,7 @@
 # grep
 
+**Уровень:** Средний
+
 Утилита для поиска текста по шаблону в файлах и потоках. Поддерживает базовые (BRE), расширенные (ERE) и Perl-совместимые (PCRE) регулярные выражения.
 
 ## Синтаксис
@@ -127,6 +129,40 @@ grep -rn "password\|secret\|api_key" --include="*.conf" /etc/
 grep -v "^\s*#" /etc/ssh/sshd_config | grep -v "^\s*$"
 ```
 
+## Связки с другими командами
+
+```bash
+# Найти процессы nginx, исключая сам grep
+ps aux | grep nginx | grep -v grep
+
+# Последние 20 ошибок из системного лога
+cat /var/log/syslog | grep -i error | tail -20
+
+# Найти лог-файлы, содержащие OOM
+find . -name "*.log" | xargs grep -l "OOM"
+
+# Кто слушает порт 80
+ss -tlnp | grep :80
+
+# Ошибки и исключения в логах Docker (включая stderr)
+docker logs container 2>&1 | grep -i exception
+
+# Подсчитать количество ответов 200 в логах nginx
+journalctl -u nginx | grep -c "200"
+
+# Только IPv4-адреса из вывода ip addr
+ip addr | grep inet | grep -v inet6
+
+# Только физические диски в выводе df
+df -h | grep -E "^(\/dev|Filesystem)"
+
+# Пользователи с реальными оболочками
+cat /etc/passwd | grep -v nologin | grep -v false
+
+# Текущие залогиненные пользователи
+last | grep -i "still logged in"
+```
+
 :::tip
 Используйте `grep -F` для поиска фиксированных строк — это значительно быстрее, чем regex, особенно в больших файлах.
 :::
@@ -134,3 +170,11 @@ grep -v "^\s*#" /etc/ssh/sshd_config | grep -v "^\s*$"
 :::warning
 `grep` по умолчанию использует BRE. Для символов `+`, `?`, `|`, `(`, `)` используйте `-E` (ERE) или экранируйте обратным слэшем.
 :::
+
+## См. также
+
+- [find](find.md) — поиск файлов
+- [sed](../viewing-and-processing-text/sed.md) — замена текста
+- [awk](../viewing-and-processing-text/awk.md) — обработка текста
+- [xargs](xargs.md) — построение аргументов
+

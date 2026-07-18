@@ -1,5 +1,7 @@
 # iptables
 
+**Уровень:** Продвинутый
+
 Управление межсетевым экраном Linux (netfilter).
 
 ## Синтаксис
@@ -294,4 +296,10 @@ sudo iptables -P INPUT DROP
 
 :::warning iptables vs nftables
 iptables постепенно заменяется на nftables. Для новых систем рассмотрите использование nft.
+## См. также
+
+- [nftables](nftables.md) — современная замена
+- [ufw](ufw.md) — простой интерфейс
+- [ss](network/ss.md) — сетевые сокеты
+
 :::

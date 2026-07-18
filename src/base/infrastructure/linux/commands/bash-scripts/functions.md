@@ -1,5 +1,7 @@
 # Функции bash
 
+**Уровень:** Продвинутый
+
 Создание и использование функций в bash-скриптах.
 
 ## Синтаксис
@@ -240,4 +242,9 @@ fi
 
 :::warning Субшеллы и pipe
 Функции в pipe (`command | while read`) выполняются в subshell. Изменения переменных не сохраняются. Используйте process substitution.
+## См. также
+
+- [variables](variables.md) — переменные
+- [arguments](arguments.md) — аргументы
+
 :::

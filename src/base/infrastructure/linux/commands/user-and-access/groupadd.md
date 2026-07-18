@@ -1,5 +1,7 @@
 # groupadd
 
+**Уровень:** Средний
+
 Создание новой группы в системе.
 
 ## Синтаксис
@@ -151,7 +153,7 @@ groupadd -g 1001 migrated_group
 
 ## См. также
 
-- `groupdel` — удаление группы
-- `groupmod` — изменение группы
-- `useradd` — создание пользователя
-- `gpasswd` — управление группой
+- [groupdel](groupdel.md) — удаление группы
+- [groupmod](groupmod.md) — изменение группы
+- [useradd](useradd.md) — создание пользователя
+- [gpasswd](gpasswd.md) — управление группой

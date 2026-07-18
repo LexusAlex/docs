@@ -1,5 +1,7 @@
 # systemd timers
 
+**Уровень:** Средний
+
 Планировщик задач systemd — современная альтернатива cron с расширенными возможностями.
 
 ## Синтаксис
@@ -233,4 +235,9 @@ ExecStart=/usr/local/bin/db-cleanup.sh
 
 :::warning Миграция с cron
 При миграции с cron учитывайте, что systemd timers не наследуют переменные окружения пользователя. Используйте `Environment=` или `EnvironmentFile=` в .service файле.
+## См. также
+
+- [crontab](crontab.md) — cron-задачи
+- [systemctl](systemd/systemctl.md) — управление таймерами
+
 :::

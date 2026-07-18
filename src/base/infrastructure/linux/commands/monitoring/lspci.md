@@ -1,5 +1,7 @@
 # lspci
 
+**Уровень:** Средний
+
 Отображение информации о PCI-устройствах в системе.
 
 ## Синтаксис
@@ -166,7 +168,7 @@ lspci -v | grep -A10 -i "nvme\|non-volatile"
 
 ## См. также
 
-- `lsusb` — информация о USB-устройствах
-- `lshw` — полная информация об оборудовании
-- `dmidecode` — информация DMI/SMBIOS
-- `/proc/bus/pci/` — информация о PCI
+- [lsusb](lsusb.md) — информация о USB-устройствах
+- [lshw](lshw.md) — полная информация об оборудовании
+- [dmidecode](dmidecode.md) — информация DMI/SMBIOS
+- [/proc/bus/pci/](/proc/bus/pci/.md) — информация о PCI

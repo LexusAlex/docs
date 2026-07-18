@@ -1,5 +1,7 @@
 # groupdel
 
+**Уровень:** Средний
+
 Удаление группы из системы.
 
 ## Синтаксис
@@ -141,7 +143,7 @@ grep "developers" /etc/sudoers /etc/sudoers.d/*
 
 ## См. также
 
-- `groupadd` — создание группы
-- `groupmod` — изменение группы
-- `usermod` — изменение пользователя
-- `gpasswd` — управление группой
+- [groupadd](groupadd.md) — создание группы
+- [groupmod](groupmod.md) — изменение группы
+- [usermod](usermod.md) — изменение пользователя
+- [gpasswd](gpasswd.md) — управление группой

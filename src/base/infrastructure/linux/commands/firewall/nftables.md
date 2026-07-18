@@ -1,5 +1,7 @@
 # nft
 
+**Уровень:** Продвинутый
+
 Управление межсетевым экраном nftables (замена iptables).
 
 ## Синтаксис
@@ -279,4 +281,9 @@ sudo nft add rule inet filter input tcp flags & (fin|syn|rst|ack) == syn ct stat
 
 :::warning Миграция
 При миграции с iptables убедитесь, что все модули совместимы. Некоторые сложные правила iptables требуют адаптации для nftables.
+## См. также
+
+- [iptables](iptables.md) — классический файрвол
+- [ufw](ufw.md) — простой интерфейс
+
 :::

@@ -326,6 +326,9 @@ export default defineConfig({
                   { text: 'Права доступа', link: '/base/infrastructure/linux/rights/'},
                   { text: 'Команды',collapsed: true, link: '/base/infrastructure/linux/commands/',
                     items: [
+                      { text: 'Шпаргалка', link: '/base/infrastructure/linux/commands/cheat-sheet'},
+                      { text: 'Как сделать...', link: '/base/infrastructure/linux/commands/how-to'},
+                      { text: 'По задачам', link: '/base/infrastructure/linux/commands/by-use-case'},
                       { text: 'Файлы и каталоги',collapsed: true, link: '/base/infrastructure/linux/commands/files-and-directories/',
                         items: [
                           { text: 'ls', link: '/base/infrastructure/linux/commands/files-and-directories/ls'},
@@ -341,7 +344,8 @@ export default defineConfig({
                           { text: 'ln', link: '/base/infrastructure/linux/commands/files-and-directories/ln'},
                           { text: 'install', link: '/base/infrastructure/linux/commands/files-and-directories/install'},
                           { text: 'shred', link: '/base/infrastructure/linux/commands/files-and-directories/shred'},
-                          { text: 'rename', link: '/base/infrastructure/linux/commands/files-and-directories/rename'}
+                          { text: 'rename', link: '/base/infrastructure/linux/commands/files-and-directories/rename'},
+                          { text: 'watch', link: '/base/infrastructure/linux/commands/files-and-directories/watch'}
                         ]
                       },
                       { text: 'Просмотр и обработка текста',collapsed: true, link: '/base/infrastructure/linux/commands/viewing-and-processing-text/',
@@ -361,8 +365,7 @@ export default defineConfig({
                           { text: 'diff', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/diff'},
                           { text: 'tee', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/tee'},
                           { text: 'column', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/column'},
-                          { text: 'jq', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/jq'},
-                          { text: 'grep', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/grep'}
+                          { text: 'jq', link: '/base/infrastructure/linux/commands/viewing-and-processing-text/jq'}
                         ]
                       },
                       { text: 'Перенаправление потоков и конвейеры',collapsed: true, link: '/base/infrastructure/linux/commands/streams-and-pipes/',
@@ -378,7 +381,8 @@ export default defineConfig({
                           { text: 'which', link: '/base/infrastructure/linux/commands/search-files-and-commands/which'},
                           { text: 'whereis', link: '/base/infrastructure/linux/commands/search-files-and-commands/whereis'},
                           { text: 'type', link: '/base/infrastructure/linux/commands/search-files-and-commands/type'},
-                          { text: 'xargs', link: '/base/infrastructure/linux/commands/search-files-and-commands/xargs'}
+                          { text: 'xargs', link: '/base/infrastructure/linux/commands/search-files-and-commands/xargs'},
+                          { text: 'grep', link: '/base/infrastructure/linux/commands/search-files-and-commands/grep'}
                         ]
                       },
                       { text: 'Пользователи и группы',collapsed: true, link: '/base/infrastructure/linux/commands/user-and-access/',
@@ -565,6 +569,29 @@ export default defineConfig({
                           { text: 'Циклы', link: '/base/infrastructure/linux/commands/bash-scripts/loops'},
                           { text: 'Функции', link: '/base/infrastructure/linux/commands/bash-scripts/functions'},
                           { text: 'Аргументы', link: '/base/infrastructure/linux/commands/bash-scripts/arguments'}
+                        ]
+                      },
+                      { text: 'Терминальные мультиплексоры',collapsed: true, link: '/base/infrastructure/linux/commands/terminal-multiplexers/',
+                        items: [
+                          { text: 'tmux', link: '/base/infrastructure/linux/commands/terminal-multiplexers/tmux'},
+                          { text: 'screen', link: '/base/infrastructure/linux/commands/terminal-multiplexers/screen'}
+                        ]
+                      },
+                      { text: 'Планировщики задач (at/batch)',collapsed: true, link: '/base/infrastructure/linux/commands/scheduling/',
+                        items: [
+                          { text: 'at', link: '/base/infrastructure/linux/commands/scheduling/at'},
+                          { text: 'batch', link: '/base/infrastructure/linux/commands/scheduling/batch'}
+                        ]
+                      },
+                      { text: 'Автоматизация',collapsed: true, link: '/base/infrastructure/linux/commands/automation/',
+                        items: [
+                          { text: 'expect', link: '/base/infrastructure/linux/commands/automation/expect'},
+                          { text: 'chroot', link: '/base/infrastructure/linux/commands/automation/chroot'}
+                        ]
+                      },
+                      { text: 'Сборка',collapsed: true, link: '/base/infrastructure/linux/commands/build-tools/',
+                        items: [
+                          { text: 'make', link: '/base/infrastructure/linux/commands/build-tools/make'}
                         ]
                       },
                       { text: 'Диагностика',collapsed: true, link: '/base/infrastructure/linux/commands/diagnostics/',

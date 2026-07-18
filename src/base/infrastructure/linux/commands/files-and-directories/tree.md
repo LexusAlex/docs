@@ -1,5 +1,7 @@
 # tree
 
+**Уровень:** Начинающий
+
 Отображает структуру каталогов в виде дерева. Утилита для визуализации иерархии файловой системы.
 
 ## Синтаксис
@@ -211,3 +213,9 @@ tree -sh -D /var/log --dirsfirst
 :::warning
 `tree` может не быть установлен по умолчанию. Установка: `sudo apt install tree` (Debian/Ubuntu) или `sudo yum install tree` (CentOS/RHEL).
 :::
+
+## См. также
+
+- [ls](ls.md) — содержимое директории
+- [find](search-files-and-commands/find.md) — поиск файлов
+

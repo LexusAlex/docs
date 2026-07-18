@@ -1,5 +1,7 @@
 # journalctl
 
+**Уровень:** Средний
+
 Просмотр системных журналов systemd-journald.
 
 ## Синтаксис
@@ -255,6 +257,11 @@ MaxRetentionSec=3month
 
 :::warning Очистка журнала
 Регулярно очищайте журнал: `sudo journalctl --vacuum-time=30d` — иначе он может занять значительное место на диске.
+## См. также
+
+- [systemctl](systemctl.md) — управление службами
+- [dmesg](monitoring/dmesg.md) — сообщения ядра
+
 :::
 
 ## Связки с другими командами

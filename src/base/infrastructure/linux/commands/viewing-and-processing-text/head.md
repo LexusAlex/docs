@@ -1,5 +1,7 @@
 # head
 
+**Уровень:** Начинающий
+
 Команда `head` выводит начало файла — по умолчанию первые 10 строк.
 
 ## Синтаксис
@@ -125,3 +127,163 @@ head -n 30 README.md
 :::tip
 Для вывода команды с `head` используйте пайп: `command | head -n 20`. Это полезно для ограничения длинного вывода.
 :::
+
+## Дополнительные примеры
+
+### Просмотр по байтам
+
+```bash
+head -c 200 file.txt
+```
+
+### Тихий режим (без имён файлов)
+
+```bash
+head -q -n 5 *.txt
+```
+
+### Просмотр нескольких файлов
+
+```bash
+head -n 3 file1.txt file2.txt file3.txt
+```
+
+### Просмотр всех строк кроме последних N
+
+```bash
+head -n -10 file.txt
+```
+
+### Просмотр первых КБ
+
+```bash
+head -c 1K largefile.bin
+```
+
+### Просмотр первых МБ
+
+```bash
+head -c 1M hugefile.dat
+```
+
+### Просмотр JSON-ответа API
+
+```bash
+curl -s https://api.example.com/data | head -c 1000
+```
+
+### Просмотр первых строк вывода команды
+
+```bash
+dmesg | head -20
+```
+
+## Практические сценарии
+
+### Просмотр заголовков CSV
+
+```bash
+head -n 1 data.csv
+# Показывает только заголовки
+```
+
+### Проверка структуры JSON
+
+```bash
+curl -s https://api.example.com | head -c 500
+```
+
+### Просмотр начала лога
+
+```bash
+head -n 50 /var/log/nginx/access.log
+```
+
+### Первые N процессов по памяти
+
+```bash
+ps aux --sort=-%mem | head -6
+# 6, потому что первая строка — заголовок
+```
+
+### Топ-10 файлов по размеру
+
+```bash
+du -sh * | sort -rh | head -10
+```
+
+### Извлечение заголовка бинарного файла
+
+```bash
+head -c 512 disk_image.bin > boot_sector.bin
+```
+
+### Просмотр README
+
+```bash
+head -n 30 README.md
+```
+
+### Проверка кодировки файла
+
+```bash
+head -c 10 file.txt | xxd
+```
+
+## Связки с другими командами
+
+### head + tail — просмотр диапазона строк
+
+```bash
+# Строки 10–20
+head -n 20 file.txt | tail -n 11
+```
+
+### head + wc — подсчёт первых строк
+
+```bash
+head -n 100 file.txt | wc -l
+```
+
+### head + grep — поиск в первых строках
+
+```bash
+head -n 50 log.txt | grep "error"
+```
+
+### head + awk — обработка первых строк
+
+```bash
+head -n 10 data.csv | awk -F',' '{print $1, $2}'
+```
+
+### head + sed — замена в первых строках
+
+```bash
+head -n 20 file.txt | sed 's/old/new/g'
+```
+
+### head + cat — объединение с другими файлами
+
+```bash
+{ head -n 1 header.txt; tail -n +2 data.csv; } > combined.csv
+```
+
+### head + sort — сортировка первых строк
+
+```bash
+head -n 100 unsorted.txt | sort
+```
+
+### head + diff — сравнение начал файлов
+
+```bash
+diff <(head -n 50 file1.txt) <(head -n 50 file2.txt)
+```
+
+## См. также
+
+- [tail](tail.md) — просмотр конца файла
+- [cat](cat.md) — вывод содержимого файла
+- [less](less.md) — постраничный просмотр
+- [wc](wc.md) — подсчёт строк, слов, символов

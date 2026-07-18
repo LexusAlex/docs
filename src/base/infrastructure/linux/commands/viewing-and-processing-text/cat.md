@@ -1,5 +1,7 @@
 # cat
 
+**Уровень:** Начинающий
+
 Команда `cat` (concatenate) объединяет и выводит содержимое файлов в стандартный вывод.
 
 ## Синтаксис
@@ -125,3 +127,183 @@ cat -E suspicious_file.txt
 :::tip
 Опция `-A` эквивалентна `-vET` — она показывает все непечатаемые символы, табуляции и концы строк.
 :::
+
+## Дополнительные примеры
+
+### Нумерация только непустых строк
+
+```bash
+cat -b document.txt
+```
+
+### Показать управляющие символы
+
+```bash
+cat -v binary_file.dat
+```
+
+### Конкатенация нескольких файлов с нумерацией
+
+```bash
+cat -n part1.txt part2.txt part3.txt
+```
+
+### Сжатие пустых строк при объединении
+
+```bash
+cat -s merged.txt
+```
+
+### Создание файла с точным содержимым
+
+```bash
+cat > config.yml << 'EOF'
+server:
+  port: 8080
+  host: 0.0.0.0
+EOF
+```
+
+### Дописывание без перезаписи
+
+```bash
+cat >> /etc/hosts << 'EOF'
+192.168.1.10 myserver.local
+EOF
+```
+
+### Просмотр файла с табуляцией
+
+```bash
+cat -T Makefile
+```
+
+### Проверка Windows-переносов строк
+
+```bash
+cat -E file_from_windows.txt
+# Если видны \r$ — файл в формате Windows
+```
+
+## Практические сценарии
+
+### Просмотр конфигурационных файлов
+
+```bash
+cat -A /etc/nginx/nginx.conf
+# Помогает обнаружить проблемы с отступами
+```
+
+### Создание скрипта из командной строки
+
+```bash
+cat > setup.sh << 'SCRIPT'
+#!/bin/bash
+apt update && apt upgrade -y
+apt install -y git curl wget
+SCRIPT
+chmod +x setup.sh
+```
+
+### Объединение логов
+
+```bash
+cat /var/log/app/access.log.* > /tmp/all_access.log
+```
+
+### Просмотр CSV с форматированием
+
+```bash
+cat -T data.csv | column -t -s $'\t'
+```
+
+### Быстрое создание тестовых данных
+
+```bash
+cat > test.txt << 'EOF'
+строка 1
+строка 2
+строка 3
+EOF
+```
+
+### Проверка кодировки файла
+
+```bash
+cat -v suspicious_file.txt | head -5
+```
+
+### Просмотр бинарного файла
+
+```bash
+cat -v /usr/bin/ls | head -20
+```
+
+## Связки с другими командами
+
+### cat + grep — фильтрация содержимого
+
+```bash
+cat config.yml | grep "port"
+```
+
+### cat + sed — замена текста
+
+```bash
+cat file.txt | sed 's/old/new/g'
+```
+
+### cat + awk — обработка данных
+
+```bash
+cat data.csv | awk -F',' '{print $1, $3}'
+```
+
+### cat + wc — подсчёт строк/слов/символов
+
+```bash
+cat file.txt | wc -l
+```
+
+### cat + head — просмотр начала
+
+```bash
+cat largefile.log | head -20
+```
+
+### cat + tail — просмотр конца
+
+```bash
+cat largefile.log | tail -20
+```
+
+### cat + less — постраничный просмотр
+
+```bash
+cat largefile.log | less
+```
+
+### cat + sort — сортировка содержимого
+
+```bash
+cat unsorted.txt | sort
+```
+
+### cat + uniq — удаление дубликатов
+
+```bash
+cat list.txt | sort | uniq
+```
+
+### cat + tee — вывод в файл и на экран
+
+```bash
+cat config.yml | tee config_backup.yml
+```
+
+## См. также
+
+- [less](less.md) — постраничный просмотр файлов
+- [head](head.md) — просмотр начала файла
+- [tail](tail.md) — просмотр конца файла
+- [more](more.md) — постраничный просмотр (устаревший)

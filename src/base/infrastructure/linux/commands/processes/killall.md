@@ -1,5 +1,7 @@
 # killall
 
+**Уровень:** Средний
+
 Завершает процессы по имени.
 
 ## Синтаксис
@@ -135,3 +137,10 @@ killall -TERM myapp && sleep 5 && killall -KILL myapp 2>/dev/null
 :::warning
 `killall` без `-e` может завершить процессы с похожими именами. На Solaris `killall` завершает ВСЕ процессы — будьте осторожны!
 :::
+
+## См. также
+
+- [kill](kill.md) — отправка сигнала по PID
+- [pkill](pkill.md) — отправка сигнала по шаблону
+- [pgrep](pgrep.md) — поиск PID
+

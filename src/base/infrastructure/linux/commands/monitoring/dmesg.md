@@ -1,5 +1,7 @@
 # dmesg
 
+**Уровень:** Средний
+
 Отображение сообщений ядра (kernel ring buffer).
 
 ## Синтаксис
@@ -201,7 +203,7 @@ dmesg | grep -i "thermal\|temperature"
 
 ## См. также
 
-- `journalctl` — системный журнал systemd
-- `/var/log/kern.log` — лог ядра
-- `syslog` — системный лог
-- `/proc/kmsg` — сообщения ядра
+- [journalctl](journalctl.md) — системный журнал systemd
+- [/var/log/kern.log](/var/log/kern.log.md) — лог ядра
+- [syslog](syslog.md) — системный лог
+- [/proc/kmsg](/proc/kmsg.md) — сообщения ядра
