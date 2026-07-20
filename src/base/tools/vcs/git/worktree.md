@@ -1,176 +1,120 @@
-# git-worktree
+# git worktree
 
-**Уровень:** Продвинутый
-**Версия Git:** 2.5.0
+**Уровень:** Средний
+**Минимальная версия Git:** 2.5
 
-Управляет несколькими рабочими деревьями, привязанными к одному репозиторию. Позволяет одновременно работать с несколькими ветками без переключения и без копирования репозитория.
+`git worktree` создаёт дополнительные рабочие деревья одного репозитория. Они разделяют объекты и большинство refs, но имеют отдельные `HEAD`, индекс и рабочие файлы.
 
-## Синтаксис
+## Основные команды
 
 ```bash
-git worktree add [опции] <путь> [<ветка>]
-git worktree list [опции]
-git worktree move <путь> <новый-путь>
-git worktree remove [опции] <путь>
-git worktree prune [опции]
-git worktree lock [опции] <путь>
-git worktree unlock <путь>
+git worktree list [--porcelain]
+git worktree add [<options>] <path> [<commit-ish>]
+git worktree move <worktree> <new-path>
+git worktree remove [--force] <worktree>
+git worktree lock [--reason <text>] <worktree>
+git worktree unlock <worktree>
+git worktree prune [-n|--dry-run]
+git worktree repair [<path>...]
 ```
 
-## Основные опции
+## Создать worktree с новой веткой
 
-| Опция | Описание |
-|---|---|
-| `add` | Добавить новое рабочее дерево |
-| `list` | Список рабочих деревьев |
-| `move` | Переместить рабочее дерево |
-| `remove` | Удалить рабочее дерево |
-| `prune` | Удалить недействительные деревья |
-| `lock` | Заблокировать рабочее дерево |
-| `unlock` | Разблокировать рабочее дерево |
-| `--detach` | Отделить HEAD в новом дереве |
-| `--checkout` | Выполнить checkout ветки |
-| `--lock` | Заблокировать при создании |
-
-## Примеры
-
-1. Добавить рабочее дерево для ветки:
 ```bash
-git worktree add ../feature-tree feature-branch
+git fetch origin
+git worktree add -b feature/login ../docs-feature origin/main
 ```
 
-2. Добавить рабочее дерево с новой веткой:
+Git создаст ветку `feature/login` от `origin/main` и checkout в указанном каталоге.
+
+## Открыть существующую ветку
+
 ```bash
-git worktree add -b new-feature ../new-tree
+git worktree add ../docs-review review-branch
 ```
 
-3. Список рабочих деревьев:
+Одна обычная ветка не может быть checkout одновременно в двух worktree. Это защищает общий ref от конкурирующих изменений.
+
+## Hotfix без переключения основного рабочего дерева
+
 ```bash
-git worktree list
+git fetch origin
+git worktree add -b hotfix/login ../docs-hotfix origin/main
+git -C ../docs-hotfix status --short --branch
+# внесите исправление
+git -C ../docs-hotfix add path/to/file
+git -C ../docs-hotfix commit -m "Fix login regression"
+git -C ../docs-hotfix push -u origin hotfix/login
 ```
 
-4. Удалить рабочее дерево:
-```bash
-git worktree remove ../feature-tree
-```
+После слияния hotfix и завершения работы:
 
-5. Переместить рабочее дерево:
 ```bash
-git worktree move ../old-path ../new-path
-```
-
-6. Заблокировать рабочее дерево:
-```bash
-git worktree lock ../feature-tree
-```
-
-7. Разблокировать рабочее дерево:
-```bash
-git worktree unlock ../feature-tree
-```
-
-8. Добавить дерево в режиме detached HEAD:
-```bash
-git worktree add --detach ../review-tree HEAD~3
-```
-
-9. Добавить дерево с принудительной проверкой:
-```bash
-git worktree add --force ../backup-tree main
-```
-
-10. Очистка недействительных деревьев:
-```bash
+git worktree remove ../docs-hotfix
+git fetch --prune origin
+git branch --merged origin/main
+# если hotfix/login перечислена как слитая:
+git branch -d hotfix/login
 git worktree prune
 ```
 
-11. Добавить дерево для ревью кода:
+`worktree remove` откажется удалять дерево с изменёнными или неотслеживаемыми файлами без `--force`.
+
+## Detached worktree для проверки коммита
+
 ```bash
-git worktree add ../review-pr-123 origin/feature-branch
+git worktree add --detach ../docs-old v2.0.0
+git -C ../docs-old status --short --branch
 ```
 
-12. Добавить дерево для хотфикса:
+Удобно для тестирования старой версии без создания ветки. Для сохранения новых коммитов создайте ветку:
+
 ```bash
-git worktree add -b hotfix-1.2 ../hotfix-tree v1.2.0
+git -C ../docs-old switch -c investigate-v2
 ```
 
-13. Список деревьев с подробной информацией:
+## Просмотр и машинный формат
+
 ```bash
+git worktree list
 git worktree list --porcelain
 ```
 
-14. Добавить дерево с блокировкой:
-```bash
-git worktree add --lock ../stable-tree main
-```
+Porcelain-формат стабилен для скриптов; не разбирайте обычный выровненный вывод.
 
-15. Удалить дерево принудительно:
-```bash
-git worktree remove --force ../old-tree
-```
-
-## Практические сценарии
-
-**Параллельная разработка:**
-Работа над несколькими функциями одновременно без переключения веток.
+## Переместить или восстановить связь
 
 ```bash
-git worktree add ../feature-auth feature/authentication
-git worktree add ../feature-api feature/api-refactoring
-# Работаем одновременно в двух директориях
+git worktree move ../docs-review ../reviews/docs
+git worktree repair ../reviews/docs
 ```
 
-**Ревью pull request:**
-Создание отдельного дерева для проверки PR без остановки текущей работы.
+`repair` полезен, если каталог переместили средствами файловой системы или переместили сам основной репозиторий.
+
+## Заблокировать переносной worktree
 
 ```bash
-git worktree add ../review-pr origin/feature-branch
-cd ../review-pr
-npm ci && npm test
-cd -
+git worktree lock --reason "External SSD is offline" ../docs-external
+git worktree unlock ../docs-external
 ```
 
-**Экстренный хотфикс:**
-Быстрое создание изолированного окружения для исправления критического бага.
+Lock предотвращает автоматическую очистку административных данных отсутствующего дерева.
+
+## Очистить устаревшие записи
 
 ```bash
-git worktree add -b hotfix-v2.1 ../hotfix v2.1.0
-cd ../hotfix
-# Исправляем баг
-git commit -am "fix: критическое исправление"
-git checkout main && git merge hotfix-v2.1
+git worktree prune --dry-run
+git worktree prune
 ```
 
-## Связки с другими командами
+Сначала используйте dry-run, особенно если часть worktree находится на отключаемых дисках.
 
-```bash
-# Проверка ветки в отдельном дереве
-git worktree add ../test-branch origin/feature && cd ../test-branch && npm test
-
-# Создание хотфикса
-git worktree add -b hotfix ../hotfix v1.0.0 && cd ../hotfix && git commit -am "fix"
-
-# Очистка неиспользуемых деревьев
-git worktree list && git worktree prune
-
-# Переключение между деревьями
-cd ../feature-tree && git pull && cd -
-```
-
-## Советы
-
-:::tip
-Рабочие деревья позволяют избежать `git stash` при переключении веток — просто создайте отдельное дерево для каждой задачи.
+::: danger Force-операции
+`git worktree add --force` разрешает обход некоторых проверок ветки, а `remove --force` может удалить изменённые файлы. Применяйте force только после `git worktree list` и `git -C <path> status`.
 :::
 
-:::warning
-Нельзя иметь два рабочих дерева с одной и тегой веткой. Используйте `--detach` или создавайте новую ветку.
-:::
+## Полезные ссылки
 
-## См. также
-
-- [git-branch](/base/tools/vcs/git/branch) — управление ветками
-- [git-checkout](/base/tools/vcs/git/checkout) — переключение веток
-- [git-stash](/base/tools/vcs/git/stash) — сохранение изменений
-- [git-clone](/base/tools/vcs/git/clone) — клонирование репозитория
-- [git-remote](/base/tools/vcs/git/remote) — управление удалёнными репозиториями
+- [Официальная документация git worktree](https://git-scm.com/docs/git-worktree)
+- [git switch](./switch.md)
+- [git branch](./branch.md)

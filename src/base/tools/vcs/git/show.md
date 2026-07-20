@@ -1,9 +1,9 @@
-# git-show
+# git show
 
-**Уровень:** Начинающий
-**Версия Git:** 1.5.0
+**Уровень:** Начальный
+**Минимальная версия Git:** 0.99
 
-Показывает подробную информацию о различных объектах Git: коммитах, тегах, деревьях и блобах.
+`git show` отображает Git-объекты. Для коммита команда показывает метаданные и patch, для аннотированного тега — тег и объект назначения, для дерева — его содержимое.
 
 ## Синтаксис
 
@@ -11,172 +11,87 @@
 git show [<options>] [<object>...]
 ```
 
-## Основные опции
+Без объекта показывается `HEAD`.
 
-| Опция | Описание |
-|-------|----------|
-| `--stat` | Показывает статистику изменений файлов |
-| `--patch` | Показывает diff изменений |
-| `--format=<format>` | Пользовательский формат вывода |
-| `--name-only` | Показывает только имена изменённых файлов |
-| `--name-status` | Показывает имена файлов и тип изменения |
-| `--pretty=<format>` | Форматирование вывода (oneline, short, medium, full) |
-| `--encoding=<encoding>` | Кодировка вывода |
-| `--no-patch` | Не показывает diff (только метаданные) |
+## Коммиты
 
-## Примеры
-
-1. Показать последний коммит:
 ```bash
-git show
+git show <commit>
+git show --stat <commit>
+git show --name-status <commit>
+git show --no-patch --format=fuller <commit>
 ```
 
-2. Показать конкретный коммит по хешу:
+Только patch:
+
 ```bash
-git show abc1234
+git show --format= --patch <commit>
 ```
 
-3. Показать коммит только со статистикой:
+Пользовательский формат:
+
 ```bash
-git show --stat abc1234
+git show --no-patch --format='%H%n%an <%ae>%n%aI%n%s' <commit>
 ```
 
-4. Показать коммит с полным diff:
+Частые placeholders: `%H`/`%h` — ID, `%an`/`%ae` — автор, `%cn`/`%ce` — committer, `%aI`/`%cI` — ISO-даты, `%P` — родители, `%s` — заголовок, `%B` — полное сообщение.
+
+## Файл из выбранной версии
+
 ```bash
-git show --patch abc1234
+git show HEAD~5:config.json
+git show v2.4.0:src/app.js
+git show <commit>:path/to/file > recovered-file
 ```
 
-5. Показать только имена изменённых файлов:
+Путь задаётся относительно корня дерева. Для восстановления tracked-файла в рабочее дерево удобнее:
+
 ```bash
-git show --name-only abc1234
+git restore --source=<commit> -- path/to/file
 ```
 
-6. Показать имена файлов с типом изменения:
-```bash
-git show --name-status abc1234
-```
+Не выводите бинарный blob прямо в терминал; перенаправьте его в файл.
 
-7. Показать тег:
-```bash
-git show v1.0.0
-```
+## Теги и деревья
 
-8. Показать дерево (содержимое директории):
 ```bash
+git show v2.4.0
+git tag -v v2.4.0
 git show HEAD^{tree}
+git show HEAD:src/
 ```
 
-9. Показать конкретный блоб (содержимое файла):
-```bash
-git show HEAD:src/app.js
-```
-
-10. Показать файл на определённом коммите:
-```bash
-git show abc1234:README.md
-```
-
-11. Показать коммит в формате oneline:
-```bash
-git show --pretty=oneline abc1234
-```
-
-12. Показать коммит в коротком формате:
-```bash
-git show --pretty=short abc1234
-```
-
-13. Показать коммит без diff:
-```bash
-git show --no-patch abc1234
-```
-
-14. Показать пользовательский формат:
-```bash
-git show --format="%h %an %s" abc1234
-```
-
-15. Показать содержимое файла на ветке:
-```bash
-git show main:config.json
-```
-
-16. Показать дерево конкретного коммита:
-```bash
-git show abc1234^{tree}
-```
-
-17. Показать родительский коммит:
-```bash
-git show HEAD~1
-```
-
-18. Показать коммит с датой в определённом формате:
-```bash
-git show --format="%h %ad %s" --date=short abc1234
-```
-
-19. Показать объект по его SHA:
-```bash
-git show 1a2b3c4d5e6f
-```
-
-20. Показать содержимое файла в индексе:
-```bash
-git show :src/main.py
-```
-
-## Практические сценарии
-
-**Проверка конкретного коммита:**
-```bash
-# Посмотреть, что изменилось в коммите
-git show --stat abc1234
-# Детальный просмотр
-git show abc1234
-```
-
-**Получение файла из прошлого:**
-```bash
-# Содержимое файла на определённом коммите
-git show abc1234:src/old_version.js > old_version.js
-```
-
-**Анализ тега релиза:**
-```bash
-# Посмотреть, что входит в тег
-git show v2.0.0 --stat
-```
-
-## Связки с другими командами
+Для низкоуровневой проверки объекта:
 
 ```bash
-# Просмотр последнего коммита с пагинацией
-git show | less
-
-# Копирование содержимого файла из прошлого
-git show HEAD~5:config.json | pbcopy
-
-# Проверка изменений перед revert
-git show abc1234 --stat
-
-# Поиск и просмотр коммита
-git log --oneline --grep="fix" | head -1 | cut -d' ' -f1 | xargs git show
+git cat-file -t <object>
+git cat-file -s <object>
+git cat-file -p <object>
 ```
 
-## Советы
+## Merge-коммит
 
-:::tip
-Используйте `git show HEAD:path/to/file` для просмотра любой версии файла без переключения веток.
-:::
+```bash
+git show --no-patch --format='%H%nparents: %P%n%s' <merge-commit>
+git diff <merge-commit>^1 <merge-commit>
+git diff <merge-commit>^2 <merge-commit>
+```
 
-:::warning
-При указании пути к файлу в `git show` используйте двоеточие (`:`) вместо слеша для разделения коммита и пути.
-:::
+Отдельные сравнения показывают результат merge относительно каждого родителя.
 
-## См. также
+## Перед revert или cherry-pick
 
-- [git-log](./log.md) — история коммитов
-- [git-diff](./diff.md) — сравнение изменений
-- [git-blame](./blame.md) — авторство строк
-- [git-cat-file](./cat-file.md) — низкоуровневый просмотр объектов
+```bash
+git show --stat <commit>
+git show --check <commit>
+```
+
+После проверки примените выбранную операцию отдельно. Для диапазонов истории и поиска удобнее `git log`.
+
+## Полезные ссылки
+
+- [Официальная документация git show](https://git-scm.com/docs/git-show)
+- [git cat-file](https://git-scm.com/docs/git-cat-file)
+- [git log](./log.md)
+- [git diff](./diff.md)
+- [git blame](./blame.md)

@@ -1,179 +1,132 @@
-# git-submodule
+# git submodule
 
 **Уровень:** Продвинутый
-**Версия Git:** 1.5.0
+**Минимальная версия Git:** 1.5
 
-Управляет подмодулями — внешними репозиториями, вложенными в основной репозиторий. Позволяет подключать внешние библиотеки и компоненты с фиксацией определённых версий.
+Submodule позволяет одному репозиторию записать ссылку на конкретный коммит другого репозитория. Superproject хранит URL в `.gitmodules` и gitlink — точный commit ID submodule.
 
-## Синтаксис
+## Добавить submodule
 
 ```bash
-git submodule [--quiet] add [опции] [--] <url> [<путь>]
-git submodule [--quiet] status [--cached] [--recursive] [--] [<путь>...]
-git submodule [--quiet] init [--] [<путь>...]
-git submodule [--quiet] update [опции] [--] [<путь>...]
-git submodule [--quiet] deinit [опции] [--] <путь>...
-git submodule [--quiet] summary [опции] [--] [<путь>...]
-git submodule [--quiet] foreach [--recursive] <команда>
-git submodule [--quiet] sync [--recursive] [--] [<путь>...]
-git submodule [--quiet] absorbgitdirs [--] [<путь>...]
+git submodule add https://example.com/libs/ui.git libs/ui
+git diff --cached --submodule
+git commit -m "Add UI submodule"
 ```
 
-## Основные опции
+Коммит включает `.gitmodules` и gitlink. Содержимое истории submodule остаётся в отдельном репозитории.
 
-| Опция | Описание |
-|---|---|
-| `add` | Добавить новый подмодуль |
-| `init` | Инициализировать подмодули |
-| `update` | Обновить подмодули |
-| `status` | Показать статус подмодулей |
-| `deinit` | Деинициализировать подмодуль |
-| `summary` | Показать сводку изменений |
-| `foreach` | Выполнить команду в каждом подмодуле |
-| `sync` | Синхронизировать URL подмодулей |
-| `absorbgitdirs` | Поглотить git-директории подмодулей |
-| `--recursive` | Рекурсивная обработка |
-| `--force` | Принудительное выполнение |
-| `--depth=<n>` | Ограничить глубину клонирования |
+## Клонировать проект с submodule
 
-## Примеры
-
-1. Добавить подмодуль:
 ```bash
-git submodule add https://github.com/user/lib.git libs/lib
+git clone --recurse-submodules https://example.com/team/project.git
 ```
 
-2. Инициализировать подмодули после клонирования:
-```bash
-git submodule init
-```
+Если проект уже клонирован:
 
-3. Обновить подмодули:
-```bash
-git submodule update
-```
-
-4. Инициализация и обновление одной командой:
-```bash
-git submodule update --init
-```
-
-5. Рекурсивное обновление вложенных подмодулей:
 ```bash
 git submodule update --init --recursive
 ```
 
-6. Статус подмодулей:
-```bash
-git submodule status
-```
+Эта команда checkout-ит коммиты, **записанные superproject**, а не последние коммиты удалённых веток.
 
-7. Статус с кэшированными данными:
-```bash
-git submodule status --cached
-```
-
-8. Удаление подмодуля:
-```bash
-git submodule deinit libs/lib
-git rm libs/lib
-rm -rf .git/modules/libs/lib
-```
-
-9. Выполнить команду во всех подмодулях:
-```bash
-git submodule foreach git pull origin main
-```
-
-10. Синхронизация URL подмодулей:
-```bash
-git submodule sync
-```
-
-11. Клонирование с подмодулями:
-```bash
-git clone --recurse-submodules https://github.com/user/repo.git
-```
-
-12. Сводка изменений в подмодулях:
-```bash
-git submodule summary
-```
-
-13. Обновление конкретного подмодуля:
-```bash
-git submodule update --remote libs/lib
-```
-
-14. Рекурсивное обновление всех подмодулей:
-```bash
-git submodule foreach --recursive git fetch
-```
-
-15. Поглощение git-директорий:
-```bash
-git submodule absorbgitdirs
-```
-
-## Практические сценарии
-
-**Подключение внешней библиотеки:**
-Добавление сторонней библиотеки как подмодуля с фиксацией версии.
+## Основные команды
 
 ```bash
-git submodule add https://github.com/vendor/library.git vendor/library
-git add .gitmodules vendor/library
-git commit -m "feat: добавление библиотеки как подмодуля"
-```
-
-**Обновление всех зависимостей:**
-Рекурсивное обновление всех подмодулей до последних версий.
-
-```bash
+git submodule status [--recursive]
 git submodule update --init --recursive
-git submodule foreach git pull origin main
-git commit -am "chore: обновление подмодулей"
+git submodule sync --recursive
+git submodule foreach --recursive '<command>'
+git submodule deinit [-f] -- <path>
 ```
 
-**Клонирование проекта с зависимостями:**
-Получение полной копии проекта вместе со всеми подмодулями.
+`git submodule status` показывает записанный коммит и маркер состояния. Для полного обзора:
 
 ```bash
-git clone --recurse-submodules https://github.com/team/project.git
-cd project
-npm ci
-```
-
-## Связки с другими командами
-
-```bash
-# Клонирование с подмодулями
-git clone --recurse-submodules <url>
-
-# Обновление и коммит
-git submodule update --remote && git add . && git commit -m "update submodules"
-
-# Проверка статуса
+git status --short
+git diff --submodule=log
 git submodule status --recursive
-
-# Синхронизация и обновление
-git submodule sync --recursive && git submodule update --init --recursive
 ```
 
-## Советы
+## После pull в superproject
 
-:::tip
-Используйте `git clone --recurse-submodules` при клонировании, чтобы автоматически инициализировать и обновить все подмодули.
-:::
+```bash
+git pull --ff-only
+git submodule sync --recursive
+git submodule update --init --recursive
+```
 
-:::warning
-При удалении подмодуля обязательно удаляйте его из `.gitmodules`, индекса и директории `.git/modules/`.
-:::
+`sync` переносит изменённые URL из `.gitmodules` в локальную конфигурацию.
 
-## См. также
+## Обновить submodule до remote-ветки
 
-- [git-clone](/base/tools/vcs/git/clone) — клонирование репозитория
-- [git-pull](/base/tools/vcs/git/pull) — получение изменений
-- [git-fetch](/base/tools/vcs/git/fetch) — получение без слияния
-- [git-add](/base/tools/vcs/git/add) — добавление файлов
-- [git-commit](/base/tools/vcs/git/commit) — создание коммитов
+По умолчанию `--remote` использует remote HEAD, а при `submodule.<name>.branch` — настроенную ветку:
+
+```bash
+git config -f .gitmodules submodule.libs/ui.branch main
+git submodule sync -- libs/ui
+git submodule update --remote -- libs/ui
+git diff --submodule=log
+git add .gitmodules libs/ui
+git commit -m "Update UI submodule"
+```
+
+После обновления superproject должен закоммитить новый gitlink. Не заменяйте это на `git submodule foreach git pull origin main`: submodule часто находится в detached HEAD, а имя ветки может отличаться.
+
+## Разработать изменение внутри submodule
+
+```bash
+git -C libs/ui switch main
+git -C libs/ui pull --ff-only
+git -C libs/ui switch -c fix/button-focus
+# измените файлы
+git -C libs/ui add path/to/file
+git -C libs/ui commit -m "Fix button focus"
+git -C libs/ui push -u origin fix/button-focus
+```
+
+После публикации коммита submodule обновите superproject:
+
+```bash
+git add libs/ui
+git commit -m "Use UI focus fix"
+```
+
+Публикуйте коммит submodule раньше gitlink, иначе коллеги не смогут получить указанное состояние.
+
+## Выполнить безопасную команду во всех submodule
+
+```bash
+git submodule foreach --recursive 'git status --short --branch'
+```
+
+Не используйте безусловные `pull`, `reset --hard` и `clean` через `foreach`: одна команда затронет все вложенные репозитории с разным состоянием.
+
+## Удалить submodule
+
+```bash
+git submodule deinit -f -- libs/ui
+git rm libs/ui
+git commit -m "Remove UI submodule"
+```
+
+`git rm` обновит индекс и `.gitmodules`, если это последний/соответствующий раздел. После коммита проверьте:
+
+```bash
+git diff HEAD^ -- .gitmodules
+git status --short
+```
+
+Git может сохранить служебный репозиторий в `.git/modules/` для восстановления. Ручное удаление оттуда не требуется для обычного удаления submodule; очищайте его отдельно только после резервной проверки точного пути.
+
+## Важные особенности
+
+- После `update` submodule обычно находится в detached HEAD — это нормально для воспроизводимой сборки.
+- `git pull` в superproject сам по себе не обязан обновить рабочие деревья submodule.
+- Изменение URL требует `git submodule sync` у существующих клонов.
+- Рекурсивные submodule требуют флага `--recursive`.
+
+## Полезные ссылки
+
+- [Официальная документация git submodule](https://git-scm.com/docs/git-submodule)
+- [gitmodules](https://git-scm.com/docs/gitmodules)
+- [git clone](./clone.md)

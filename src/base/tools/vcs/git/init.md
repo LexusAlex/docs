@@ -1,177 +1,113 @@
 # git init
 
-**Уровень:** Начинающий
-**Версия Git:** 0.99
+**Уровень:** Начальный
+**Минимальная версия Git:** 0.99
 
-Создаёт новый пустой Git-репозиторий. Команда инициализирует директорию `.git` со всеми необходимыми структурами данных.
+`git init` создаёт пустой Git-репозиторий или повторно инициализирует существующий. В обычном репозитории служебные данные находятся в `.git`, а файлы проекта — в рабочем дереве.
 
 ## Синтаксис
 
 ```bash
-git init [каталог]
-git init [опции] [каталог]
+git init [<options>] [<directory>]
 ```
 
 ## Основные опции
 
 | Опция | Описание |
-|-------|----------|
-| `--bare` | Создать «голый» репозиторий (без рабочей директории) — для серверов |
-| `--initial-branch=<имя>` | Задать имя начальной ветки (вместо `main`/`master`) |
-| `--shared[=<значение>]` | Настроить совместный доступ к репозиторию (`false`, `true`, `umask`, `group`, `all`, `world`, `everybody`) |
-| `--template=<каталог>` | Использовать указанный каталог как шаблон |
-| `--separate-git-dir=<каталог>` | Создать `.git` как ссылку на указанный каталог |
-| `--object-format=<формат>` | Формат хеша объектов (`sha1` или `sha256`) |
+|---|---|
+| `-b <name>`, `--initial-branch=<name>` | Задать имя первой ветки |
+| `--bare` | Создать репозиторий без рабочего дерева |
+| `--shared[=<permissions>]` | Настроить права совместного локального доступа |
+| `--template=<directory>` | Скопировать шаблоны в Git directory |
+| `--separate-git-dir=<directory>` | Хранить Git directory отдельно от рабочего дерева |
+| `--object-format=<format>` | Выбрать `sha1` или `sha256` |
+| `--ref-format=<format>` | Выбрать `files` или `reftable`, если сборка Git поддерживает его |
+| `-q`, `--quiet` | Выводить только ошибки и предупреждения |
 
-## Примеры
-
-### 1. Создание репозитория в текущей директории
+## Новый проект
 
 ```bash
-git init
-# Инициализирует .git в текущей папке
+mkdir my-project
+cd my-project
+git init --initial-branch=main
+git status --short --branch
 ```
 
-### 2. Создание репозитория в новой директории
+Добавляйте содержимое после `.gitignore` и проверки:
 
 ```bash
-git init my-project
-# Создаёт my-project/ и my-project/.git/
-```
-
-### 3. Указание имени начальной ветки
-
-```bash
-git init --initial-branch=main my-project
-# Начальная ветка будет main вместо master
-```
-
-### 4. Создание «голого» репозитория (для сервера)
-
-```bash
-git init --bare my-repo.git
-# Создаёт репозиторий без рабочей директории
-# Используется на серверах для push/pull
-```
-
-### 5. Создание с указанием шаблона
-
-```bash
-git init --template=~/.git-templates/default my-project
-# Использует файлы из ~/.git-templates/default
-# (хуки, .gitignore, README и т.д.)
-```
-
-### 6. Создание с форматом SHA-256
-
-```bash
-git init --object-format=sha256 my-project
-# Использует SHA-256 вместо SHA-1
-```
-
-### 7. Совместный репозиторий для группы
-
-```bash
-git init --shared=group my-repo.git
-# Все члены группы могут push'ить
-```
-
-### 8. Отдельная директория .git
-
-```bash
-git init --separate-git-dir=/tmp/gitdir my-project
-# .git будет ссылкой на /tmp/gitdir
-```
-
-### 9. Переинициализация существующего репозитория
-
-```bash
-git init
-# Безопасно — не перезаписывает существующий .git
-```
-
-### 10. Создание репозитория в текущем проекте
-
-```bash
-cd /home/user/projects/existing-code
-git init
-git add .
+git status --short
+git add -p
+# для полностью новых файлов укажите пути явно
+git add README.md src/
+git diff --cached
 git commit -m "Initial commit"
 ```
 
-## Структура .git
+## Настроить имя начальной ветки
 
-После `git init` создаётся:
-
-```
-.git/
-├── HEAD          # Ссылка на текущую ветку
-├── config        # Конфигурация репозитория
-├── description   # Описание (для GitWeb)
-├── hooks/        # Скрипты-хуки
-├── objects/      # Хранилище объектов (коммиты, деревья, блобы)
-├── refs/         # Ссылки (ветки, теги)
-└── info/         # Дополнительная информация
-```
-
-## Практические сценарии
-
-### Начало нового проекта
+Для всех будущих репозиториев пользователя:
 
 ```bash
-mkdir my-project && cd my-project
-git init
-echo "# My Project" > README.md
-git add README.md
-git commit -m "Initial commit"
+git config --global init.defaultBranch main
 ```
 
-### Подготовка серверного репозитория
+Без настройки актуальная документация Git всё ещё описывает built-in fallback `master` до планируемого изменения в Git 3.0, поэтому для воспроизводимых инструкций используйте `--initial-branch`.
+
+## Инициализировать существующий каталог
 
 ```bash
-# На сервере
-git init --bare /srv/git/project.git
-
-# На локальной машине
-git remote add origin user@server:/srv/git/project.git
-git push -u origin main
+cd existing-project
+git init --initial-branch=main
+git status --short
 ```
 
-### Миграция существующего проекта в Git
+Повторный `git init` в существующем репозитории обычно безопасен и не перезаписывает имеющиеся данные. Он может применить новые template-файлы или переместить Git directory при `--separate-git-dir`.
+
+## Bare-репозиторий для сервера
 
 ```bash
-cd /path/to/existing/project
-git init
-git add .
-git commit -m "Import existing project"
+git init --bare --shared=group /srv/git/project.git
 ```
 
-## Связки с другими командами
+Bare-репозиторий не имеет рабочего дерева и подходит как центральный endpoint. `--shared` настраивает файловые права Git directory, но не заменяет ОС-права, SSH/HTTPS-аутентификацию, резервное копирование и серверные hooks.
+
+## Template directory
 
 ```bash
-# Инициализация + первый коммит за одну строку
-git init && git add . && git commit -m "Initial commit"
-
-# Инициализация с настройкой пользователя
-git init my-project && cd my-project && git config user.name "Name" && git config user.email "email@example.com"
+git init --template=/path/to/git-templates my-project
 ```
 
-## Советы
+Файлы и каталоги шаблона, чьи имена не начинаются с точки, копируются в **Git directory** (`.git`), а не в рабочее дерево. Типичные примеры: `hooks/`, `info/exclude`, служебная конфигурация. README или `.gitignore` проекта автоматически в корень проекта не попадают.
 
-:::tip
-Глобально задайте имя начальной ветки: `git config --global init.defaultBranch main`
-:::
+## Отдельный Git directory
 
-:::warning
-`git init` в уже существующем репозитории безопасен — команда не перезаписывает `.git`
-:::
+```bash
+git init --separate-git-dir=/path/to/metadata/project.git /path/to/worktree
+```
 
-:::tip
-Используйте `--bare` только для серверных репозиторивов. В голом репозитории нельзя работать напрямую.
-:::
+В рабочем каталоге создаётся текстовый `.git`, указывающий на фактический Git directory. Не перемещайте его вручную без последующей проверки `git rev-parse --git-dir`.
 
-## См. также
+## SHA-256
 
-- [clone](clone.md) — клонирование существующего репозитория
-- [add](add.md) — добавление файлов в индекс
-- [commit](commit.md) — фиксация изменений
+```bash
+git init --object-format=sha256 --initial-branch=main my-project
+```
+
+SHA-256-репозитории сейчас не interoperable с SHA-1-репозиториями. Перед выбором формата проверьте поддержку у hosting, CI, libgit2/JGit и других клиентов. Для максимальной совместимости default SHA-1 пока остаётся обычным выбором.
+
+## Проверка результата
+
+```bash
+git rev-parse --git-dir
+git rev-parse --show-toplevel
+git config --show-origin --get init.defaultBranch
+git status --short --branch
+```
+
+## Полезные ссылки
+
+- [Официальная документация git init](https://git-scm.com/docs/git-init)
+- [git add](./add.md)
+- [git commit](./commit.md)
+- [git clone](./clone.md)

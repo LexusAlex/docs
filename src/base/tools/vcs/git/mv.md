@@ -1,161 +1,86 @@
-# git-mv
+# git mv
 
-**Уровень:** Начинающий
-**Версия Git:** 0.99
+**Уровень:** Начальный
+**Минимальная версия Git:** 0.99
 
-Перемещает или переименовывает файлы, обновляя индекс Git. Эквивалентно выполнению `mv`, `git add` и `git rm` для переименованных файлов.
+`git mv` перемещает или переименовывает путь и сразу обновляет индекс.
 
 ## Синтаксис
 
 ```bash
-git mv [опции] <источник> <назначение>
-git mv [опции] <источник>... <каталог>
+git mv [<options>] <source> <destination>
+git mv [<options>] <source>... <destination-directory>
 ```
-
-## Основные опции
 
 | Опция | Описание |
 |---|---|
-| `-f` | Принудительное перемещение (перезаписать существующие файлы) |
-| `-k` | Пропустить ошибки при перемещении |
-| `-n` | Показать, что было бы сделано (сухой запуск) |
-| `-v` | Подробный вывод |
+| `-n`, `--dry-run` | Показать план |
+| `-v`, `--verbose` | Подробный вывод |
+| `-f`, `--force` | Разрешить перезапись назначения |
+| `-k` | Пропускать пути, которые нельзя переместить |
+| `--sparse` | Разрешить пути вне sparse-checkout cone |
+
+Опции `--follow` у `git mv` нет. История перемещения определяется позже командами `git log --follow`, `git diff --find-renames` и `git blame`.
 
 ## Примеры
 
-1. Переименование файла:
 ```bash
-git mv old_name.txt new_name.txt
+git mv old-name.txt new-name.txt
+git status --short
+git diff --cached --summary
 ```
 
-2. Перемещение файла в каталог:
-```bash
-git mv file.txt src/
-```
-
-3. Перемещение файла в каталог с новым именем:
-```bash
-git mv file.txt src/new_name.txt
-```
-
-4. Переименование с подробным выводом:
-```bash
-git mv -v old.txt new.txt
-```
-
-5. Сухой запуск (показать без выполнения):
-```bash
-git mv -n old.txt new.txt
-```
-
-6. Принудительное перемещение (перезаписать существующий):
-```bash
-git mv -f source.txt existing.txt
-```
-
-7. Перемещение нескольких файлов в каталог:
-```bash
-git mv file1.txt file2.txt file3.txt backup/
-```
-
-8. Переименование с использованием подстановки:
-```bash
-git mv *.md docs/
-```
-
-9. Перемещение каталога:
-```bash
-git mv old_dir/ new_dir/
-```
-
-10. Перемещение с игнорированием ошибок:
-```bash
-git mv -k *.txt archive/
-```
-
-11. Переименование файла в подкаталоге:
-```bash
-git mv src/app.js src/application.js
-```
-
-12. Перемещение файла из подкаталога в корень:
-```bash
-git mv src/config.json .
-```
-
-13. Переименование с отменой изменений:
-```bash
-git mv new_name.txt old_name.txt
-```
-
-14. Перемещение файлов с пробелами в именах:
-```bash
-git mv "my file.txt" "new file.txt"
-```
-
-15. Перемещение с сохранением истории:
-```bash
-git mv --follow old_path.txt new_path.txt
-```
-
-## Практические сценарии
-
-**Реорганизация структуры проекта:**
-Перемещение файлов в новые каталоги при реструктуризации кодовой базы.
+Переместить файл или несколько файлов:
 
 ```bash
-git mv src/components/Header.vue src/components/layout/
-git mv src/components/Footer.vue src/components/layout/
-git mv src/components/Sidebar.vue src/components/layout/
+git mv src/legacy.js src/utils/legacy.js
+git mv src/a.js src/b.js src/archive/
 ```
 
-**Переименование модуля:**
-Изменение имени модуля или компонента с сохранением истории изменений.
+Каталог назначения для нескольких источников должен существовать.
+
+### Preview и force
 
 ```bash
-git mv src/utils/helper.js src/utils/validator.js
-git mv src/utils/helper.test.js src/utils/validator.test.js
+git mv --dry-run source.txt existing.txt
+git diff -- existing.txt
+git mv --force source.txt existing.txt
 ```
 
-**Архивация старых файлов:**
-Перемещение устаревших файлов в архивный каталог.
+`--force` способен перезаписать незакоммиченный destination. Сначала сохраните нужное содержимое.
+
+### Переименование только регистра
+
+На файловых системах без учёта регистра:
 
 ```bash
-mkdir -p archive
-git mv old_module.py archive/
-git mv deprecated_script.sh archive/
+git mv readme.md readme.tmp
+git mv readme.tmp README.md
+git status --short
 ```
 
-## Связки с другими командами
+### Обычное перемещение
 
 ```bash
-# Перемещение и коммит в одной операции
-git mv file.txt new_location/ && git commit -m "refactor: перемещение file.txt"
-
-# Проверка перед перемещением
-git status && git mv -n old.txt new.txt
-
-# Перемещение с обновлением ссылок
-git mv config.example.js config.js && git add -u && git commit -m "rename config"
-
-# Массовое перемещение с коммитом
-git mv src/*.js dist/ && git commit -m "build: перемещение скриптов в dist"
+mv old-name.txt new-name.txt
+git add -- old-name.txt new-name.txt
 ```
 
-## Советы
+На Windows используйте команду своей оболочки. Git хранит снимки и обнаруживает rename эвристически; `git mv` лишь выполняет файловый и индексный шаги согласованно.
 
-:::tip
-Используйте `git mv` вместо обычной команды `mv` — это автоматически обновит индекс Git и сохранит историю переименований.
-:::
+### Проверить историю после коммита
 
-:::warning
-При перемещении файлов с помощью `git mv` убедитесь, что целевой каталог существует, иначе операция завершится ошибкой.
-:::
+```bash
+git log --follow -- new-name.txt
+git diff HEAD^ HEAD --find-renames
+git show --summary HEAD
+```
 
-## См. также
+`git log --follow` работает только с одним путём.
 
-- [git-rm](/base/tools/vcs/git/rm) — удаление файлов
-- [git-add](/base/tools/vcs/git/add) — добавление файлов в индекс
-- [git-status](/base/tools/vcs/git/status) — состояние репозитория
-- [git-commit](/base/tools/vcs/git/commit) — создание коммитов
-- [git-clean](/base/tools/vcs/git/clean) — удаление неотслеживаемых файлов
+## Полезные ссылки
+
+- [Официальная документация git mv](https://git-scm.com/docs/git-mv)
+- [git add](./add.md)
+- [git rm](./rm.md)
+- [git log](./log.md)

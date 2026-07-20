@@ -1,192 +1,133 @@
 # git switch
 
-**Уровень:** Начинающий
-**Версия Git:** 2.23.0
+**Уровень:** Начальный
+**Добавлена в Git:** 2.23
 
-Переключает ветки. Рекомендуемая замена `git checkout` для переключения веток (начиная с Git 2.23). Восстановление файлов вынесено в `git restore`.
+`git switch` переключает ветки и создаёт новые. Для восстановления файлов используйте `git restore`.
 
 ## Синтаксис
 
 ```bash
-git switch <ветка>
-git switch -c <новая-ветка> [начальная-точка]
-git switch [опции] <ветка>
+git switch [<options>] [<branch>]
+git switch [<options>] --detach [<start-point>]
+git switch [<options>] (-c|-C) <new-branch> [<start-point>]
 ```
 
 ## Основные опции
 
 | Опция | Описание |
-|-------|----------|
-| `-c <имя>` / `--create <имя>` | Создать и переключиться |
-| `-C <имя>` / `--force-create <имя>` | Создать/сбросить и переключиться |
-| `-d` / `--detach` | Отключить HEAD |
-| `--guess` / `--no-guess` | Автоматический tracking |
-| `-f` / `--force` / `--discard-changes` | Принудительное переключение |
-| `-m` / `--merge` | Сохранить локальные изменения |
-| `--conflict=<стиль>` | Стиль конфликтов |
-| `-t` / `--track` | Настроить tracking |
-| `--no-track` | Без tracking |
-| `--orphan <имя>` | Ветка без истории |
-| `-q` / `--quiet` | Тихий режим |
-| `--ignore-other-worktrees` | Игнорировать другие worktree |
-| `--recurse-submodules` | Обновить подмодули |
+|---|---|
+| `-c <name>`, `--create <name>` | Создать новую ветку и переключиться |
+| `-C <name>`, `--force-create <name>` | Создать либо принудительно переместить существующую ветку |
+| `-d`, `--detach` | Переключиться в detached HEAD |
+| `--track[=<mode>]` | Настроить upstream; режим — `direct` или `inherit` |
+| `--guess` / `--no-guess` | Разрешить/запретить подбор единственной remote-ветки |
+| `-m`, `--merge` | Попытаться перенести локальные изменения трёхсторонним слиянием |
+| `--discard-changes` | Выбросить локальные изменения, мешающие переключению |
+| `--orphan <name>` | Создать ветку без родителей |
+| `--recurse-submodules` | Обновить активные submodule к записанным состояниям |
+| `--ignore-other-worktrees` | Обойти запрет checkout ветки в другом worktree |
 
-## Примеры
-
-### 1. Переключение на существующую ветку
+## Переключить ветку
 
 ```bash
+git status --short
 git switch main
-# Переключает на ветку main
 ```
 
-### 2. Возврат на предыдущую ветку
+Вернуться к предыдущей:
 
 ```bash
 git switch -
-# Возвращает на предыдущую ветку
 ```
 
-### 3. Создание и переключение на новую ветку
+## Создать feature-ветку
 
 ```bash
-git switch -c feature/login
-# Создаёт ветку и переключает на неё
+git fetch origin
+git switch -c feature/login origin/main
 ```
 
-### 4. Создание от удалённой ветки
+## Создать tracking-ветку
 
 ```bash
-git switch -c feature/new origin/develop
-# Новая ветка от origin/develop
+git switch --track origin/feature/login
 ```
 
-### 5. Автоматический tracking (короткий синтаксис)
+Если существует только одна подходящая remote-ветка, Git часто угадает её:
 
 ```bash
 git switch feature/login
-# Если ветки нет локально, но есть в одном remote
-# Автоматически создаёт с tracking
 ```
 
-### 6. Отключённый HEAD (detached)
+Проверьте upstream через `git branch -vv`.
+
+## Detached HEAD
 
 ```bash
-git switch --detach abc1234
-# HEAD указывает на коммит
+git switch --detach v2.4.0
 ```
 
-### 7. Отключённый HEAD по тегу
+Для сохранения сделанных здесь коммитов:
 
 ```bash
-git switch --detach v1.0.0
-# Detached HEAD на теге
+git switch -c investigate-v2
 ```
 
-### 8. Принудительное переключение
+## Перенести локальные изменения при переключении
 
 ```bash
-git switch -f main
-# Отбрасывает локальные изменения
+git switch --merge other-branch
 ```
 
-### 9. Переключение с сохранением изменений
+Git пытается выполнить трёхстороннее слияние и может оставить конфликтующие файлы. Сначала проверьте `git status`; для важных изменений обычно яснее сделать WIP-коммит или именованный stash.
+
+## Принудительно создать/переместить ветку
 
 ```bash
-git switch -m feature/login
-# Пытается слить локальные изменения
+git branch backup-feature feature/login
+git switch -C feature/login origin/main
 ```
 
-### 10. Создание orphan-ветки
+`-C` может переместить существующую ветку и скрыть её прежние коммиты из обычного лога. Backup-ветка делает действие обратимым.
+
+## Orphan-ветка
 
 ```bash
 git switch --orphan gh-pages
-# Новая ветка без истории
 ```
 
-### 11. Создание и переключение с tracking
+Git создаст новую историю без родителей и удалит отслеживаемые файлы из индекса/рабочего дерева. Проверьте `git status` перед первым коммитом.
 
-```bash
-git switch -c feature/new --track origin/feature/new
-```
-
-### 12. Принудительное создание ветки
-
-```bash
-git switch -C feature/login origin/develop
-# Сбрасывает существующую ветку
-```
-
-### 13. Переключение с обновлением подмодулей
+## Submodule и worktree
 
 ```bash
 git switch --recurse-submodules main
 ```
 
-### 14. Игнорирование других worktree
+Активные submodule обновляются к коммитам, записанным в superproject, и их `HEAD` может стать detached. Локальные изменения внутри submodule могут помешать или быть потеряны при force-режимах.
 
 ```bash
 git switch --ignore-other-worktrees main
-# Разрешает переключиться, даже если ветка в другом worktree
 ```
 
-## Практические сценарии
-
-### Быстрое переключение между ветками
-
-```bash
-git switch develop
-# ... работа ...
-git switch -
-# Возврат на предыдущую ветку
-```
-
-### Новая feature-ветка
-
-```bash
-git switch -c feature/user-profile
-# Начать работу над фичей
-```
-
-### Возврат к стабильной версии
-
-```bash
-git switch --detach v1.0.0
-# Посмотреть на код версии 1.0.0
-# Если нужно сохранить:
-git switch -c hotfix/v1.0.1
-```
-
-## Связки с другими командами
-
-```bash
-# Создать ветку и закоммитить
-git switch -c feature/new && git add . && git commit -m "Start feature"
-
-# Переключиться и pull
-git switch main && git pull
-
-# Переключиться на предыдущую ветку
-git switch -
-```
-
-## Советы
-
-:::tip
-Используйте `git switch` вместо `git checkout` для переключения веток — команда более безопасная и понятная.
+::: danger Обход защиты worktree
+Одна ветка обычно не должна быть checkout в двух worktree: оба каталога изменяют общий ref. `--ignore-other-worktrees` используйте только для осознанной диагностики, а для параллельной работы создайте отдельную ветку.
 :::
 
-:::warning
-`git switch` не восстанавливает файлы. Для этого используйте `git restore`.
-:::
+## Обновить main
 
-:::tip
-Настройте алиас: `git config --global alias.sw switch`
-:::
+```bash
+git fetch origin
+git switch main
+git merge --ff-only origin/main
+```
 
-## См. также
+Так обновление не создаст неожиданный merge-коммит.
 
-- [checkout](checkout.md) — переключение и восстановление
-- [restore](restore.md) — восстановление файлов
-- [branch](branch.md) — управление ветками
-- [merge](merge.md) — слияние веток
+## Полезные ссылки
+
+- [Официальная документация git switch](https://git-scm.com/docs/git-switch)
+- [git restore](./restore.md)
+- [git checkout](./checkout.md)
+- [git worktree](./worktree.md)

@@ -188,8 +188,8 @@ git status --show-stash && git stash list
 Используйте `git status -sb` для быстрой проверки — показывает ветку и изменения в компактном формате.
 :::
 
-:::warning
-`git status` не показывает изменения в подмодулях. Используйте `git submodule status` для проверки.
+:::info Подмодули
+`git status` показывает изменённое состояние submodule, если оно не скрыто настройкой или `--ignore-submodules`. `git submodule status --recursive` дополнительно показывает записанные commit ID и состояние вложенных submodule.
 :::
 
 :::tip

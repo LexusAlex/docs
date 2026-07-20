@@ -17,7 +17,7 @@ git log [<options>] [<revision-range>] [[--] <path>...]
 |-------|----------|
 | `--oneline` | Выводит каждый коммит в одну строку |
 | `--graph` | Отображает граф ветвлений и слияний |
-| `--all` | Показывает все ветки, включая удалённые |
+| `--all` | Включает все refs: локальные и remote-tracking ветки, теги и другие |
 | `--author=<pattern>` | Фильтр по автору |
 | `--since=<date>` | Коммиты после указанной даты |
 | `--until=<date>` | Коммиты до указанной даты |
@@ -133,7 +133,10 @@ git log feature-branch --oneline
 
 20. Сравнение двух веток:
 ```bash
-git log main..feature --oneline
+git log --oneline main..feature
+# Коммиты, достижимые из feature, но не из main
+git log --left-right --oneline main...feature
+# Уникальные коммиты обеих сторон
 ```
 
 ## Практические сценарии
@@ -165,7 +168,9 @@ git log --author="Alex" --since="1 month ago" --stat
 git log --oneline -- src/app.js | head -5
 
 # Поиск и показ коммита
-git log --oneline --grep="refactor" | head -1 | cut -d' ' -f1 | xargs git show
+git log --oneline --grep="refactor"
+# После выбора хеша
+git show <commit>
 
 # Экспорт лога в файл
 git log --oneline --all > commit_history.txt

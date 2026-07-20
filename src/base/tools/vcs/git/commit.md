@@ -1,244 +1,126 @@
 # git commit
 
-**Уровень:** Начинающий
-**Версия Git:** 0.99
+**Уровень:** Начальный
+**Минимальная версия Git:** 0.99
 
-Фиксирует изменения из индекса в репозиторий. Создаёт новый коммит с уникальным хешем SHA-1.
+`git commit` создаёт новый снимок из содержимого индекса. Идентификатор коммита вычисляется выбранным форматом объектов репозитория — обычно SHA-1, а в репозитории с `extensions.objectFormat=sha256` это SHA-256.
 
 ## Синтаксис
 
 ```bash
-git commit
-git commit [опции] [файл...]
-git commit -m "сообщение"
+git commit [<options>] [--] [<pathspec>...]
 ```
 
 ## Основные опции
 
 | Опция | Описание |
-|-------|----------|
-| `-m "сообщение"` | Задать сообщение коммита |
-| `-a` / `--all` | Автоматически добавить все отслеживаемые файлы |
-| `-am "сообщение"` | Добавить отслеживаемые + сообщение |
-| `--amend` | Исправить последний коммит |
-| `--no-edit` | Не открывать редактор при --amend |
-| `--allow-empty` | Разрешить коммит без изменений |
-| `--allow-empty-message` | Разрешить пустое сообщение |
-| `-v` / `--verbose` | Показать diff в редакторе сообщения |
-| `-s` / `--signoff` | Добавить подпись (Signed-off-by) |
-| `-S` / `--gpg-sign` | Подписать GPG-ключом |
-| `--no-verify` | Пропустить pre-commit хуки |
-| `--dry-run` | Показать, что было бы закоммичено |
-| `--fixup=<коммит>` | Создать fixup-коммит |
-| `--squash=<коммит>` | Создать squash-коммит |
-| `-i` / `--include` | Добавить файлы в индекс перед коммитом |
-| `--author="Name <email>"` | Переопределить автора |
-| `--date="дата"` | Переопределить дату |
-| `-p` / `--patch` | Интерактивный выбор блоков |
+|---|---|
+| `-m <message>` | Задать сообщение в командной строке |
+| `-a`, `--all` | Автоматически добавить изменения и удаления **уже отслеживаемых** файлов |
+| `--amend` | Заменить последний коммит |
+| `--no-edit` | При amend сохранить сообщение |
+| `--fixup=<commit>` | Создать fixup-коммит для autosquash; также доступны формы `amend:` и `reword:` |
+| `--squash=<commit>` | Создать squash-коммит для autosquash |
+| `-p`, `--patch` | Интерактивно выбрать части файлов для коммита |
+| `--only` | Коммитить только перечисленные пути, игнорируя другие staged-изменения |
+| `--include` | Сначала добавить перечисленные пути к уже staged-изменениям |
+| `--author=<author>` | Переопределить автора |
+| `--date=<date>` | Переопределить дату автора, не дату committer |
+| `-s`, `--signoff` | Добавить `Signed-off-by` |
+| `-S[<keyid>]` | Подписать коммит GPG/SSH-ключом |
+| `--no-verify` | Пропустить `pre-commit` и `commit-msg` hooks |
+| `--allow-empty` | Разрешить коммит без изменения дерева |
 
-## Примеры
-
-### 1. Базовый коммит с сообщением
+## Подготовить и проверить коммит
 
 ```bash
-git commit -m "Add user authentication"
-# Самый частый способ
+git status --short
+git diff
+git add -p
+git diff --cached
+git commit -m "Validate login form"
 ```
 
-### 2. Коммит всех отслеживаемых файлов
+Коммит включает только индекс. `git diff --cached` — последняя проверка содержимого перед фиксацией.
+
+## Изменить последний локальный коммит
+
+Добавить забытый файл и сохранить сообщение:
 
 ```bash
-git commit -a -m "Fix typo in README"
-# Не нужно git add для изменённых файлов
-```
-
-### 3. Коммит с подробным описанием
-
-```bash
-git commit -m "feat: add login page
-
-- Add login form component
-- Add validation
-- Connect to API"
-
-# Многострочное сообщение
-```
-
-### 4. Исправление последнего коммита
-
-```bash
-git commit --amend -m "New message"
-# Изменяет сообщение последнего коммита
-```
-
-### 5. Добавление файлов в последний коммит
-
-```bash
-git add forgotten-file.js
-git commit --amend --no-edit
-# Добавляет файл без изменения сообщения
-```
-
-### 6. Коммит с подписью GPG
-
-```bash
-git commit -S -m "Signed commit"
-# Требует настроенного GPG-ключа
-```
-
-### 7. Коммит с подписью (Signed-off-by)
-
-```bash
-git commit -s -m "Add feature"
-# Добавляет: Signed-off-by: Name <email>
-```
-
-### 8. Коммит с verbose (diff в редакторе)
-
-```bash
-git commit -v
-# Показывает diff в редакторе для написания сообщения
-```
-
-### 9. Пустой коммит (для запуска CI)
-
-```bash
-git commit --allow-empty -m "Trigger CI"
-```
-
-### 10. Fixup-коммит (для rebase --autosquash)
-
-```bash
-git commit --fixup=abc1234
-# Создаёт коммит "fixup! Original message"
-```
-
-### 11. Squash-коммит (для rebase --autosquash)
-
-```bash
-git commit --squash=abc1234
-# Создаёт коммит "squash! Original message"
-```
-
-### 12. Коммит с переопределением автора
-
-```bash
-git commit --author="John Doe <john@example.com>" -m "Fix"
-```
-
-### 13. Коммит с интерактивным выбором блоков
-
-```bash
-git commit -p
-# Выбирает блоки для коммита
-```
-
-### 14. Коммит конкретных файлов
-
-```bash
-git commit file1.js file2.js -m "Update specific files"
-```
-
-### 15. Коммит с датой
-
-```bash
-git commit --date="2024-01-15" -m "Backdated commit"
-```
-
-## Структура сообщения
-
-```
-<тип>(<область>): <краткое описание>
-
-<подробное описание>
-
-<ссылки на задачи>
-```
-
-### Conventional Commits
-
-| Тип | Описание |
-|-----|----------|
-| `feat` | Новый функционал |
-| `fix` | Исправление бага |
-| `docs` | Документация |
-| `style` | Форматирование (без изменения логики) |
-| `refactor` | Рефакторинг |
-| `test` | Тесты |
-| `chore` | Инструменты, зависимости |
-
-```bash
-git commit -m "feat(auth): add OAuth2 login"
-git commit -m "fix(api): handle null response"
-git commit -m "docs: update README with examples"
-```
-
-## Практические сценарии
-
-### Пошаговый коммит части файла
-
-```bash
-git add -p file.js    # Выбрать блоки
-git commit -m "Part 1"
-git add -p file.js    # Выбрать следующие блоки
-git commit -m "Part 2"
-```
-
-### Исправление забытого файла
-
-```bash
-git add forgotten.js
+git add path/to/file
 git commit --amend --no-edit
 ```
 
-### Исправление автора последнего коммита
+Изменить только сообщение:
 
 ```bash
-git commit --amend --author="Name <email@example.com>"
+git commit --amend -m "Better commit message"
 ```
 
-### Коммит с проверкой (pre-commit hooks)
+::: warning Amend переписывает коммит
+У заменённого коммита будет новый ID. Не amend-ьте опубликованный общий коммит без согласования.
+:::
+
+## Автоматически включить tracked-файлы
 
 ```bash
-# Pre-commit hook запускается автоматически
-# Пропустить проверку:
-git commit --no-verify -m "Emergency fix"
+git commit -am "Update validation"
 ```
 
-## Связки с другими командами
+`-a` не добавляет неотслеживаемые файлы. Проверьте их через `git status` и добавьте явно.
+
+## Fixup для интерактивного rebase
 
 ```bash
-# Добавить всё и закоммитить
-git add . && git commit -m "Update"
-
-# Добавить, проверить и закоммитить
-git add -u && git diff --cached && git commit -m "Update"
-
-# Исправить последний коммит
-git add . && git commit --amend --no-edit
-
-# Коммит с автоматическим push
-git commit -m "Update" && git push
+git commit --fixup=<target-commit>
+git rebase -i --autosquash <target-commit>^
 ```
 
-## Советы
+## Коммитить выбранные пути
 
-:::tip
-Используйте `git commit -p` для точного контроля — можно закоммитить только часть изменений.
-:::
+```bash
+git commit --only -- path/to/a path/to/b
+```
 
-:::warning
-`--amend` перезаписывает хеш коммита. Не используйте для коммитов, которые уже запушены.
-:::
+При pathspec Git может закоммитить версии этих путей из рабочего дерева, не включая прочие staged-изменения. Это отличается от обычной модели «коммит равен индексу»; перед применением проверьте:
 
-:::tip
-Пишите осмысленные сообщения — они помогают понять историю проекта через годы.
-:::
+```bash
+git diff --cached
+git diff -- path/to/a path/to/b
+```
 
-## См. также
+Для более прозрачного workflow обычно сначала подготовьте точный индекс через `git add -p`, затем вызовите `git commit` без путей.
 
-- [add](add.md) — добавление в индекс
-- [status](status.md) — просмотр состояния
-- [log](log.md) — история коммитов
-- [reset](reset.md) — отмена коммитов
-- [revert](revert.md) — отмена коммита новым коммитом
+## Автор и даты
+
+Коммит хранит автора и committer отдельно. `--author` и `--date` меняют поля автора:
+
+```bash
+git commit --author="Example User <user@example.com>" --date="2026-07-20T10:00:00+03:00" -m "Import historical change"
+```
+
+Используйте переопределение дат только для миграций и воспроизводимых импортов, а не для маскировки реального времени работы.
+
+## Hooks и подпись
+
+```bash
+git commit -S -s -m "Release metadata"
+```
+
+`--no-verify` отключает важные локальные проверки. Применяйте его только когда понимаете причину сбоя hook и всё равно выполняете необходимые проверки другим способом.
+
+## Проверить результат
+
+```bash
+git show --stat --oneline HEAD
+git status --short
+git log -1 --format=fuller
+```
+
+## Полезные ссылки
+
+- [Официальная документация git commit](https://git-scm.com/docs/git-commit)
+- [git add](./add.md)
+- [git status](./status.md)
+- [git rebase](./rebase.md)

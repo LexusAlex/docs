@@ -1,188 +1,137 @@
-# git-fetch
+# git fetch
 
-**Уровень:** Начинающий
+**Уровень:** Начальный
+**Минимальная версия Git:** 0.99
 
-**Версия Git:** 1.5.0
-
-Загружает объекты и ссылки из удалённого репозория без автоматического слияния. Позволяет безопасно просматривать изменения перед их интеграцией.
+`git fetch` загружает объекты и обновляет remote-tracking refs, но не меняет текущую локальную ветку и рабочие файлы.
 
 ## Синтаксис
 
 ```bash
-git fetch [<удалённый_репозорий>] [<ветка>] [опции]
+git fetch [<options>] [<repository> [<refspec>...]]
+git fetch [<options>] --all
 ```
 
 ## Основные опции
 
 | Опция | Описание |
-|-------|----------|
-| `--all` | Загружает из всех удалённых репозориев |
-| `--prune` | Удаляет устаревшие ссылки на ветки |
-| `--tags` | Загружает все теги из удалённого репозория |
-| `--depth <n>` | Загружает только n последних коммитов |
-| `--unshallow` | Преобразует неполный репозорий в полный |
-| `--dry-run` | Показывает, что будет сделано, без выполнения |
-| `--force` | Принудительно обновляет ссылки |
-| `--jobs <n>` | Количество параллельных загрузок |
+|---|---|
+| `--all` | Получить данные из всех remote |
+| `--prune` | Удалить remote-tracking refs, исчезнувшие на сервере |
+| `--prune-tags` | Вместе с `--prune` удалить локальные теги, исчезнувшие на сервере |
+| `--tags` | Получить все теги в дополнение к обычному fetch |
+| `--no-tags` | Не выполнять автоматическое следование за тегами |
+| `--depth <n>` | Ограничить историю shallow-границей |
+| `--deepen <n>` | Углубить shallow clone на `n` коммитов |
+| `--unshallow` | Преобразовать shallow clone в полный, если источник полный |
+| `--filter=<spec>` | Ограничить загрузку объектов для partial clone |
+| `--dry-run` | Показать план без обновления refs |
+| `--force` | Разрешить принудительное обновление локальных refs по refspec |
+| `--atomic` | Обновить все локальные refs целиком или ни одного |
 
-## Примеры
+## Получить изменения из origin
 
-1. Загрузить изменения из origin:
 ```bash
 git fetch origin
+git status --short --branch
 ```
 
-2. Загрузить изменения из всех удалённых репозориев:
+Посмотреть входящие коммиты:
+
 ```bash
-git fetch --all
+git log --oneline main..origin/main
 ```
 
-3. Загрузить конкретную ветку из origin:
+Посмотреть только локальные коммиты:
+
 ```bash
-git fetch origin main
+git log --oneline origin/main..main
 ```
 
-4. Загрузить и удалить устаревшие ссылки:
+Одновременно обе стороны:
+
 ```bash
-git fetch --prune
+git log --left-right --oneline main...origin/main
 ```
 
-5. Загрузить все теги:
+## Получить и удалить устаревшие refs
+
 ```bash
-git fetch --tags
+git fetch --prune origin
 ```
 
-6. Загрузить только теги:
-```bash
-git fetch origin --tags
-```
+Удаляются только локальные remote-tracking refs. Ветки на сервере команда не удаляет.
 
-7. Неполная загрузка (последние 10 коммитов):
-```bash
-git fetch --depth 10
-```
+Для всех remote:
 
-8. Преобразовать неполный репозорий в полный:
-```bash
-git fetch --unshallow
-```
-
-9. Показать, что будет загружено:
-```bash
-git fetch --dry-run
-```
-
-10. Загрузить с принудительным обновлением ссылок:
-```bash
-git fetch --force
-```
-
-11. Загрузить из конкретного удалённого репозория:
-```bash
-git fetch upstream
-```
-
-12. Загрузить несколько веток:
-```bash
-git fetch origin main develop feature
-```
-
-13. Загрузить с указанием refspec:
-```bash
-git fetch origin refs/heads/*:refs/remotes/origin/*
-```
-
-14. Загрузить тег с определённым именем:
-```bash
-git fetch origin tag v2.0
-```
-
-15. Загрузить с параллельными потоками:
-```bash
-git fetch --jobs 4
-```
-
-16. Загрузить и обновить все удалённые ветки:
 ```bash
 git fetch --all --prune
 ```
 
-17. Загрузить из URL напрямую:
+## Получить конкретную ветку
+
 ```bash
-git fetch https://github.com/user/repo.git main
+git fetch origin feature/login
+git switch --track origin/feature/login
 ```
 
-18. Загрузить конкретную ветку в FETCH_HEAD:
+Без настроенного refspec результат может попасть в `FETCH_HEAD`, поэтому для постоянной tracking-ветки обычный `git fetch origin` часто понятнее.
+
+## Явный refspec
+
 ```bash
-git fetch origin pull/123/head:pr-123
+git fetch origin 'refs/heads/release/*:refs/remotes/origin/release/*'
 ```
 
-## Практические сценарии
+Заключайте wildcard refspec в кавычки, чтобы `*` не раскрыла оболочка.
 
-### Ревью Pull Request локально
+## Теги
+
+Обычный fetch автоматически получает теги, указывающие на загруженные объекты. Чтобы запросить все теги дополнительно:
 
 ```bash
-# Загружаем PR из GitHub
-git fetch origin pull/123/head:pr-123
-
-# Переключаемся на ветку PR
-git checkout pr-123
-
-# Просматриваем изменения
-git log main..pr-123
+git fetch origin --tags
 ```
 
-### Синхронизация с upstream
+Это не означает «получить только теги». Для явного tag refspec:
 
 ```bash
-# Загружаем изменения из оригинального репозория
-git fetch upstream
-
-# Просматриваем новые коммиты
-git log --oneline HEAD..upstream/main
-
-# Сливаем изменения
-git merge upstream/main
+git fetch origin 'refs/tags/*:refs/tags/*'
 ```
 
-### Быстрая проверка удалённых изменений
+## Углубить shallow clone
 
 ```bash
-# Загружаем изменения без слияния
+git rev-parse --is-shallow-repository
+git fetch --deepen=100 origin
+# или
+git fetch --unshallow origin
+```
+
+## Проверить до интеграции
+
+```bash
 git fetch origin
-
-# Сравниваем локальные и удалённые ветки
-git log --oneline origin/main..main
-
-# Просматриваем статистику изменений
-git diff --stat main origin/main
+git diff --stat main...origin/main
+git log --graph --oneline --decorate main...origin/main
 ```
 
-## Связки с другими командами
+После проверки выберите действие явно:
 
 ```bash
-# Просмотр изменений после fetch
-git fetch origin && git log --oneline HEAD..origin/main
-
-# Fetch с последующим rebase
-git fetch origin && git rebase origin/main
-
-# Fetch и удаление устаревших веток
-git fetch --prune && git branch -vv | grep ': gone]'
+git switch main
+git merge --ff-only origin/main
 ```
 
-## Советы
+В отличие от `pull`, `fetch` сам не выполняет merge или rebase.
 
-:::tip
-Используйте `git fetch --prune` регулярно для очистки ссылок на удалённые ветки, которые уже не существуют на сервере.
-:::
+## Host-specific refs
 
-:::warning
-`git fetch` не изменяет вашу рабочую директорию. Изменения загружаются только в удалённые трекинг-ветки (например, `origin/main`).
-:::
+Некоторые хостинги публикуют дополнительные refs pull/merge requests. Например, конкретный refspec зависит от платформы и может измениться; проверяйте документацию своего сервера, а не добавляйте такой refspec как универсальный Git-интерфейс.
 
-## См. также
+## Полезные ссылки
 
-- [git-remote](./remote.md) — управление удалёнными репозориями
-- [git-pull](./pull.md) — получение и слияние изменений
-- [git-push](./push.md) — отправка изменений в удалённый репозорий
+- [Официальная документация git fetch](https://git-scm.com/docs/git-fetch)
+- [git remote](./remote.md)
+- [git pull](./pull.md)
+- [git merge](./merge.md)

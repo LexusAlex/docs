@@ -1,189 +1,129 @@
-# git-push
+# git push
 
-**Уровень:** Начинающий
+**Уровень:** Начальный
+**Минимальная версия Git:** 0.99
 
-**Версия Git:** 1.5.0
-
-Отправляет локальные коммиты в удалённый репозорий. Обновляет удалённые ссылки и передаёт все необходимые объекты.
+`git push` обновляет refs в удалённом репозитории и передаёт необходимые объекты. По умолчанию поведение зависит от upstream-настройки и `push.default`.
 
 ## Синтаксис
 
 ```bash
-git push [<удалённый_репозорий>] [<ветка>] [опции]
+git push [<options>] [<repository> [<refspec>...]]
 ```
 
 ## Основные опции
 
 | Опция | Описание |
-|-------|----------|
-| `--force` | Принудительно перезаписывает удалённые изменения |
-| `--force-with-lease` | Принудительный push с проверкой актуальности |
-| `--tags` | Отправляет все локальные теги |
-| `--delete` | Удаляет удалённую ветку |
-| `--set-upstream` | Устанавливает связь с удалённой веткой |
-| `--dry-run` | Показывает, что будет отправлено |
-| `--all` | Отправляет все ветки |
-| `--mirror` | Отправляет все ссылки (ветки и теги) |
-| `--no-verify` | Пропускает pre-push хуки |
+|---|---|
+| `-u`, `--set-upstream` | Запомнить upstream для успешно отправленной ветки |
+| `--dry-run` | Показать план без отправки |
+| `--all` | Отправить все локальные ветки |
+| `--tags` | Отправить все теги из `refs/tags/` |
+| `--follow-tags` | Вместе с веткой отправить достижимые аннотированные теги, отсутствующие на сервере |
+| `--delete` | Удалить указанный remote ref |
+| `--prune` | Удалить remote refs без локального соответствия по refspec |
+| `--atomic` | Обновить все refs целиком или не обновить ни одного, если сервер поддерживает режим |
+| `--force-with-lease` | Разрешить non-fast-forward только при совпадении ожидаемого remote ref |
+| `--force-if-includes` | Проверить, что обновления remote-tracking ref включены в локальную историю |
+| `--signed` | Подписать запрос push, если сервер поддерживает |
 
-## Примеры
+## Обычный workflow
 
-1. Отправить изменения в origin/main:
+### Первая отправка ветки
+
 ```bash
-git push origin main
+git switch -c feature/login
+git push -u origin feature/login
 ```
 
-2. Отправить текущую ветку:
+После установки upstream обычно достаточно:
+
 ```bash
 git push
 ```
 
-3. Отправить новую ветку и установить связь:
-```bash
-git push --set-upstream origin feature/new-api
-```
+### Проверить push заранее
 
-4. Отправить с принудительной перезаписью:
-```bash
-git push --force origin main
-```
-
-5. Отправить с безопасной принудительной перезаписью:
-```bash
-git push --force-with-lease origin main
-```
-
-6. Отправить все теги:
-```bash
-git push --tags
-```
-
-7. Удалить удалённую ветку:
-```bash
-git push --delete origin feature/old-branch
-```
-
-8. Отправить все ветки:
-```bash
-git push --all origin
-```
-
-9. Проверить, что будет отправлено:
 ```bash
 git push --dry-run origin main
+git push origin main
 ```
 
-10. Отправить в конкретный удалённый репозорий:
-```bash
-git push upstream main
-```
+`--dry-run` не заменяет серверные проверки, но показывает выбранные refs.
 
-11. Отправить с пропуском хуков:
-```bash
-git push --no-verify origin main
-```
-
-12. Отправить зеркало репозория:
-```bash
-git push --mirror origin
-```
-
-13. Отправить ветку с другим именем:
-```bash
-git push origin local-branch:remote-branch
-```
-
-14. Отправить и установить upstream для будущих push:
-```bash
-git push -u origin develop
-```
-
-15. Отправить конкретный тег:
-```bash
-git push origin tag v1.0.0
-```
-
-16. Удалить удалённый тег:
-```bash
-git push --delete origin v1.0.0
-```
-
-17. Отправить с перезаписью истории:
-```bash
-git push --force-with-lease --force-if-includes origin main
-```
-
-18. Отправить в несколько удалённых репозориев:
-```bash
-git push origin main && git push backup main
-```
-
-## Практические сценарии
-
-### Публикация новой ветки
+### Отправить ветку и релизный тег
 
 ```bash
-# Создаём и переключаемся на новую ветку
-git checkout -b feature/user-auth
-
-# Делаем коммиты
-git add .
-git commit -m "Add user authentication"
-
-# Отправляем ветку и устанавливаем связь
-git push --set-upstream origin feature/user-auth
+git tag -a v2.4.0 -m "Release 2.4.0"
+git push --atomic origin main refs/tags/v2.4.0
 ```
 
-### История переписана — безопасный force push
+Если сервер не поддерживает atomic push, отправьте ветку и тег отдельно. `--follow-tags` удобен, когда нужно публиковать все достижимые аннотированные теги:
 
 ```bash
-# Переписываем историю (rebase, amend, etc.)
-git rebase -i HEAD~3
-
-# Проверяем изменения
-git log --oneline
-
-# Безопасный force push
-git push --force-with-lease origin feature-branch
+git push --follow-tags origin main
 ```
 
-### Удаление ветки после merge
+### Удалить remote-ветку или тег
 
 ```bash
-# После merge PR в GitHub/GitLab
-
-# Удаляем локальную ветку
-git branch -d feature/user-auth
-
-# Удаляем удалённую ветку
-git push --delete origin feature/user-auth
+git push origin --delete old-branch
+git push origin --delete refs/tags/v1.0.0
 ```
 
-## Связки с другими командами
+Полное имя тега исключает неоднозначность с веткой того же имени.
+
+## После rebase: безопасная принудительная отправка
+
+Сначала получите актуальное состояние и проверьте расхождение:
 
 ```bash
-# Pull перед push
-git pull --rebase origin main && git push origin main
-
-# Fetch, проверка и push
-git fetch origin && git log --oneline origin/main..main && git push
-
-# Push всех веток и тегов
-git push --all origin && git push --tags
+git fetch origin
+git log --oneline --left-right origin/feature...feature
 ```
 
-## Советы
+Затем:
 
-:::tip
-Используйте `--force-with-lease` вместо `--force` для безопасного принудительного push. Эта опция проверяет, что удалённые изменения не были обновлены другими пользователями.
+```bash
+git push --force-with-lease --force-if-includes origin feature
+```
+
+`--force-with-lease` безопаснее `--force`, но форма без явного ожидаемого значения опирается на remote-tracking ref. Фоновый `fetch` способен обновить его и ослабить защиту.
+
+Для критичной ветки зафиксируйте проверенный ожидаемый OID и используйте явную lease:
+
+```bash
+git rev-parse refs/remotes/origin/feature
+# после проверки подставьте полученный OID
+git push --force-with-lease=refs/heads/feature:<expected-oid> origin feature
+```
+
+Если remote ref изменился, push завершится отказом. Не повторяйте его с `--force`, пока не разберёте новые коммиты.
+
+::: danger `--force`
+Безусловный force-push может удалить чужие коммиты с сервера. Не используйте `git push --force origin main` как типовой пример; защищайте основные ветки настройками сервера.
 :::
 
-:::warning
-Никогда не используйте `git push --force` на общих ветках (main, develop). Это может привести к потере чужих коммитов. Используйте `--force-with-lease` для безопасности.
-:::
+## Зеркальная отправка
 
-## См. также
+```bash
+git push --mirror <mirror-remote>
+```
 
-- [git-fetch](./fetch.md) — получение изменений из удалённого репозория
-- [git-pull](./pull.md) — получение и слияние изменений
-- [git-remote](./remote.md) — управление удалёнными репозориями
+`--mirror` синхронизирует **все** refs под `refs/` и принудительно удаляет на сервере refs, которых нет локально. Это режим для специально выделенного зеркала, а не для обычного remote.
+
+## Полезные проверки
+
+```bash
+git remote -v
+git branch -vv
+git ls-remote --heads --tags origin
+git config --get push.default
+```
+
+## Полезные ссылки
+
+- [Официальная документация git push](https://git-scm.com/docs/git-push)
+- [git remote](./remote.md)
+- [git fetch](./fetch.md)
+- [git tag](./tag.md)

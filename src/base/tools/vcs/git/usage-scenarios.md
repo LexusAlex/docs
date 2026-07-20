@@ -1,330 +1,283 @@
-# Сценарии использования Git
+# Практические сценарии Git
 
-Типовые рабочие процессы и команды для повседневной работы с Git.
+Ниже собраны последовательные workflows с проверками до и после изменений. Имена `main`, `origin` и пути замените на принятые в вашем проекте.
 
-## Ежедневная работа
-
-### Начало дня (синхронизация)
+## 1. Начать работу с существующим проектом
 
 ```bash
-# Переключиться на main и получить изменения
+git clone https://example.com/team/project.git
+cd project
+git status --short --branch
+git remote -v
+git branch -vv
+```
+
+Если используются submodule:
+
+```bash
+git submodule update --init --recursive
+```
+
+Личные данные автора настраивайте глобально только на собственной машине:
+
+```bash
+git config --global user.name "Your Name"
+git config --global user.email "you@example.com"
+```
+
+Настройки конкретного проекта можно задать без `--global`.
+
+## 2. Безопасно обновить main
+
+Прозрачный вариант с просмотром входящих коммитов:
+
+```bash
+git fetch --prune origin
+git log --oneline --left-right main...origin/main
 git switch main
-git pull
-
-# Обновить develop
-git switch develop
-git pull
+git merge --ff-only origin/main
 ```
 
-### Работа над фичей
+`--ff-only` не создаст неожиданный merge-коммит. Если ветки разошлись, Git остановится — сначала разберите локальные коммиты.
+
+## 3. Разработать feature
+
+### Создать ветку от актуального main
 
 ```bash
-# Создать ветку от develop
-git switch -c feature/user-profile develop
-
-# Работать...
-# Добавить изменения
-git add .
-git commit -m "feat(profile): add user avatar"
-
-# Продолжить работу...
-git add .
-git commit -m "feat(profile): add bio section"
-
-# Отправить на сервер
-git push -u origin feature/user-profile
-```
-
-### Завершение фичи (Merge Request)
-
-```bash
-# Обновить ветку перед merge
-git switch develop
-git pull
-git switch feature/user-profile
-git rebase develop
-
-# Разрешить конфликты (если есть)
-# ...
-git rebase --continue
-
-# Отправить обновлённую ветку
-git push --force-with-lease
-
-# После merge на сервере — удалить локальную ветку
-git switch develop
-git pull
-git branch -d feature/user-profile
-```
-
-## Работа с Pull Request
-
-### Подготовка ветки для PR
-
-```bash
-# Переключиться на актуальный main
+git fetch origin
 git switch main
-git pull
-
-# Создать ветку
-git switch -c feature/new-feature
-
-# Работать...
-git add .
-git commit -m "feat: add new feature"
-
-# Отправить
-git push -u origin feature/new-feature
+git merge --ff-only origin/main
+git switch -c feature/login
 ```
 
-### Обновление ветки после ревью
+### Сделать логичный коммит
 
 ```bash
-# Получить изменения из main
+git status --short
+git diff
+git add -p
+git diff --cached
+git commit -m "Add login validation"
+```
+
+`git add -p` или явные пути не позволяют случайно включить временные файлы так легко, как безусловный `git add .`.
+
+### Обновить feature перед review
+
+```bash
 git fetch origin
 git rebase origin/main
-
-# Разрешить конфликты
-# ...
-git rebase --continue
-
-# Force push (с защитой)
-git push --force-with-lease
+# при конфликте: исправить файлы, git add <path>, git rebase --continue
+git diff --check
+git diff origin/main...HEAD
 ```
 
-## Работа с конфликтами
-
-### При merge
+Если команда договорилась сохранять merge-коммиты, вместо rebase используйте:
 
 ```bash
-git switch main
+git merge origin/main
+```
+
+### Опубликовать
+
+```bash
+git push -u origin feature/login
+```
+
+После локального rebase уже опубликованной личной ветки:
+
+```bash
+git fetch origin
+git log --left-right --oneline origin/feature/login...feature/login
+git push --force-with-lease --force-if-includes origin feature/login
+```
+
+Не переписывайте общую ветку без согласования.
+
+## 4. Работа с конфликтами
+
+### Merge-конфликт
+
+```bash
 git merge feature/login
-# Конфликт в file.js
-
-# Посмотреть конфликты
 git status
-
-# Решить в редакторе
-# Оставить нужные изменения
-
-# Отметить как решённый
-git add file.js
-git commit
 ```
 
-### При rebase
+Исправьте маркеры в каждом файле, затем:
 
 ```bash
-git rebase main
-# Конфликт в file.js
+git add path/to/resolved-file
+git diff --check
+git diff --cached
+git merge --continue
+```
 
-# Решить конфликт
-git add file.js
+Отменить незавершённый merge:
+
+```bash
+git merge --abort
+```
+
+### Rebase-конфликт
+
+```bash
+git rebase origin/main
+git status
+# исправьте текущий конфликт
+git add path/to/resolved-file
 git rebase --continue
+```
 
-# Или отменить rebase
+Rebase может остановиться несколько раз — по одному разу для разных переносимых коммитов. Отмена всей операции:
+
+```bash
 git rebase --abort
 ```
 
-## Горячие исправления (Hotfix)
+Не запускайте `--continue`, если `git status` уже не сообщает о незавершённой операции.
+
+## 5. Срочный hotfix без нарушения текущей работы
+
+Создайте отдельное рабочее дерево от серверного main:
 
 ```bash
-# Переключиться на релизную ветку
+git fetch origin
+git worktree add -b hotfix/login ../project-hotfix origin/main
+git -C ../project-hotfix status --short --branch
+```
+
+Внесите и проверьте исправление:
+
+```bash
+git -C ../project-hotfix add path/to/fixed-file
+git -C ../project-hotfix diff --cached
+git -C ../project-hotfix commit -m "Fix login regression"
+git -C ../project-hotfix push -u origin hotfix/login
+```
+
+После слияния pull request:
+
+```bash
+git worktree remove ../project-hotfix
+git fetch --prune origin
+git branch --merged origin/main
+# если hotfix/login перечислена как слитая:
+git branch -d hotfix/login
+```
+
+## 6. Выбрать правильную отмену
+
+| Ситуация | Решение |
+|---|---|
+| Изменения файла ещё не staged | `git restore -- <file>` |
+| Нужно убрать файл из индекса | `git restore --staged -- <file>` |
+| Последний локальный коммит надо переделать | `git reset --soft HEAD^` или `git commit --amend` |
+| Опубликованный коммит надо отменить | `git revert <commit>` |
+| Потерян локальный commit после reset/rebase | найти через `git reflog`, создать recovery-ветку |
+| Незавершённый merge/rebase надо отменить | `git merge --abort` / `git rebase --abort` |
+
+### Восстановить потерянный коммит
+
+```bash
+git reflog --date=local
+git show <old-head>
+git branch recovered-work <old-head>
+```
+
+Сначала закрепите найденный коммит веткой; не начинайте с нового `reset --hard`.
+
+## 7. Подготовить релиз
+
+```bash
+git fetch origin
 git switch main
-git pull
-
-# Создать ветку hotfix
-git switch -c hotfix/v1.0.1
-
-# Исправить баг
-git add .
-git commit -m "fix: critical bug in payment"
-
-# Слить в main
-git switch main
-git merge hotfix/v1.0.1
-git tag v1.0.1
-git push origin main --tags
-
-# Слить в develop
-git switch develop
-git merge hotfix/v1.0.1
-
-# Удалить ветку
-git branch -d hotfix/v1.0.1
+git merge --ff-only origin/main
+git status --short
+# запустите тесты проекта
+git tag -a v2.4.0 -m "Release 2.4.0"
+git show v2.4.0 --no-patch
+git push --atomic origin main refs/tags/v2.4.0
 ```
 
-## Работа с тегами
+`--atomic` гарантирует обновление обоих refs целиком, если сервер поддерживает режим. Не используйте `git push --tags`, когда нужно отправить только один релизный тег.
 
-### Релиз
+## 8. Случайно добавлен секрет
+
+### Секрет ещё не закоммичен
 
 ```bash
-# Переключиться на main
-git switch main
-git pull
-
-# Создать тег
-git tag -a v2.0.0 -m "Release version 2.0.0"
-
-# Отправить теги
-git push origin v2.0.0
-# или все теги
-git push origin --tags
+git restore --staged -- .env
+# добавьте правило .env в .gitignore
+git check-ignore -v .env
 ```
 
-### Откат к предыдущей версии
+### Секрет уже попал в коммит или был отправлен
+
+1. Немедленно отзовите/замените ключ, пароль или токен.
+2. Уберите файл из текущего состояния:
 
 ```bash
-# Посмотреть теги
-git tag -l
-
-# Переключиться на тег (detached HEAD)
-git switch --detach v1.9.0
-
-# Или создать ветку от тега
-git switch -c hotfix/v1.9.1 v1.9.0
+git rm --cached -- .env
+git check-ignore -v .env
+git commit -m "Stop tracking local environment file"
 ```
 
-## Восстановление
+3. Согласуйте очистку всей истории с командой и владельцами remote. Переписывание refs требует специального инструмента, резервной копии, force-push и повторного клонирования/очистки старых клонов.
 
-### Отмена незакоммиченных изменений
+`git rm --cached` и `.gitignore` не удаляют секрет из старых коммитов.
+
+## 9. Очистить локальный репозиторий
+
+### Удалить устаревшие remote-tracking ветки
 
 ```bash
-# Один файл
-git restore file.js
-
-# Все файлы
-git restore .
+git remote prune --dry-run origin
+git fetch --prune origin
 ```
 
-### Отмена последнего коммита
+### Удалить слитую локальную ветку
 
 ```bash
-# Сохранить изменения в рабочей директории
-git reset --soft HEAD~1
-
-# Полностью отменить
-git reset --hard HEAD~1
+git branch --merged main
+git branch -d feature/login
 ```
 
-### Отмена коммита, который уже запушен
+Не разбирайте вывод `git branch` через `grep | xargs`: имена, текущая ветка и нестандартные символы делают такой конвейер хрупким.
+
+### Очистить артефакты сборки
+
+Только игнорируемые файлы:
 
 ```bash
-# Создать новый коммит, отменяющий изменения
-git revert abc1234
-git push
+git clean -ndX
+git clean -fdX
 ```
 
-### Восстановление удалённой ветки
+Все неотслеживаемые и игнорируемые файлы:
 
 ```bash
-# Найти коммит в reflog
-git reflog
-
-# Восстановить ветку
-git branch feature/deleted abc1234
-```
-
-## Работа со stash
-
-### Временное сохранение
-
-```bash
-# Сохранить изменения
-git stash push -m "WIP: login feature"
-
-# Посмотреть stash
-git stash list
-
-# Восстановить
-git stash pop
-
-# Или применить без удаления
-git stash apply stash@{0}
-```
-
-### Переключение между задачами
-
-```bash
-# В процессе работы над фичей
-git stash push -m "WIP: user profile"
-
-# Переключиться на hotfix
-git switch main
-git switch -c hotfix/bug-123
-
-# После hotfix вернуться
-git switch feature/user-profile
-git stash pop
-```
-
-## Оптимизация репозитория
-
-### Очистка
-
-```bash
-# Удалить слитые ветки
-git branch --merged main | grep -v "\*\|main\|develop" | xargs git branch -d
-
-# Удалить неотслеживаемые файлы
-git clean -fd
-
-# Удалить игнорируемые файлы
+git clean -ndx
+# внимательно проверьте .env, ключи и локальные данные
 git clean -fdx
-
-# Оптимизировать репозиторий
-git gc --aggressive --prune=now
 ```
 
-### Проверка целостности
+### Обслужить объекты
 
 ```bash
-# Проверка репозитория
-git fsck
-
-# Проверка размера
-git count-objects -vH
+git gc --auto
 ```
 
-## Связки с другими командами
+Регулярные `git gc --aggressive` и `git gc --prune=now` не нужны и сокращают возможности восстановления.
 
-```bash
-# Быстрый коммит и push
-git add . && git commit -m "update" && git push
+## Связанные страницы
 
-# Обновление ветки перед работой
-git switch main && git pull && git switch - && git rebase main
-
-# Просмотр изменений перед коммитом
-git status && git diff --cached
-
-# Очистка + оптимизация
-git gc --prune=now && git remote prune origin
-```
-
-## Советы
-
-:::tip
-Всегда обновляйте ветку перед началом работы: `git pull` или `git fetch` + `git rebase`.
-:::
-
-:::warning
-Избегайте `git push --force`. Используйте `git push --force-with-lease` — это защищает от перезаписи чужих коммитов.
-:::
-
-:::tip
-Используйте `git stash` для временного сохранения изменений вместо создания WIP-коммитов.
-:::
-
-:::warning
-Не коммитьте секреты (ключи, пароли) в репозиторий. Используйте `.gitignore` и переменные окружения.
-:::
-
-## См. также
-
-- [init](init.md) — создание репозитория
-- [branch](branch.md) — управление ветками
-- [merge](merge.md) — слияние веток
-- [rebase](rebase.md) — перебазирование
-- [stash](stash.md) — временное сохранение
-- [tag](tag.md) — управление тегами
+- [git status](./status.md)
+- [git diff](./diff.md)
+- [git branch](./branch.md)
+- [git merge](./merge.md)
+- [git rebase](./rebase.md)
+- [git reset](./reset.md)
+- [git reflog](./reflog.md)
+- [git clean](./clean.md)
+- [git worktree](./worktree.md)

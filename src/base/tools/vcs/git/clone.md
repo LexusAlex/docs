@@ -1,234 +1,134 @@
 # git clone
 
-**Уровень:** Начинающий
-**Версия Git:** 0.99
+**Уровень:** Начальный
+**Минимальная версия Git:** 0.99
 
-Клонирует удалённый репозиторий в локальную директорию. Создаёт полную копию всех веток, тегов и истории коммитов.
+`git clone` создаёт новый репозиторий из существующего, настраивает remote `origin` и обычно checkout-ит default branch.
 
 ## Синтаксис
 
 ```bash
-git clone <url> [каталог]
-git clone [опции] <url> [каталог]
+git clone [<options>] <repository> [<directory>]
 ```
 
 ## Основные опции
 
 | Опция | Описание |
-|-------|----------|
-| `--depth <глубина>` | Поверхностное клонирование (только N последних коммитов) |
-| `--branch <ветка>` | Клонировать указанную ветку (вместо default) |
-| `--single-branch` | Клонировать только одну ветку |
-| `--no-checkout` | Не создавать рабочую директорию (только .git) |
-| `--bare` | Создать «голый» репозиторий |
-| `--mirror` | Зеркальное клонирование (все ссылки) |
-| `--recurse-submodules` | Клонировать подмодули |
-| `--shallow-since=<дата>` | Поверхностное клонирование до даты |
-| `--shallow-exclude=<ревизия>` | Исключить коммиты до ревизии |
-| `--jobs <число>` | Параллельное клонирование подмодулей |
-| `--filter=<фильтр>` | Фильтрация объектов (partial clone) |
-| `--sparse` | Разреженное клонирование |
+|---|---|
+| `-b <name>`, `--branch <name>` | Checkout указанной ветки или тега |
+| `--single-branch` | Получить историю только одной ветки |
+| `--depth <n>` | Создать shallow clone глубиной `n` коммитов |
+| `--filter=<spec>` | Создать partial clone с отложенной загрузкой части объектов |
+| `--sparse` | Сначала checkout только файлов верхнего уровня и включить sparse-checkout |
+| `-n`, `--no-checkout` | Не выполнять checkout после клонирования |
+| `--bare` | Создать репозиторий без рабочего дерева |
+| `--mirror` | Создать bare-зеркало всех refs и настроить mirror fetch |
+| `--recurse-submodules[=<pathspec>]` | Инициализировать submodule после clone |
+| `--shallow-submodules` | Клонировать submodule с глубиной 1 |
+| `-j <n>`, `--jobs <n>` | Параллельно клонировать submodule |
+| `-o <name>`, `--origin <name>` | Использовать другое имя вместо `origin` |
 
-## Примеры
-
-### 1. Базовое клонирование
+## Обычное клонирование
 
 ```bash
-git clone https://github.com/user/repo.git
-# Создаёт директорию repo/ с полной копией
+git clone https://example.com/team/project.git
+git -C project status --short --branch
+git -C project remote -v
 ```
 
-### 2. Клонирование в指定ную директорию
+Обычный clone создаёт remote-tracking refs для веток согласно fetch refspec, но локально checkout-ит только одну начальную ветку. Остальные локальные ветки создаются по мере необходимости:
 
 ```bash
-git clone https://github.com/user/repo.git my-project
-# Клонирует в my-project/
+git -C project switch --track origin/feature/login
 ```
 
-### 3. Клонирование по SSH
+## Клонировать в выбранный каталог
 
 ```bash
-git clone git@github.com:user/repo.git
-# Использует SSH-ключ для аутентификации
+git clone https://example.com/team/project.git docs-local
 ```
 
-### 4. Поверхностное клонирование (для экономии места)
+Каталог должен быть пустым или отсутствовать.
+
+## Выбрать ветку или тег
 
 ```bash
-git clone --depth 1 https://github.com/user/repo.git
-# Только последний коммит — быстро и мало места
+git clone --branch release/2.x --single-branch https://example.com/team/project.git
+git clone --branch v2.4.0 --single-branch https://example.com/team/project.git project-v2.4
 ```
 
-### 5. Клонирование конкретной ветки
+При выборе тега `HEAD` будет detached. Создайте ветку, если планируете коммиты.
+
+## Shallow clone
 
 ```bash
-git clone --branch develop https://github.com/user/repo.git
-# Клонирует ветку develop вместо main
+git clone --depth 1 https://example.com/team/project.git
 ```
 
-### 6. Клонирование одной ветки
+Подходит для CI или быстрого просмотра актуального состояния. Позже историю можно углубить:
 
 ```bash
-git clone --single-branch --branch main https://github.com/user/repo.git
-# Только ветка main, без fetch других веток
-```
-
-### 7. Клонирование с подмодулями
-
-```bash
-git clone --recurse-submodules https://github.com/user/repo.git
-# Автоматически инициализирует и клонирует подмодули
-```
-
-### 8. Зеркальное клонирование (для миграции)
-
-```bash
-git clone --mirror https://github.com/user/repo.git
-# Все ссылки (ветки, теги) — для переноса на другой сервер
-```
-
-### 9. Поверхностное клонирование до даты
-
-```bash
-git clone --shallow-since=2024-01-01 https://github.com/user/repo.git
-# Коммиты только с 1 января 2024
-```
-
-### 10. Частичное клонирование (без больших файлов)
-
-```bash
-git clone --filter=blob:none https://github.com/user/repo.git
-# Метаданные загружены, blob'ы по требованию
-```
-
-### 11. Частичное клонирование (без деревьев)
-
-```bash
-git clone --filter=tree:0 https://github.com/user/repo.git
-# Минимальная загрузка — деревья по требованию
-```
-
-### 12. Разреженное клонирование
-
-```bash
-git clone --sparse https://github.com/user/repo.git
-# Только файлы из корня, остальные — по checkout
-```
-
-### 13. Клонирование без checkout
-
-```bash
-git clone --no-checkout https://github.com/user/repo.git
-# Только .git, без файлов проекта
-```
-
-### 14. Клонирование голого репозитория
-
-```bash
-git clone --bare https://github.com/user/repo.git
-# Репозиторий без рабочей директории
-```
-
-### 15. Клонирование с ограничением глубины и одной веткой
-
-```bash
-git clone --depth 1 --single-branch --branch main https://github.com/user/repo.git
-# Максимально быстрое клонирование
-```
-
-## Протоколы
-
-| Протокол | URL-формат | Пример |
-|----------|-----------|--------|
-| HTTPS | `https://host/user/repo.git` | `https://github.com/user/repo.git` |
-| SSH | `git@host:user/repo.git` | `git@github.com:user/repo.git` |
-| Git | `git://host/user/repo.git` | `git://github.com/user/repo.git` |
-| Локальный | `/path/to/repo.git` | `/srv/git/project.git` |
-| file:// | `file:///path/to/repo.git` | `file:///srv/git/project.git` |
-
-## Практические сценарии
-
-### Быстрое клонирование большого репозитория
-
-```bash
-# Поверхностное клонирование нужной ветки
-git clone --depth 1 --single-branch --branch develop https://github.com/user/huge-repo.git
-
-# Позже, если нужна полная история:
+git fetch --deepen=50
+# или получить полную историю
 git fetch --unshallow
 ```
 
-### Клонирование для участия в Open Source
+Shallow clone технически может выполнять push, если сервер принимает обновление и нужная история доступна. Ограничение не в запрете push, а в неполной истории: некоторые merge, blame, bisect и серверные проверки могут работать не так, как в полном клоне.
+
+## Partial clone
 
 ```bash
-# Клонировать свой форк
-git clone git@github.com:your-user/repo.git
-
-# Добавить upstream
-git remote add upstream git@github.com:original-user/repo.git
-
-# Синхронизация
-git fetch upstream
-git merge upstream/main
+git clone --filter=blob:none https://example.com/team/large-project.git
 ```
 
-### Миграция репозитория на другой сервер
+Git получает историю и деревья, а содержимое blob загружает по запросу. Сервер должен поддерживать partial clone.
+
+Вместе со sparse-checkout:
 
 ```bash
-# Зеркальное клонирование
-git clone --mirror git@old-server:project.git
-
-# Настройка нового remote
-cd project.git
-git remote set-url origin git@new-server:project.git
-
-# Push всех ссылок
-git push --mirror
+git clone --filter=blob:none --sparse https://example.com/team/monorepo.git
+git -C monorepo sparse-checkout set docs tools
 ```
 
-### Клонирование монорепозитория (sparse)
+## Не выполнять checkout
 
 ```bash
-git clone --sparse https://github.com/user/monorepo.git
-cd monorepo
-git sparse-checkout set services/my-service
-# Только нужная часть монорепозитория
+git clone --no-checkout https://example.com/team/project.git
 ```
 
-## Связки с другими командами
+Создаётся обычный репозиторий с рабочим каталогом, но файлы выбранного коммита в него пока не checkout-ятся. Это не то же самое, что «только `.git`»; для репозитория без рабочего дерева используйте `--bare`.
+
+## Submodule
 
 ```bash
-# Клонирование + переход в директорию
-git clone https://github.com/user/repo.git && cd repo
-
-# Клонирование + настройка + переход
-git clone git@github.com:user/repo.git && cd repo && git config user.name "Name"
-
-# Поверхностное клонирование + checkout тега
-git clone --depth 1 --branch v1.0.0 https://github.com/user/repo.git
+git clone --recurse-submodules https://example.com/team/project.git
 ```
 
-## Советы
+Для уже созданного клона:
 
-:::tip
-Для больших репозиториев используйте `--depth 1` — это ускоряет клонирование в десятки раз.
-:::
+```bash
+git submodule update --init --recursive
+```
 
-:::warning
-Поверхностное клонирование (`--depth`) не позволяет push'ить в удалённый репозиторий. Используйте `git fetch --unshallow` для получения полной истории.
-:::
+## Bare и mirror
 
-:::tip
-Используйте SSH вместо HTTPS — не нужно вводить пароль при каждом push/pull.
-:::
+```bash
+git clone --bare https://example.com/team/project.git project.git
+git clone --mirror https://example.com/team/project.git project-mirror.git
+```
 
-:::warning
-`git clone --mirror` перезаписывает все ссылки в целевом репозитории. Используйте только для миграции.
-:::
+`--mirror` включает все refs и настройку принудительной синхронизации. Используйте зеркало только для backup/mirroring, а не как обычную рабочую копию.
 
-## См. также
+## Протоколы
 
-- [init](init.md) — создание нового репозитория
-- [remote](remote.md) — управление удалёнными репозиториями
-- [fetch](fetch.md) — получение изменений
-- [pull](pull.md) — получение и слияние изменений
+- HTTPS — удобен с токенами и credential manager.
+- SSH — удобен с ключами и настройкой доступа.
+- Локальный путь/`file://` — для локальных копий.
+- `git://` не шифрует трафик и не аутентифицирует сервер; для доверенной разработки предпочитайте HTTPS или SSH.
+
+## Полезные ссылки
+
+- [Официальная документация git clone](https://git-scm.com/docs/git-clone)
+- [git remote](./remote.md)
+- [git fetch](./fetch.md)
+- [git submodule](./submodule.md)

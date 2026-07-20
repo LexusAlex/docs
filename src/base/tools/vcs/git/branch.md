@@ -1,239 +1,153 @@
 # git branch
 
-**Уровень:** Начинающий
-**Версия Git:** 0.99
+**Уровень:** Начальный
+**Минимальная версия Git:** 0.99
 
-Создаёт, переименовывает, удаляет и отображает ветки. Ветка — это указатель на коммит.
+`git branch` создаёт, перечисляет, переименовывает, копирует и удаляет ветки. Для переключения используйте `git switch`.
 
-## Синтаксис
+## Основные формы
+
+```bash
+git branch [<options>] [--list] [<pattern>...]
+git branch [<options>] <branch> [<start-point>]
+git branch (-m|-M) [<old>] <new>
+git branch (-c|-C) [<old>] <new>
+git branch (-d|-D) <branch>...
+git branch --set-upstream-to=<upstream> [<branch>]
+```
+
+## Просмотр веток
 
 ```bash
 git branch
-git branch [опции] <имя>
-git branch [опции] <имя> <начальная-точка>
+git branch --all
+git branch --verbose --verbose
+git branch --show-current
 ```
 
-## Основные опции
-
-| Опция | Описание |
-|-------|----------|
-| (без аргументов) | Список всех веток |
-| `-a` | Все ветки (локальные + удалённые) |
-| `-r` | Только удалённые ветки |
-| `-v` / `-vv` | Подробная информация (последний коммит + tracking) |
-| `-d` | Удалить ветку (merged) |
-| `-D` | Принудительное удаление |
-| `-m [<старое>] <новое>` | Переименовать ветку |
-| `-M [<старое>] <новое>` | Принудительное переименование |
-| `-c` / `-C` | Копировать ветку |
-| `--list` | Список веток с фильтром |
-| `--contains <коммит>` | Ветки, содержащие коммит |
-| `--merged [<коммит>]` | Слитые ветки |
-| `--no-merged [<коммит>]` | Неслитые ветки |
-| `--sort=<ключ>` | Сортировка |
-| `--set-upstream-to=<upstream>` | Настроить tracking |
-| `--unset-upstream` | Удалить tracking |
-| `-f` / `--force` | Принудительное действие |
-| `--edit-description` | Описание ветки |
-
-## Примеры
-
-### 1. Список всех локальных веток
+Удобный стабильный формат для скриптов:
 
 ```bash
-git branch
-# * main
-#   develop
-#   feature/login
+git for-each-ref --format='%(refname:short)%09%(upstream:short)%09%(upstream:track)' refs/heads/
 ```
 
-### 2. Все ветки (включая удалённые)
+## Создать ветку
+
+Без переключения:
 
 ```bash
-git branch -a
-# * main
-#   remotes/origin/main
-#   remotes/origin/develop
+git branch feature/login origin/main
 ```
 
-### 3. Только удалённые ветки
+Создать и сразу переключиться:
 
 ```bash
-git branch -r
-# origin/main
-# origin/develop
+git switch -c feature/login origin/main
 ```
 
-### 4. Подробная информация
+## Tracking/upstream
 
 ```bash
+git branch --set-upstream-to=origin/feature/login feature/login
 git branch -vv
-# * main     abc1234 [origin/main] Latest commit
-#   develop  def5678 [origin/develop: ahead 2] Dev commit
 ```
 
-### 5. Создание новой ветки
+Чаще upstream устанавливается при первом push:
 
 ```bash
-git branch feature/new-feature
-# Создаёт ветку, но НЕ переключает на неё
+git push -u origin feature/login
 ```
 
-### 6. Создание от конкретного коммита
+## Переименовать
+
+Текущую ветку:
 
 ```bash
-git branch hotfix abc1234
-# Ветка от коммита abc1234
+git branch -m feature/auth
 ```
 
-### 7. Удаление merged-ветки
+Явно указанную ветку:
 
 ```bash
-git branch -d feature/old
-# Ошибка, если ветка не слита
+git branch -m feature/login feature/auth
 ```
 
-### 8. Принудительное удаление
+`-M` выполняет принудительное переименование, если целевое имя уже существует. Перед force проверьте обе ветки.
+
+## Скопировать ветку
 
 ```bash
-git branch -D feature/abandoned
-# Удаляет даже неслитую ветку
+git branch -c feature/login experiment/login
 ```
 
-### 9. Переименование текущей ветки
+`-c` копирует ветку и её конфигурацию/reflog. `-C` делает то же принудительно и может перезаписать существующую целевую ветку.
+
+## Удалить ветку
 
 ```bash
-git branch -m new-name
-# Переименовывает текущую ветку
+git branch -d feature/login
 ```
 
-### 10. Переименование любой ветки
+`-d` откажется удалять ветку, если она не слита в её upstream или в `HEAD` при отсутствии подходящего upstream.
+
+Принудительное удаление:
 
 ```bash
-git branch -m old-name new-name
+git log --oneline main..experiment/login
+git branch backup/experiment-login experiment/login
+git branch -D experiment/login
 ```
 
-### 11. Ветки, содержащие коммит
+Сначала просмотрите уникальные коммиты и при необходимости создайте backup-ветку.
+
+Удаление remote-ветки — это `push`, не `branch`:
 
 ```bash
-git branch --contains abc1234
-# Какие ветки содержат этот коммит
+git push origin --delete feature/login
 ```
 
-### 12. Список слитых веток
+## Найти слитые и неслитые ветки
+
+Относительно явного коммита:
 
 ```bash
-git branch --merged
-# Ветки, которые уже слиты в текущую
-```
-
-### 13. Список неслитых веток
-
-```bash
-git branch --no-merged
-# Ветки, которые ещё не слиты
-```
-
-### 14. Удаление всех слитых веток
-
-```bash
-git branch --merged | grep -v "main" | xargs git branch -d
-# Удаляет все слитые ветки кроме main
-```
-
-### 15. Настройка tracking
-
-```bash
-git branch --set-upstream-to=origin/develop develop
-# Отслеживание удалённой ветки
-```
-
-### 16. Удаление tracking
-
-```bash
-git branch --unset-upstream develop
-```
-
-### 17. Копирование ветки
-
-```bash
-git branch -C feature/old feature/new
-# Копирует ветку с историей
-```
-
-### 18. Описание ветки
-
-```bash
-git branch --edit-description feature/login
-# Открывает редактор для описания
-```
-
-### 19. Сортировка по дате
-
-```bash
-git branch --sort=-committerdate -v
-# Ветки от новых к старым
-```
-
-### 20. Фильтрация по маске
-
-```bash
-git branch --list "feature/*"
-# Только feature-ветки
-```
-
-## Практические сценарии
-
-### Очистка слитых веток
-
-```bash
-git checkout main
-git branch --merged | grep -v "\*\|main\|develop" | xargs -n 1 git branch -d
-```
-
-### Просмотр веток с последними коммитами
-
-```bash
-git branch -v --sort=-committerdate
-```
-
-### Проверка перед удалением
-
-```bash
+git branch --merged main
 git branch --no-merged main
-# Какие ветки ещё не слиты
 ```
 
-## Связки с другими командами
+Удаляйте выбранные ветки по одной после просмотра:
 
 ```bash
-# Создать и переключиться
-git branch feature/new && git switch feature/new
-
-# Удалить удалённую ветку
-git branch -d local-branch && git push origin --delete remote-branch
-
-# Список веток + последний коммит
-git branch -v --sort=-committerdate | head -10
+git branch -d feature/one feature/two
 ```
 
-## Советы
+Не используйте конвейер `git branch | grep | xargs`: обычный вывод помечает текущую ветку, формат зависит от настроек, а автоматическая фильтрация имён хрупка.
 
-:::tip
-Используйте `git switch -c` вместо `git branch` + `git checkout` — быстрее и нагляднее.
-:::
+## Ветки, содержащие коммит
 
-:::warning
-`git branch -D` удаляет ветку без предупреждения. Проверяйте `git branch --no-merged` перед удалением.
-:::
+```bash
+git branch --contains <commit>
+git branch --all --contains <commit>
+```
 
-:::tip
-Настройте алиас для очистки: `git config --global alias.cleanup '!git branch --merged | grep -v "\*\|main\|develop" | xargs -n 1 git branch -d'`
-:::
+Ветки, указывающие прямо на объект:
 
-## См. также
+```bash
+git branch --points-at <commit>
+```
 
-- [checkout](checkout.md) — переключение веток
-- [switch](switch.md) — переключение веток (рекомендуется)
-- [merge](merge.md) — слияние веток
-- [log](log.md) — история коммитов
+## Восстановление удалённой ветки
+
+```bash
+git reflog --all --date=local
+git branch restored-branch <commit>
+```
+
+Собственный reflog ветки обычно удаляется вместе с ref, поэтому ищите хеш в `HEAD` и других reflog.
+
+## Полезные ссылки
+
+- [Официальная документация git branch](https://git-scm.com/docs/git-branch)
+- [git switch](./switch.md)
+- [git reflog](./reflog.md)
+- [git push](./push.md)

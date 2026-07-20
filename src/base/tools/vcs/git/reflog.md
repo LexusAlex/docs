@@ -1,167 +1,119 @@
-# git-reflog
+# git reflog
 
-**Уровень:** Продвинутый
-**Версия Git:** 1.5.0
+**Уровень:** Средний
+**Минимальная версия Git:** 1.4
 
-Показывает журнал ссылок (reference logs) — историю всех изменений HEAD и веток. Позволяет отслеживать все операции, включая те, которые не видны в `git log`, и восстанавливать "потерянные" коммиты.
+Reflog — локальный журнал перемещений ссылок. Он помогает найти прежние значения `HEAD`, веток и других refs после `reset`, `rebase`, переключения веток или удаления коммитов из видимой истории.
 
 ## Синтаксис
 
 ```bash
-git reflog [опции] [<ссылка>]
+git reflog [show] [<log-options>] [<ref>]
+git reflog list
+git reflog exists <ref>
+git reflog expire [<options>] [<refs>...]
+git reflog delete [<options>] <ref>@{<specifier>}...
 ```
 
-## Основные опции
+Короткая форма `git reflog` равна `git reflog show HEAD`.
 
-| Опция | Описание |
-|---|---|
-| `--all` | Показать reflog всех ссылок |
-| `--expire=<дата>` | Удалить записи старше указанной даты |
-| `--expire-unreachable=<дата>` | Удалить недостижимые записи старше даты |
-| `--updateref` | Обновить ссылку при expire |
-| `--rewrite` | Перезаписать записи при expire |
-| `-n <количество>` | Ограничить количество записей |
-| `--date=<формат>` | Показать даты в указанном формате |
-| `--stale-fix` | Исправить устаревшие записи |
-
-## Примеры
-
-1. Показать reflog HEAD:
-```bash
-git reflog
-```
-
-2. Показать reflog для конкретной ветки:
-```bash
-git reflog main
-```
-
-3. Показать reflog с датами:
-```bash
-git reflog --date=iso
-```
-
-4. Показать последние 10 записей:
-```bash
-git reflog -n 10
-```
-
-5. Показать reflog всех ссылок:
-```bash
-git reflog --all
-```
-
-6. Показать reflog с относительными датами:
-```bash
-git reflog --date=relative
-```
-
-7. Восстановить удалённую ветку:
-```bash
-git reflog
-git branch recovered-branch HEAD@{5}
-```
-
-8. Восстановить удалённый коммит:
-```bash
-git reflog
-git cherry-pick HEAD@{3}
-```
-
-9. Показать reflog с хешами:
-```bash
-git reflog show HEAD
-```
-
-10. Показать reflog для конкретного коммита:
-```bash
-git reflog HEAD@{2}
-```
-
-11. Показать reflog с форматом даты:
-```bash
-git reflog --date=format:"%Y-%m-%d %H:%M"
-```
-
-12. Показать reflog с количеством записей:
-```bash
-git reflog -n 20 main
-```
-
-13. Показать reflog для всех веток:
-```bash
-git reflog --all --date=iso
-```
-
-14. Восстановить состояние после неудачного ребейза:
-```bash
-git reflog
-git reset --hard HEAD@{2}
-```
-
-15. Показать reflog с ограничением:
-```bash
-git reflog --expire=1.month.ago
-```
-
-## Практические сценарии
-
-**Восстановление удалённой ветки:**
-После случайного удаления ветки можно восстановить её через reflog.
+## Просмотр
 
 ```bash
-git reflog main
-# Найти коммит перед удалением
-git branch main HEAD@{3}
+git reflog --date=local
+git reflog show main --date=iso
+git reflog --all --oneline
 ```
 
-**Отмена неудачного слияния:**
-Возврат к состоянию до неудачного merge или rebase.
+Ссылки вида `HEAD@{2}` означают прежнее значение, выбранное по позиции в журнале. Позиции меняются по мере появления новых записей, поэтому для долгого хранения используйте хеш или создайте ветку.
+
+## Восстановить коммит после reset
 
 ```bash
-git reflog
-git reset --hard HEAD@{4}
+git reflog --date=local
+git show <old-head>
+git branch recovered-work <old-head>
 ```
 
-**Поиск потерянного коммита:**
-Найти коммит, который не отображается в git log (например, после reset).
+Сначала создайте ветку восстановления. Это безопаснее, чем немедленно выполнять ещё один `reset --hard`.
+
+## Восстановить состояние до rebase
 
 ```bash
-git reflog --all
-git show HEAD@{7}
-git cherry-pick HEAD@{7}
+git reflog show HEAD --date=local
+git branch before-rebase <old-head>
+git range-diff <old-head>...HEAD
 ```
 
-## Связки с другими командами
+После проверки можно решить, нужна ли старая ветка целиком или только отдельные коммиты через `cherry-pick`.
+
+## Найти состояние удалённой ветки
+
+Удаление ветки обычно удаляет и её собственный reflog. Ищите коммит в журналах `HEAD` и остальных refs:
 
 ```bash
-# Восстановление ветки
-git reflog main && git branch main HEAD@{5}
-
-# Проверка перед восстановлением
-git reflog && git show HEAD@{3}
-
-# Восстановление с созданием новой ветки
-git reflog && git checkout -b recovery HEAD@{2}
-
-# Очистка старых записей
-git reflog expire --expire=now --all && git gc --prune=now
+git reflog --all --date=local
+git log --all --decorate --oneline --graph
 ```
 
-## Советы
+Если хеш найден:
 
-:::tip
-Reflog хранится локально и не синхронизируется с удалённым репозиторием. Используйте его как последнее средство восстановления.
+```bash
+git branch restored-branch <commit>
+```
+
+## Найти состояние по времени
+
+```bash
+git show 'main@{yesterday}'
+git show 'HEAD@{2026-07-01 12:00}'
+```
+
+Результат зависит от того, сохранились ли записи за этот период.
+
+## Срок хранения
+
+Типичные значения по умолчанию:
+
+- достижимые записи — 90 дней;
+- недостижимые записи — 30 дней.
+
+Проверьте локальные настройки:
+
+```bash
+git config --get gc.reflogExpire
+git config --get gc.reflogExpireUnreachable
+```
+
+Изменять срок можно через конфигурацию, например только для конкретного репозитория:
+
+```bash
+git config gc.reflogExpire 120.days
+git config gc.reflogExpireUnreachable 45.days
+```
+
+## Ручное удаление записей
+
+Синтаксис истечения относится к подкоманде `expire`:
+
+```bash
+git reflog expire --expire=90.days --expire-unreachable=30.days --all --dry-run
+git reflog expire --expire=90.days --expire-unreachable=30.days --all
+```
+
+::: danger Сначала `--dry-run`
+Ручное истечение reflog и последующий `git gc` сокращают или уничтожают возможности восстановления. Не используйте `--expire=now` и `git gc --prune=now` как стандартную «очистку».
 :::
 
-:::warning
-Записи reflog имеют срок действия (по умолчанию 90 дней). Регулярно выполняйте бэкап важных коммитов.
-:::
+## Ограничения
 
-## См. также
+- Reflog хранится локально и не отправляется через `push`.
+- В другом клоне могут быть другие записи или не быть нужного коммита.
+- Истёкшие записи и удалённые объекты могут быть невосстановимы.
+- Для резервного копирования важной работы создавайте ветки, теги или внешний backup.
 
-- [git-log](/base/tools/vcs/git/log) — просмотр истории
-- [git-reset](/base/tools/vcs/git/reset) — сброс состояния
-- [git-checkout](/base/tools/vcs/git/checkout) — переключение
-- [git-cherry-pick](/base/tools/vcs/git/cherry-pick) — применение коммитов
-- [git-gc](/base/tools/vcs/git/gc) — сборка мусора
+## Полезные ссылки
+
+- [Официальная документация git reflog](https://git-scm.com/docs/git-reflog)
+- [git reset](./reset.md)
+- [git gc](./gc.md)

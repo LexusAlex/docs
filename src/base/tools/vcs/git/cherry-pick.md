@@ -1,292 +1,137 @@
-# git-cherry-pick
+# git cherry-pick
 
 **Уровень:** Средний
+**Минимальная версия Git:** 0.99
 
-**Версия Git:** 1.5.0
-
-Применяет изменения из существующих коммитов в текущую ветку. Позволяет выборочно переносить конкретные коммиты без слияния целых веток.
+`git cherry-pick` применяет изменения существующих коммитов поверх текущей ветки и создаёт новые коммиты. У новых коммитов будут другие идентификаторы, потому что меняются их родители.
 
 ## Синтаксис
 
 ```bash
-git cherry-pick <commit>...
-git cherry-pick --continue
-git cherry-pick --skip
-git cherry-pick --abort
+git cherry-pick [<options>] <commit>...
+git cherry-pick (--continue | --skip | --abort | --quit)
+```
+
+Перед началом проверьте ветку и чистоту рабочего дерева:
+
+```bash
+git branch --show-current
+git status --short
 ```
 
 ## Основные опции
 
 | Опция | Описание |
-|-------|----------|
-| `--no-commit` | Применить изменения, но не создавать автоматический коммит |
-| `--edit` | Открыть редактор для изменения сообщения коммита |
-| `-x` | Добавить в сообщение "(cherry picked from commit ...)" |
-| `--signoff` | Добавить Signed-off-by в сообщение коммита |
-| `--abort` | Отменить cherry-pick и вернуть исходное состояние |
-| `--continue` | Продолжить после разрешения конфликтов |
-| `--skip` | Пропустить текущий коммит при конфликте |
-| `--strategy` | Указать стратегию слияния |
-| `-m` | Указать родительский коммит для merge-коммитов |
-| `--no-verify` | Пропустить pre-commit и commit-msg хуки |
-| `--allow-empty` | Позволить создание пустых коммитов |
-| `--keep-redundant-commits` | Сохранить коммиты, которые не вносят изменений |
-| `--ff` | Если возможно, использовать fast-forward вместо создания нового коммита |
+|---|---|
+| `-e`, `--edit` | Отредактировать сообщение нового коммита |
+| `-n`, `--no-commit` | Применить изменения в индекс и рабочее дерево без автоматического коммита |
+| `-x` | Добавить в сообщение строку с идентификатором исходного коммита, если cherry-pick прошёл без конфликтов |
+| `-s`, `--signoff` | Добавить `Signed-off-by` |
+| `-m <n>`, `--mainline <n>` | Выбрать основного родителя при переносе merge-коммита |
+| `--ff` | Выполнить fast-forward, если текущий `HEAD` совпадает с родителем выбранного коммита |
+| `--empty=<mode>` | Для ставшего пустым коммита выбрать `drop`, `keep` или `stop` |
+| `--allow-empty` | Разрешить коммит, который был пустым изначально |
+| `-S[<keyid>]` | Подписать новый коммит |
+| `--strategy <strategy>`, `-X<option>` | Выбрать стратегию и передать ей параметр |
+
+Опции `--no-verify` у `git cherry-pick` нет. Для сохранения ставшего пустым коммита используйте современную форму `--empty=keep`; `--keep-redundant-commits` оставлен как устаревший синоним.
 
 ## Примеры
 
-### 1. Cherry-pick одного коммита
+### Перенести один коммит
 
 ```bash
-# Применить конкретный коммит в текущую ветку
-git cherry-pick abc1234
+git switch release
+git show --stat a1b2c3d
+git cherry-pick -x a1b2c3d
 ```
 
-### 2. Cherry-pick нескольких коммитов
+`-x` полезен при переносе исправлений между публичными ветками: в сообщении будет виден источник.
+
+### Перенести несколько заданных коммитов
 
 ```bash
-# Применить несколько коммитов последовательно
-git cherry-pick abc1234 def5678 ghi9012
+git cherry-pick a1b2c3d e4f5a6b 0123abc
 ```
 
-### 3. Cherry-pick без автоматического коммита
+Коммиты применяются в порядке аргументов.
+
+### Перенести непрерывный диапазон
 
 ```bash
-# Применить изменения, но не коммитить
-git cherry-pick --no-commit abc1234
-# Проверить изменения
-git diff --staged
-# Вручную сделать коммит
-git commit -m "Применены изменения из abc1234"
+# Включить oldest и все коммиты до newest
+git cherry-pick oldest^..newest
 ```
 
-### 4. Cherry-pick с сообщением из оригинала и ссылкой
+`oldest..newest` исключил бы `oldest`. Перед выполнением диапазон можно проверить:
 
 ```bash
-# Добавить "(cherry picked from commit ...)" в сообщение
-git cherry-pick -x abc1234
+git log --oneline --reverse oldest^..newest
 ```
 
-### 5. Cherry-pick с редактированием сообщения
+### Объединить несколько коммитов в один
 
 ```bash
-# Открыть редактор для изменения сообщения
-git cherry-pick --edit abc1234
+git cherry-pick --no-commit oldest^..newest
+git diff --cached
+git commit -m "Apply selected fixes"
 ```
 
-### 6. Cherry-pick с подписью
+### Разрешить конфликт
 
 ```bash
-# Добавить Signed-off-by
-git cherry-pick --signoff abc1234
-```
-
-### 7. Cherry-pick диапазона коммитов
-
-```bash
-# Применить диапазон коммитов (не включая abc1234, включая def5678)
-git cherry-pick abc1234..def5678
-```
-
-### 8. Cherry-pick диапазона включительно
-
-```bash
-# Пр�именить диапазон коммитов включительно
-git cherry-pick abc1234^..def5678
-```
-
-### 9. Отмена cherry-pick при конфликтах
-
-```bash
-# Если возникли конфликты и нужно отменить
-git cherry-pick --abort
-```
-
-### 10. Продолжение cherry-pick после разрешения конфликтов
-
-```bash
-# Разрешить конфликты в файлах
-# ...
-git add .
+git cherry-pick a1b2c3d
+# исправьте конфликтующие файлы
+git add path/to/resolved-file
 git cherry-pick --continue
 ```
 
-### 11. Пропуск проблемного коммита
+Управление незавершённой последовательностью:
 
 ```bash
-# Пропустить коммит, который вызывает неразрешимые конфликты
 git cherry-pick --skip
+git cherry-pick --abort
+git cherry-pick --quit
 ```
 
-### 12. Cherry-pick merge-коммита
+`--abort` возвращает состояние до начала операции. `--quit` только забывает состояние sequencer и оставляет текущие изменения.
+
+### Перенести merge-коммит
 
 ```bash
-# Указать родительский коммит для merge-коммита (номер родителя)
-git cherry-pick -m 1 merge-commit-hash
+git show --no-patch --pretty='%H parents: %P' <merge-commit>
+git cherry-pick -m 1 <merge-commit>
 ```
 
-### 13. Cherry-pick с указанной стратегией
+Выберите родителя осознанно: неверный номер меняет смысл переносимого патча.
+
+### Исправить коммит, сделанный не в той ветке
+
+Если коммит уже опубликован, не переписывайте ветку:
 
 ```bash
-# Использовать стратегию "ours" при конфликтах
-git cherry-pick --strategy ours abc1234
+git switch correct-branch
+git cherry-pick <commit>
+git switch wrong-branch
+git revert <commit>
 ```
 
-### 14. Cherry-pick с пропуском хуков
+Если это последний **неопубликованный** коммит и рабочее дерево чистое:
 
 ```bash
-# Пропустить pre-commit хуки
-git cherry-pick --no-verify abc1234
+git branch correct-branch <commit>
+git switch wrong-branch
+git reset --hard <commit>^
 ```
 
-### 15. Cherry-pick пустого коммита
+Перед `reset --hard` проверьте `git status` и убедитесь, что коммит не отправлен коллегам.
 
-```bash
-# Позволить создание пустого коммита
-git cherry-pick --allow-empty abc1234
-```
-
-### 16. Cherry-pick с сохранением избыточных коммитов
-
-```bash
-# Сохранить коммиты, которые не вносят изменений
-git cherry-pick --keep-redundant-commits abc1234
-```
-
-### 17. Cherry-pick с fast-forward
-
-```bash
-# Если возможно, использовать fast-forward
-git cherry-pick --ff abc1234
-```
-
-### 18. Cherry-pick коммита из другой ветки
-
-```bash
-# Найти коммит в другой ветке и применить
-git log feature --oneline
-git cherry-pick feature-branch-commit-hash
-```
-
-### 19. Cherry-pick с автоматическим squash
-
-```bash
-# Применить несколько коммитов как один
-git cherry-pick --no-commit abc1234 def5678
-git commit -m "Объединённые изменения из abc1234 и def5678"
-```
-
-### 20. Cherry-pick с проверкой через diff
-
-```bash
-# Проверить что будет применено
-git diff abc1234^..abc1234
-git cherry-pick abc1234
-```
-
-## Практические сценарии
-
-### Сценарий 1: Перенос горячего фикса в несколько веток
-
-```bash
-# Применить критический фикс в release и develop ветки
-git checkout release/v1.0
-git cherry-pick -x hotfix-commit-hash
-git push origin release/v1.0
-
-git checkout develop
-git cherry-pick -x hotfix-commit-hash
-git push origin develop
-```
-
-### Сценарий 2: Выборочное применение фич из feature-ветки
-
-```bash
-# Применить только определённые коммиты из feature-ветки
-git checkout main
-git cherry-pick feature-commit-1 feature-commit-3
-```
-
-### Сценарий 3: Исправление коммита в wrong branch
-
-```bash
-# Коммит попал не в ту ветку — перенести его
-git checkout correct-branch
-git cherry-pick wrong-branch-commit-hash
-
-git checkout wrong-branch
-git reset --hard HEAD~1
-```
-
-### Сценарий 4: Применение патча из PR
-
-```bash
-# Применить изменения из PR без merge
-git fetch origin pull/123/head:pr-123
-git cherry-pick pr-123-commit-hash
-```
-
-## Связки с другими командами
-
-### Cherry-pick с проверкой через show
-
-```bash
-git show abc1234
-git cherry-pick abc1234
-```
-
-### Cherry-pick с логированием
-
-```bash
-git log --oneline other-branch
-git cherry-pick chosen-commit-hash
-```
-
-### Cherry-pick с revert
-
-```bash
-# Применить коммит, затем отменить его если нужно
-git cherry-pick abc1234
-git revert HEAD
-```
-
-### Cherry-pick с stash
-
-```bash
-git stash
-git cherry-pick abc1234
-git stash pop
-```
-
-### Cherry-pick нескольких коммитов из ветки
-
-```bash
-git log feature --oneline
-git cherry-pick hash1 hash2 hash3
-```
-
-## Советы
-
-:::tip
-Используйте `-x` при cherry-pick, чтобы в сообщении коммита была ссылка на оригинал. Это помогает отслеживать происхождение изменений.
+::: danger Стратегия ours
+`git cherry-pick --strategy=ours` не «разрешает только конфликты в пользу текущей ветки», а игнорирует дерево переносимого коммита целиком. Для отдельных конфликтов исправляйте файлы вручную либо используйте подходящую `-X`-опцию после проверки результата.
 :::
 
-:::warning
-При частом использовании cherry-pick возникает дублирование коммитов, что усложняет историю. Рассмотрите merge или rebase для больших объёмов изменений.
-:::
+## Полезные ссылки
 
-:::tip
-Для применения нескольких коммитов используйте `--no-commit`, а затем один `git commit` — это создаст чистую историю.
-:::
-
-:::warning
-При cherry-pick merge-коммитов обязательно указывайте `-m` с номером родителя, иначе могут возникнуть неожиданные конфликты.
-:::
-
-## См. также
-
-- [git-merge](./merge.md) — слияние целых веток
-- [git-rebase](./rebase.md) — перебазирование коммитов
-- [git-revert](./revert.md) — отмена изменений коммита
-- [git-diff](./diff.md) — просмотр различий между коммитами
-- [git-log](./log.md) — просмотр истории коммитов
+- [Официальная документация git cherry-pick](https://git-scm.com/docs/git-cherry-pick)
+- [git revert](./revert.md)
+- [git rebase](./rebase.md)

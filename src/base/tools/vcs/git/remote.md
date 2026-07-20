@@ -1,189 +1,138 @@
-# git-remote
+# git remote
 
-**Уровень:** Начинающий
+**Уровень:** Начальный
+**Минимальная версия Git:** 1.5
 
-**Версия Git:** 1.5.0
+`git remote` управляет именами удалённых репозиториев и их fetch/push URL. Сам remote не является копией сервера: это локальная конфигурация плюс набор remote-tracking refs.
 
-Управление набором отслеживаемых удалённых репозиториев. Позволяет добавлять, удалять, переименовывать и настраивать подключения к удалённым репозориям.
-
-## Синтаксис
+## Основные команды
 
 ```bash
-git remote [add|remove|rename|show|set-url|prune|update|get-url|set-head] [<аргументы>]
+git remote [-v]
+git remote add <name> <url>
+git remote rename <old> <new>
+git remote remove <name>
+git remote get-url [--push] [--all] <name>
+git remote set-url [--add|--delete] [--push] <name> <url>
+git remote show <name>
+git remote prune [-n|--dry-run] <name>
+git remote update [<group>...]
 ```
 
-## Основные опции
+## Просмотр
 
-| Опция | Описание |
-|-------|----------|
-| `add <имя> <url>` | Добавляет новый удалённый репозорий |
-| `remove <имя>` | Удаляет указанный удалённый репозорий |
-| `rename <старое> <новое>` | Переименовывает удалённый репозорий |
-| `show <имя>` | Выводит информацию об удалённом репозории |
-| `-v` | Показывает URL удалённых репозориев |
-| `set-url <имя> <url>` | Изменяет URL удалённого репозория |
-| `prune <имя>` | Удаляет устаревшие ссылки на ветки |
-| `update` | Обновляет список удалённых репозориев |
-| `get-url <имя>` | Получает URL удалённого репозория |
-| `set-head <имя> <ветка>` | Устанавливает ветку по умолчанию для удалённого репозория |
-
-## Примеры
-
-1. Показать все удалённые репозории:
-```bash
-git remote
-```
-
-2. Показать удалённые репозории с URL:
 ```bash
 git remote -v
-```
-
-3. Добавить удалённый репозорий с именем origin:
-```bash
-git remote add origin https://github.com/user/repo.git
-```
-
-4. Добавить второй удалённый репозорий:
-```bash
-git remote add upstream https://github.com/original/repo.git
-```
-
-5. Показать подробную информацию об origin:
-```bash
 git remote show origin
 ```
 
-6. Переименовать удалённый репозорий:
+`-v` обычно выводит отдельные URL для fetch и push. `remote show` может обращаться к сети; добавьте `-n`, если нужен только локальный обзор.
+
+## Добавить remote
+
 ```bash
-git remote rename origin upstream
+git remote add origin git@example.com:team/project.git
+git fetch origin
 ```
 
-7. Удалить удалённый репозорий:
+У `git remote add` нет опции `--push`. Отдельный push URL настраивается после добавления:
+
 ```bash
-git remote remove upstream
+git remote set-url --add --push origin git@example.com:team/project.git
 ```
 
-8. Изменить URL удалённого репозория:
+Если push URL должен заменить существующий, опустите `--add`:
+
 ```bash
-git remote set-url origin https://github.com/new-url/repo.git
+git remote set-url --push origin git@example.com:team/project.git
 ```
 
-9. Изменить URL на SSH:
-```bash
-git remote set-url origin git@github.com:user/repo.git
-```
+## Получить URL
 
-10. Показать URL конкретного удалённого репозория:
 ```bash
 git remote get-url origin
+git remote get-url --all origin
+git remote get-url --push --all origin
 ```
 
-11. Удалить устаревшие ссылки на ветки:
+`--push` показывает URL отправки, а без него — URL получения.
+
+## Несколько URL: fetch из одного места, push в другое
+
 ```bash
+git remote set-url origin https://example.com/team/project.git
+git remote set-url --push origin git@example.com:team/project.git
+```
+
+Проверьте результат:
+
+```bash
+git remote -v
+```
+
+## Несколько push-зеркал
+
+```bash
+git remote set-url --add --push publish git@example.com:mirror-a/project.git
+git remote set-url --add --push publish git@example.org:mirror-b/project.git
+```
+
+Один push попытается отправить одинаковые refs во все настроенные push URL. Они должны принимать одинаковый набор данных; для независимых целей используйте разные remote.
+
+## Переименовать или удалить remote
+
+```bash
+git remote rename origin upstream
+git remote remove obsolete
+```
+
+Удаление remote убирает его конфигурацию и remote-tracking refs, но не удаляет локальные ветки и не меняет сервер.
+
+## Очистить устаревшие remote-tracking refs
+
+```bash
+git remote prune --dry-run origin
 git remote prune origin
 ```
 
-12. Установить ветку по умолчанию для origin:
+Это удаляет локальные `origin/*`, для которых веток больше нет на сервере. Удалённые ветки на сервере команда не затрагивает.
+
+Эквивалент при fetch:
+
 ```bash
-git remote set-head origin main
+git fetch --prune origin
 ```
 
-13. Автоматически определить ветку по умолчанию:
-```bash
-git remote set-head origin --auto
-```
+## Обновить remote-трекинг
 
-14. Обновить список удалённых репозориев:
 ```bash
 git remote update
+git remote update --prune
 ```
 
-15. Обновить конкретный удалённый репозорий:
-```bash
-git remote update origin
-```
+Команда получает данные из настроенных remote или групп remote, но сама не сливает их в локальные ветки.
 
-16. Добавить удалённый репозорий для push-only:
-```bash
-git remote add --push origin https://github.com/user/repo.git
-```
-
-17. Показать только fetch URL:
-```bash
-git remote get-url --push origin
-```
-
-18. Добавить зеркало репозория:
-```bash
-git remote add --mirror=push origin https://github.com/user/repo.git
-```
-
-## Практические сценарии
-
-### Настройка форк-репозория
+## Remote HEAD
 
 ```bash
-# Клонируем свой форк
-git clone https://github.com/myuser/project.git
-cd project
-
-# Добавляем оригинальный репозорий как upstream
-git remote add upstream https://github.com/original/project.git
-
-# Проверяем настройки
-git remote -v
-
-# Синхронизируем изменения из оригинала
-git fetch upstream
-git merge upstream/main
+git remote set-head origin --auto
+git symbolic-ref refs/remotes/origin/HEAD
 ```
 
-### Смена протокола подключения
+`set-head` меняет только локальную символическую ссылку `refs/remotes/origin/HEAD`. Он не меняет default branch на сервере.
+
+## Mirror-режим
 
 ```bash
-# Переключаемся с HTTPS на SSH
-git remote set-url origin git@github.com:user/repo.git
-
-# Проверяем изменение
-git remote -v
+git remote add --mirror=push mirror <url>
 ```
 
-### Очистка устаревших ссылок
-
-```bash
-# После удаления веток на сервере
-git remote prune origin
-
-# Проверяем, какие ссылки были удалены
-git remote prune origin --dry-run
-```
-
-## Связки с другими командами
-
-```bash
-# Получение и слияние изменений из upstream
-git fetch upstream && git merge upstream/main
-
-# Push в несколько удалённых репозориев
-git push origin main && git push backup main
-
-# Проверка перед push
-git remote show origin && git push
-```
-
-## Советы
-
-:::tip
-Используйте `git remote -v` для быстрой проверки настроенных удалённых репозориев и их URL.
+::: danger Только для выделенного зеркала
+Mirror push синхронизирует все refs и может удалять refs на сервере. `--mirror=fetch` напрямую отображает remote refs в локальные refs и подходит только bare-репозиторию: в обычном репозитории можно перезаписать локальные ветки.
 :::
 
-:::warning
-При изменении URL убедитесь, что новый адрес доступен и у вас есть необходимые права. Неправильный URL приведёт к ошибкам при fetch и push.
-:::
+## Полезные ссылки
 
-## См. также
-
-- [git-fetch](./fetch.md) — получение изменений из удалённого репозория
-- [git-pull](./pull.md) — получение и слияние изменений
-- [git-push](./push.md) — отправка изменений в удалённый репозорий
+- [Официальная документация git remote](https://git-scm.com/docs/git-remote)
+- [git fetch](./fetch.md)
+- [git push](./push.md)

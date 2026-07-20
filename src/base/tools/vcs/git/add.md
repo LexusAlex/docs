@@ -9,7 +9,7 @@
 
 ```bash
 git add <путь>
-git add [опции] <путь...>
+git add [<опции>] [--] <pathspec>...
 ```
 
 ## Основные опции
@@ -188,7 +188,10 @@ git add -u
 
 ```bash
 # Добавить всё и закоммитить
-git add . && git commit -m "Update"
+git add -p
+git add path/to/new-file
+git diff --cached
+git commit -m "Describe the change"
 
 # Добавить и посмотреть что будет закоммичено
 git add -u && git status
@@ -197,7 +200,9 @@ git add -u && git status
 git add -p && git diff --cached
 
 # Добавить и поправить последний коммит
-git add . && git commit --amend
+git add path/to/fixed-file
+git diff --cached
+git commit --amend
 ```
 
 ## Советы
