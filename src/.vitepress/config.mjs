@@ -177,7 +177,61 @@ export default defineConfig({
             items: [
               { text: 'VCS',collapsed: true, link: '/base/tools/vcs/',
                 items: [
-                  { text: 'git',link: '/base/tools/vcs/git/',}
+                  { text: 'git',collapsed: true, link: '/base/tools/vcs/git/',
+                    items: [
+                      { text: 'Сценарии',link: '/base/tools/vcs/git/usage-scenarios'},
+                      { text: 'Создание',collapsed: true, items: [
+                        { text: 'init',link: '/base/tools/vcs/git/init'},
+                        { text: 'clone',link: '/base/tools/vcs/git/clone'}
+                      ]},
+                      { text: 'Основные',collapsed: true, items: [
+                        { text: 'add',link: '/base/tools/vcs/git/add'},
+                        { text: 'commit',link: '/base/tools/vcs/git/commit'},
+                        { text: 'status',link: '/base/tools/vcs/git/status'},
+                        { text: 'diff',link: '/base/tools/vcs/git/diff'},
+                        { text: 'show',link: '/base/tools/vcs/git/show'}
+                      ]},
+                      { text: 'Ветвление',collapsed: true, items: [
+                        { text: 'branch',link: '/base/tools/vcs/git/branch'},
+                        { text: 'checkout',link: '/base/tools/vcs/git/checkout'},
+                        { text: 'switch',link: '/base/tools/vcs/git/switch'}
+                      ]},
+                      { text: 'Слияние',collapsed: true, items: [
+                        { text: 'merge',link: '/base/tools/vcs/git/merge'},
+                        { text: 'rebase',link: '/base/tools/vcs/git/rebase'},
+                        { text: 'cherry-pick',link: '/base/tools/vcs/git/cherry-pick'}
+                      ]},
+                      { text: 'Удалённые',collapsed: true, items: [
+                        { text: 'remote',link: '/base/tools/vcs/git/remote'},
+                        { text: 'fetch',link: '/base/tools/vcs/git/fetch'},
+                        { text: 'pull',link: '/base/tools/vcs/git/pull'},
+                        { text: 'push',link: '/base/tools/vcs/git/push'}
+                      ]},
+                      { text: 'История',collapsed: true, items: [
+                        { text: 'log',link: '/base/tools/vcs/git/log'},
+                        { text: 'blame',link: '/base/tools/vcs/git/blame'},
+                        { text: 'bisect',link: '/base/tools/vcs/git/bisect'}
+                      ]},
+                      { text: 'Коррекция',collapsed: true, items: [
+                        { text: 'reset',link: '/base/tools/vcs/git/reset'},
+                        { text: 'revert',link: '/base/tools/vcs/git/revert'},
+                        { text: 'restore',link: '/base/tools/vcs/git/restore'},
+                        { text: 'stash',link: '/base/tools/vcs/git/stash'}
+                      ]},
+                      { text: 'Теги',link: '/base/tools/vcs/git/tag'},
+                      { text: 'Файлы',collapsed: true, items: [
+                        { text: 'mv',link: '/base/tools/vcs/git/mv'},
+                        { text: 'rm',link: '/base/tools/vcs/git/rm'},
+                        { text: 'clean',link: '/base/tools/vcs/git/clean'}
+                      ]},
+                      { text: 'Администрирование',collapsed: true, items: [
+                        { text: 'gc',link: '/base/tools/vcs/git/gc'},
+                        { text: 'reflog',link: '/base/tools/vcs/git/reflog'},
+                        { text: 'worktree',link: '/base/tools/vcs/git/worktree'},
+                        { text: 'submodule',link: '/base/tools/vcs/git/submodule'}
+                      ]}
+                    ]
+                  }
                 ]
               },
               { text: 'Платформы',collapsed: true, link: '/base/tools/platform/',
