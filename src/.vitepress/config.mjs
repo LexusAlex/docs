@@ -1,4 +1,5 @@
 import { defineConfig } from 'vitepress'
+import { htmlReferenceSidebar } from './data/html-sidebar.mjs'
 
 export function tokenizeSearch(text, fieldName) {
   // VitePress сериализует эту функцию отдельно от config.mjs, поэтому все
@@ -271,25 +272,7 @@ export default defineConfig({
                       { text: 'Заголовки',link: '/base/frontend/html/document/headers',}
                     ]
                   },
-                  { text: 'Элементы',collapsed: true,link: '/base/frontend/html/elements/',
-                    items: [
-                      { text: 'Теория',collapsed: true,link: '/base/frontend/html/elements/theory/',
-                        items: [
-                          { text: 'Блочные и строчные элементы',link: '/base/frontend/html/elements/theory/block-and-inline'}
-                        ]
-                      },
-                      { text: 'Базовые',collapsed: true,link: '/base/frontend/html/elements/basics/',}
-                    ]
-                  },
-                  { text: 'Атрибуты',collapsed: true,link: '/base/frontend/html/attributes/',
-                    items: [
-                      { text: 'Глобальные',collapsed: true,link: '/base/frontend/html/attributes/global/',
-                        items: [
-                          { text: 'id',link: '/base/frontend/html/attributes/global/id',}
-                        ]
-                      }
-                    ]
-                  }
+                  ...htmlReferenceSidebar
                 ]
               },
               { text: 'CSS',collapsed: true, link: '/base/frontend/css/',

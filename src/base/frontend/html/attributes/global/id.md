@@ -1,143 +1,87 @@
-# id
+---
+title: "id"
+description: "Задаёт уникальный в документе идентификатор без ASCII-пробелов."
+outline: [2, 3]
+---
 
-`id` Устанавливает элементу уникальный идентификатор, имя которого должно быть уникальным на всей странице.
+<!-- Этот файл сгенерирован scripts/generate-html-docs.mjs. Не редактируйте вручную. -->
 
-Атрибут `id` должен содержать хотя бы один символ и в нем не должно быть пробелов, браузер поймет это как часть идентификатора.
+# `id`
 
-Значения атрибута `id` регистрозависимы, то есть `Main` и `main` разные идентификаторы.
+Задаёт уникальный в документе идентификатор без ASCII-пробелов.
 
-Старайтесь придерживаться единого стиля именования идентификаторов на странице.
-
-````html
-<div id="error-container"></div>
-````
-
-Атрибут `id` не стоит использовать для передачи какой-либо информации, он необходим для поиска элемента через `css` или доступа через `javascript`.
-
-## Как использовать
-
-- Можно получить доступ к элементу из `javascript`.
-
-````javascript
-document.getElementById("error-container");
-const button = document.getElementById('button');
-button.addEventListener('click', function () {
-    alert('Click!');
-});
-````
-
-- Стилизовать элемент из `css`.
-
-````css
-#error-container {
-    background-color: #1b1b1f;
-}
-````
-
-- Позволяет создать якорь ведущий к определенному разделу на странице и производить навигацию к ней
-
-````html
-<a href="#section2">Перейти к разделу 2</a> 
-<div id="section2">...</div>
-````
-
-- Позволяет создать связь с тегом `label` через атрибут `for` 
-
-````html
-<label for="email">Email:</label> 
-<input type="email" id="email">
-````
-
-## Javascript
-
-Можно обращаться к элементам с атрибутом `id` как к свойствам объекта `window`.
-
-Например:
-
-````html
-<div id="test">test123</div>
-<script>
-    console.log(window.test.textContent); // test123
-</script>
-````
-
-::: danger
-Данное использование не рекомендовано, лучше использовать `document.getElementById('')` или `document.querySelector()`.
+::: info Актуальность
+Страница сверена 2026-07-22 с текущим индексом WHATWG HTML Living Standard. Наличие в стандарте не заменяет проверку поддержки браузерами для проекта.
 :::
 
-::: info
-Метод `getElementById` есть только у объекта `document`, он ищет `id` по всему документу.
-:::
 
-Получим атрибут элемента
+## Применимость и значение
 
-````javascript
-document.body.id;
-````
+| Элементы | Значение в индексе WHATWG | Формат значения | Определение |
+|---|---|---|---|
+| Все HTML-элементы | The element's ID | Text * | [WHATWG](https://html.spec.whatwg.org/multipage/dom.html#the-id-attribute) |
 
-Присвоить новое значение
+Английские формулировки в таблице сохранены из официального индекса, чтобы не потерять нормативные различия одноимённых атрибутов.
 
-````javascript
-document.body.id = 'new value'
-````
+## Примеры использования
 
-Удалим атрибут `id`.
+### Для всех HTML-элементов
 
-````javascript
-document.body.removeAttribute('id');
-````
+Точная формулировка WHATWG: `The element's ID`. Формат из индекса: `Text *`.
 
-Но более правильно для получения и изменения атрибута использовать встроенные методы элемента
+```html
+<div id="main-content">Содержимое div</div>
+```
 
-````javascript
-// Задать атрибут
-document.body.setAttribute('id','set');
-// Получить атрибут
-document.body.getAttribute('id')
-````
+### Фрагмент, подпись поля и выбор из JavaScript
 
-Получим элемент двумя разными методами и сравним их
+```html
+<h2 id="install">Установка</h2>
+<a href="#install">Перейти к установке</a>
+<label for="email">Email</label>
+<input id="email" type="email">
+```
 
-````javascript
-let e = document.getElementById('test');
-let e2 = document.querySelector('#test');
-console.log(e === e2); // true
-````
+### Связь: Связи элементов формы
 
-::: tip
-`document.querySelector('')` считается современной и гибкой альтернативой.
-:::
+for у label совпадает с id поля, а list у input — с id datalist.
 
-Проверка, что найденный элемент существует, это желательно делать всегда, так как элемента может не быть.
+```html
+<form action="/subscribe" method="post">
+  <fieldset>
+    <legend>Подписка</legend>
+    <label for="email">Email</label>
+    <input id="email" name="email" type="email" required>
+    <button type="submit">Подписаться</button>
+  </fieldset>
+</form>
+```
 
-````html
-<div id="test1">test123</div>
-<script>
-    let e = document.getElementById('test');
-    // Если элемент не найден null
-    if (e) {
-        console.log(true);
-    }
-</script>
-````
+### Связь: Popover и управляющая кнопка
 
-## Примеры названий атрибутов
+popovertarget ссылается на id элемента с popover.
 
-- `main_section`
-- `block`
-- `contenteditable`
-- `main-content`
-- `login-form`
-- `modal-window`
-- `background-audio`
-- `comments-block`
-- `related-posts`
-- `error-container`
-- `collapsed-menu`
-- `product-card`
-- `menu__item--active`
-- `card__title`
+```html
+<button popovertarget="filters">Фильтры</button>
+<div id="filters" popover>Настройки фильтрации</div>
+```
 
-## Ссылки
+Если атрибут отсутствует, действует состояние по умолчанию конкретного элемента. Пустая строка и отсутствие атрибута не взаимозаменяемы, кроме случаев, явно определённых спецификацией.
 
-[Спецификация](https://html.spec.whatwg.org/multipage/dom.html#the-id-attribute)
+## Связи
+
+- **Связи элементов формы:** for у label совпадает с id поля, а list у input — с id datalist.
+- **Popover и управляющая кнопка:** popovertarget ссылается на id элемента с popover.
+
+## DOM
+
+`element.getAttribute(name)` возвращает исходную строку или `null`, а `element.hasAttribute(name)` проверяет присутствие. IDL-свойство, тип отражения и нормализация зависят от определения конкретного атрибута; ориентируйтесь на ссылки в таблице.
+
+## Доступность и безопасность
+
+Атрибут не заменяет корректную семантику элемента и доступное имя. Для URL, встроенного кода, навигации, загрузки ресурсов и пользовательского ввода отдельно учитывайте CSP, CORS, политику referrer и проверку данных — когда они применимы.
+
+## Спецификация
+
+- [Индекс атрибутов WHATWG](https://html.spec.whatwg.org/multipage/indices.html#attributes-3)
+- [Определение для всех HTML-элементов](https://html.spec.whatwg.org/multipage/dom.html#the-id-attribute)

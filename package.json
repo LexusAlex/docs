@@ -7,7 +7,9 @@
     "docs:dev": "vitepress dev src",
     "docs:build": "vitepress build src",
     "docs:preview": "vitepress preview src",
+    "docs:generate-html": "node scripts/generate-html-docs.mjs",
+    "docs:check-html": "node --test scripts/check-html-docs.test.mjs && node scripts/generate-html-docs.mjs --check && node scripts/check-html-docs.mjs",
     "docs:check-linux": "node scripts/check-linux-docs.mjs",
-    "docs:check": "node scripts/check-linux-docs.mjs && vitepress build src"
+    "docs:check": "node scripts/check-linux-docs.mjs && npm run docs:check-html && vitepress build src"
   }
 }

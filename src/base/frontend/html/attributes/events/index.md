@@ -1,0 +1,101 @@
+---
+title: "Атрибуты событий"
+description: "Встроенные обработчики событий HTML. Для основного JavaScript-кода обычно предпочтительнее addEventListener."
+outline: [2, 3]
+---
+
+<!-- Этот файл сгенерирован scripts/generate-html-docs.mjs. Не редактируйте вручную. -->
+
+# Атрибуты событий
+
+Встроенные обработчики событий HTML. Для основного JavaScript-кода обычно предпочтительнее addEventListener.
+
+- [`onafterprint`](./onafterprint) — Обработчик события `afterprint`.
+- [`onauxclick`](./onauxclick) — Обработчик события `auxclick`.
+- [`onbeforeinput`](./onbeforeinput) — Обработчик события `beforeinput`.
+- [`onbeforematch`](./onbeforematch) — Обработчик события `beforematch`.
+- [`onbeforeprint`](./onbeforeprint) — Обработчик события `beforeprint`.
+- [`onbeforetoggle`](./onbeforetoggle) — Обработчик события `beforetoggle`.
+- [`onbeforeunload`](./onbeforeunload) — Обработчик события `beforeunload`.
+- [`onblur`](./onblur) — Обработчик события `blur`.
+- [`oncancel`](./oncancel) — Обработчик события `cancel`.
+- [`oncanplay`](./oncanplay) — Обработчик события `canplay`.
+- [`oncanplaythrough`](./oncanplaythrough) — Обработчик события `canplaythrough`.
+- [`onchange`](./onchange) — Обработчик события `change`.
+- [`onclick`](./onclick) — Обработчик события `click`.
+- [`onclose`](./onclose) — Обработчик события `close`.
+- [`oncommand`](./oncommand) — Обработчик события `command`.
+- [`oncontextlost`](./oncontextlost) — Обработчик события `contextlost`.
+- [`oncontextmenu`](./oncontextmenu) — Обработчик события `contextmenu`.
+- [`oncontextrestored`](./oncontextrestored) — Обработчик события `contextrestored`.
+- [`oncopy`](./oncopy) — Обработчик события `copy`.
+- [`oncuechange`](./oncuechange) — Обработчик события `cuechange`.
+- [`oncut`](./oncut) — Обработчик события `cut`.
+- [`ondblclick`](./ondblclick) — Обработчик события `dblclick`.
+- [`ondrag`](./ondrag) — Обработчик события `drag`.
+- [`ondragend`](./ondragend) — Обработчик события `dragend`.
+- [`ondragenter`](./ondragenter) — Обработчик события `dragenter`.
+- [`ondragleave`](./ondragleave) — Обработчик события `dragleave`.
+- [`ondragover`](./ondragover) — Обработчик события `dragover`.
+- [`ondragstart`](./ondragstart) — Обработчик события `dragstart`.
+- [`ondrop`](./ondrop) — Обработчик события `drop`.
+- [`ondurationchange`](./ondurationchange) — Обработчик события `durationchange`.
+- [`onemptied`](./onemptied) — Обработчик события `emptied`.
+- [`onended`](./onended) — Обработчик события `ended`.
+- [`onerror`](./onerror) — Обработчик события `error`.
+- [`onfocus`](./onfocus) — Обработчик события `focus`.
+- [`onformdata`](./onformdata) — Обработчик события `formdata`.
+- [`onhashchange`](./onhashchange) — Обработчик события `hashchange`.
+- [`oninput`](./oninput) — Обработчик события `input`.
+- [`oninvalid`](./oninvalid) — Обработчик события `invalid`.
+- [`onkeydown`](./onkeydown) — Обработчик события `keydown`.
+- [`onkeypress`](./onkeypress) — Обработчик события `keypress`.
+- [`onkeyup`](./onkeyup) — Обработчик события `keyup`.
+- [`onlanguagechange`](./onlanguagechange) — Обработчик события `languagechange`.
+- [`onload`](./onload) — Обработчик события `load`.
+- [`onloadeddata`](./onloadeddata) — Обработчик события `loadeddata`.
+- [`onloadedmetadata`](./onloadedmetadata) — Обработчик события `loadedmetadata`.
+- [`onloadstart`](./onloadstart) — Обработчик события `loadstart`.
+- [`onmessage`](./onmessage) — Обработчик события `message`.
+- [`onmessageerror`](./onmessageerror) — Обработчик события `messageerror`.
+- [`onmousedown`](./onmousedown) — Обработчик события `mousedown`.
+- [`onmouseenter`](./onmouseenter) — Обработчик события `mouseenter`.
+- [`onmouseleave`](./onmouseleave) — Обработчик события `mouseleave`.
+- [`onmousemove`](./onmousemove) — Обработчик события `mousemove`.
+- [`onmouseout`](./onmouseout) — Обработчик события `mouseout`.
+- [`onmouseover`](./onmouseover) — Обработчик события `mouseover`.
+- [`onmouseup`](./onmouseup) — Обработчик события `mouseup`.
+- [`onoffline`](./onoffline) — Обработчик события `offline`.
+- [`ononline`](./ononline) — Обработчик события `online`.
+- [`onpagehide`](./onpagehide) — Обработчик события `pagehide`.
+- [`onpagereveal`](./onpagereveal) — Обработчик события `pagereveal`.
+- [`onpageshow`](./onpageshow) — Обработчик события `pageshow`.
+- [`onpageswap`](./onpageswap) — Обработчик события `pageswap`.
+- [`onpaste`](./onpaste) — Обработчик события `paste`.
+- [`onpause`](./onpause) — Обработчик события `pause`.
+- [`onplay`](./onplay) — Обработчик события `play`.
+- [`onplaying`](./onplaying) — Обработчик события `playing`.
+- [`onpopstate`](./onpopstate) — Обработчик события `popstate`.
+- [`onprogress`](./onprogress) — Обработчик события `progress`.
+- [`onratechange`](./onratechange) — Обработчик события `ratechange`.
+- [`onrejectionhandled`](./onrejectionhandled) — Обработчик события `rejectionhandled`.
+- [`onreset`](./onreset) — Обработчик события `reset`.
+- [`onresize`](./onresize) — Обработчик события `resize`.
+- [`onscroll`](./onscroll) — Обработчик события `scroll`.
+- [`onscrollend`](./onscrollend) — Обработчик события `scrollend`.
+- [`onsecuritypolicyviolation`](./onsecuritypolicyviolation) — Обработчик события `securitypolicyviolation`.
+- [`onseeked`](./onseeked) — Обработчик события `seeked`.
+- [`onseeking`](./onseeking) — Обработчик события `seeking`.
+- [`onselect`](./onselect) — Обработчик события `select`.
+- [`onslotchange`](./onslotchange) — Обработчик события `slotchange`.
+- [`onstalled`](./onstalled) — Обработчик события `stalled`.
+- [`onstorage`](./onstorage) — Обработчик события `storage`.
+- [`onsubmit`](./onsubmit) — Обработчик события `submit`.
+- [`onsuspend`](./onsuspend) — Обработчик события `suspend`.
+- [`ontimeupdate`](./ontimeupdate) — Обработчик события `timeupdate`.
+- [`ontoggle`](./ontoggle) — Обработчик события `toggle`.
+- [`onunhandledrejection`](./onunhandledrejection) — Обработчик события `unhandledrejection`.
+- [`onunload`](./onunload) — Обработчик события `unload`.
+- [`onvolumechange`](./onvolumechange) — Обработчик события `volumechange`.
+- [`onwaiting`](./onwaiting) — Обработчик события `waiting`.
+- [`onwheel`](./onwheel) — Обработчик события `wheel`.
