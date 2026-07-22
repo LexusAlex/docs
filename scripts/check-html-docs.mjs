@@ -102,6 +102,9 @@ export function validateGeneratedFiles(files) {
   for (const [relativePath, content] of files) {
     const expectedMarker = extname(relativePath) === '.md' ? MARKER : JS_MARKER
     invariant(content.includes(expectedMarker), `${relativePath}: отсутствует маркер генератора`)
+    if (relativePath === 'src/.vitepress/data/html-sidebar.mjs') {
+      invariant(!/text: "<[a-z][a-z0-9]*>"/u.test(content), `${relativePath}: HTML-подписи интерпретируются как скрытые DOM-элементы`)
+    }
     if (extname(relativePath) !== '.md') continue
     invariant((content.match(/^# /gmu) ?? []).length === 1, `${relativePath}: должен быть ровно один H1`)
     invariant(!content.includes('="example"'), `${relativePath}: найдено шаблонное значение example`)

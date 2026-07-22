@@ -144,6 +144,11 @@ test('проверка отклоняет потерю JavaScript-примера
   files.set(path, files.get(path).replace(/```js\n[\s\S]*?```/u, ''))
   assert.throws(() => validateGeneratedFiles(files), /addEventListener/u)
 })
+test('подписи HTML-элементов в sidebar экранированы для v-html', () => {
+  const sidebar = buildHtmlDocFiles().get('src/.vitepress/data/html-sidebar.mjs')
+  assert.ok(sidebar.includes('text: "&lt;a&gt;"'))
+  assert.doesNotMatch(sidebar, /text: "<[a-z][a-z0-9]*>"/u)
+})
 test('каталог и полный набор страниц проходят структурную проверку', () => {
   assert.doesNotThrow(() => validateCatalog())
   assert.doesNotThrow(() => validateGeneratedFiles(buildHtmlDocFiles()))

@@ -696,7 +696,7 @@ function sidebarItem(text, link, items) {
 }
 
 function renderSidebarModule() {
-  const elementItems = elementGroups.map((group) => sidebarItem(group.title, `/base/frontend/html/elements/${group.slug}/`, group.names.map((name) => sidebarItem(`<${name}>`, elementHref(name)))))
+  const elementItems = elementGroups.map((group) => sidebarItem(group.title, `/base/frontend/html/elements/${group.slug}/`, group.names.map((name) => sidebarItem(`&lt;${name}&gt;`, elementHref(name)))))
   const theoryItem = sidebarItem('Теория', '/base/frontend/html/elements/theory/', [
     sidebarItem('Блочные и строчные элементы', '/base/frontend/html/elements/theory/block-and-inline')
   ])
