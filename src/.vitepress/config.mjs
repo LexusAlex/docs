@@ -180,6 +180,7 @@ export default defineConfig({
                 items: [
                   { text: 'git',collapsed: true, link: '/base/tools/vcs/git/',
                     items: [
+                      { text: 'Часто используемое',link: '/base/tools/vcs/git/often'},
                       { text: 'Сценарии',link: '/base/tools/vcs/git/usage-scenarios'},
                       { text: 'Создание',collapsed: true, items: [
                         { text: 'init',link: '/base/tools/vcs/git/init'},
