@@ -282,12 +282,174 @@ export default defineConfig({
                     items: [
                       { text: 'Базовые',collapsed: true,link: '/base/frontend/css/selectors/basics/',
                         items: [
-                          { text: 'Универсальный',link: '/base/frontend/css/selectors/basics/universal'}
+                          { text: 'Универсальный',link: '/base/frontend/css/selectors/basics/universal'},
+                          { text: 'Тип элемента',link: '/base/frontend/css/selectors/basics/type'},
+                          { text: 'Класс',link: '/base/frontend/css/selectors/basics/class'},
+                          { text: 'ID',link: '/base/frontend/css/selectors/basics/id'},
+                          { text: 'Атрибуты',link: '/base/frontend/css/selectors/basics/attribute'}
                         ]
                       },
-                      { text: 'Комбинаторы',collapsed: true,link: '/base/frontend/css/selectors/combined/'},
-                      { text: 'Псевдоклассы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-classes/'},
-                      { text: 'Псевдоэлементы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-elements/'}
+                      { text: 'Комбинаторы',collapsed: true,link: '/base/frontend/css/selectors/combined/',
+                        items: [
+                          { text: 'Потомок',link: '/base/frontend/css/selectors/combined/descendant'},
+                          { text: 'Прямой потомок',link: '/base/frontend/css/selectors/combined/child'},
+                          { text: 'Смежный sibling',link: '/base/frontend/css/selectors/combined/adjacent-sibling'},
+                          { text: 'Общий sibling',link: '/base/frontend/css/selectors/combined/general-sibling'}
+                        ]
+                      },
+                      { text: 'Псевдоклассы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-classes/',
+                        items: [
+                          { text: 'Состояние',link: '/base/frontend/css/selectors/pseudo-classes/state'},
+                          { text: 'Структурные',link: '/base/frontend/css/selectors/pseudo-classes/structural'},
+                          { text: 'Поля ввода',link: '/base/frontend/css/selectors/pseudo-classes/input'}
+                        ]
+                      },
+                      { text: 'Псевдоэлементы',collapsed: true,link: '/base/frontend/css/selectors/pseudo-elements/',
+                        items: [
+                          { text: 'Текстовые',link: '/base/frontend/css/selectors/pseudo-elements/text'},
+                          { text: 'Генерируемое содержимое',link: '/base/frontend/css/selectors/pseudo-elements/generated'},
+                          { text: 'Дерево',link: '/base/frontend/css/selectors/pseudo-elements/tree'}
+                        ]
+                      }
+                    ]
+                  },
+                  { text: 'Свойства',collapsed: true,link: '/base/frontend/css/properties/',
+                    items: [
+                      { text: 'Модульная раскладка',collapsed: true,link: '/base/frontend/css/properties/layout/',
+                        items: [
+                          { text: 'display',link: '/base/frontend/css/properties/layout/display'},
+                          { text: 'position',link: '/base/frontend/css/properties/layout/position'},
+                          { text: 'inset',link: '/base/frontend/css/properties/layout/inset'},
+                          { text: 'z-index',link: '/base/frontend/css/properties/layout/z-index'},
+                          { text: 'overflow',link: '/base/frontend/css/properties/layout/overflow'},
+                          { text: 'visibility',link: '/base/frontend/css/properties/layout/visibility'},
+                          { text: 'contain',link: '/base/frontend/css/properties/layout/contain'},
+                          { text: 'content-visibility',link: '/base/frontend/css/properties/layout/content-visibility'},
+                          { text: 'Container Queries',link: '/base/frontend/css/properties/layout/container-queries'},
+                          { text: 'Scroll-свойства',link: '/base/frontend/css/properties/layout/scroll'},
+                          { text: 'Прочие',link: '/base/frontend/css/properties/layout/misc-layout'}
+                        ]
+                      },
+                      { text: 'Блочная модель',collapsed: true,link: '/base/frontend/css/properties/box-model/',
+                        items: [
+                          { text: 'Размеры и box-sizing',link: '/base/frontend/css/properties/box-model/sizing'},
+                          { text: 'margin',link: '/base/frontend/css/properties/box-model/margin'},
+                          { text: 'padding',link: '/base/frontend/css/properties/box-model/padding'},
+                          { text: 'border',link: '/base/frontend/css/properties/box-model/border'},
+                          { text: 'outline',link: '/base/frontend/css/properties/box-model/outline'}
+                        ]
+                      },
+                      { text: 'Флексбокс',collapsed: true,link: '/base/frontend/css/properties/flexbox/',
+                        items: [
+                          { text: 'flex-direction / flex-wrap',link: '/base/frontend/css/properties/flexbox/flex-flow'},
+                          { text: 'flex-grow / flex-shrink / flex-basis',link: '/base/frontend/css/properties/flexbox/flex'},
+                          { text: 'Выравнивание',link: '/base/frontend/css/properties/flexbox/alignment'},
+                          { text: 'gap',link: '/base/frontend/css/properties/flexbox/gap'},
+                          { text: 'order',link: '/base/frontend/css/properties/flexbox/order'}
+                        ]
+                      },
+                      { text: 'CSS Grid',collapsed: true,link: '/base/frontend/css/properties/grid/',
+                        items: [
+                          { text: 'grid-template',link: '/base/frontend/css/properties/grid/grid-template'},
+                          { text: 'grid-auto',link: '/base/frontend/css/properties/grid/grid-auto'},
+                          { text: 'grid-placement',link: '/base/frontend/css/properties/grid/grid-placement'},
+                          { text: 'Выравнивание',link: '/base/frontend/css/properties/grid/alignment'}
+                        ]
+                      },
+                      { text: 'Типографика',collapsed: true,link: '/base/frontend/css/properties/typography/',
+                        items: [
+                          { text: 'Шрифты',link: '/base/frontend/css/properties/typography/font'},
+                          { text: 'Текст',link: '/base/frontend/css/properties/typography/text'},
+                          { text: 'Межбуквенный интервал',link: '/base/frontend/css/properties/typography/spacing'},
+                          { text: 'Перенос строк',link: '/base/frontend/css/properties/typography/white-space'},
+                          { text: 'Цвет текста',link: '/base/frontend/css/properties/typography/color'}
+                        ]
+                      },
+                      { text: 'Фоны',collapsed: true,link: '/base/frontend/css/properties/background/',
+                        items: [
+                          { text: 'background',link: '/base/frontend/css/properties/background/background'}
+                        ]
+                      },
+                      { text: 'Цвета и прозрачность',collapsed: true,link: '/base/frontend/css/properties/color/',
+                        items: [
+                          { text: 'Функции цвета',link: '/base/frontend/css/properties/color/color-functions'},
+                          { text: 'opacity',link: '/base/frontend/css/properties/color/opacity'},
+                          { text: 'CSS-переменные',link: '/base/frontend/css/properties/color/custom-properties'}
+                        ]
+                      },
+                      { text: 'Визуальные эффекты',collapsed: true,link: '/base/frontend/css/properties/visual-effects/',
+                        items: [
+                          { text: 'box-shadow',link: '/base/frontend/css/properties/visual-effects/box-shadow'},
+                          { text: 'filter / backdrop-filter',link: '/base/frontend/css/properties/visual-effects/filter'},
+                          { text: 'clip-path',link: '/base/frontend/css/properties/visual-effects/clip-path'},
+                          { text: 'mask',link: '/base/frontend/css/properties/visual-effects/mask'}
+                        ]
+                      },
+                      { text: 'Трансформации',collapsed: true,link: '/base/frontend/css/properties/transform/',
+                        items: [
+                          { text: 'transform',link: '/base/frontend/css/properties/transform/transform'},
+                          { text: 'perspective',link: '/base/frontend/css/properties/transform/perspective'}
+                        ]
+                      },
+                      { text: 'Анимации и переходы',collapsed: true,link: '/base/frontend/css/properties/transition-animation/',
+                        items: [
+                          { text: 'transition',link: '/base/frontend/css/properties/transition-animation/transition'},
+                          { text: 'animation',link: '/base/frontend/css/properties/transition-animation/animation'},
+                          { text: '@keyframes',link: '/base/frontend/css/properties/transition-animation/keyframes'},
+                          { text: 'Функции ускорения',link: '/base/frontend/css/properties/transition-animation/easing'}
+                        ]
+                      },
+                      { text: 'Курсор и взаимодействие',collapsed: true,link: '/base/frontend/css/properties/cursor-and-pointer/',
+                        items: [
+                          { text: 'cursor',link: '/base/frontend/css/properties/cursor-and-pointer/cursor'},
+                          { text: 'pointer-events',link: '/base/frontend/css/properties/cursor-and-pointer/pointer-events'},
+                          { text: 'touch-action',link: '/base/frontend/css/properties/cursor-and-pointer/touch-action'},
+                          { text: 'user-select',link: '/base/frontend/css/properties/cursor-and-pointer/user-select'}
+                        ]
+                      },
+                      { text: 'Списки и счётчики',collapsed: true,link: '/base/frontend/css/properties/lists-and-counters/',
+                        items: [
+                          { text: 'list-style',link: '/base/frontend/css/properties/lists-and-counters/list-style'},
+                          { text: 'counter',link: '/base/frontend/css/properties/lists-and-counters/counter'}
+                        ]
+                      },
+                      { text: 'Таблицы',collapsed: true,link: '/base/frontend/css/properties/table/',
+                        items: [
+                          { text: 'table-layout',link: '/base/frontend/css/properties/table/table-layout'},
+                          { text: 'border-collapse',link: '/base/frontend/css/properties/table/border-collapse'},
+                          { text: 'caption-side',link: '/base/frontend/css/properties/table/caption-side'},
+                          { text: 'empty-cells',link: '/base/frontend/css/properties/table/empty-cells'}
+                        ]
+                      },
+                      { text: 'Мультиколонки',collapsed: true,link: '/base/frontend/css/properties/columns/',
+                        items: [
+                          { text: 'columns',link: '/base/frontend/css/properties/columns/columns'}
+                        ]
+                      },
+                      { text: 'Печать и страницы',collapsed: true,link: '/base/frontend/css/properties/paged-media/',
+                        items: [
+                          { text: 'break',link: '/base/frontend/css/properties/paged-media/break'},
+                          { text: 'orphans / widows',link: '/base/frontend/css/properties/paged-media/orphans-widows'}
+                        ]
+                      },
+                      { text: 'Разное',collapsed: true,link: '/base/frontend/css/properties/misc/',
+                        items: [
+                          { text: 'will-change',link: '/base/frontend/css/properties/misc/will-change'},
+                          { text: 'all',link: '/base/frontend/css/properties/misc/all'},
+                          { text: 'initial / inherit / unset / revert',link: '/base/frontend/css/properties/misc/initial'}
+                        ]
+                      },
+                      { text: 'Каскад и наследование',link: '/base/frontend/css/properties/cascade/'},
+                      { text: 'Единицы измерения',link: '/base/frontend/css/properties/units/'},
+                      { text: 'Медиа-запросы',collapsed: true,link: '/base/frontend/css/properties/media-queries/',
+                        items: [
+                          { text: 'prefers-*',link: '/base/frontend/css/properties/media-queries/prefers'},
+                          { text: '@supports',link: '/base/frontend/css/properties/media-queries/supports'},
+                          { text: '@layer',link: '/base/frontend/css/properties/media-queries/layer'},
+                          { text: '@scope',link: '/base/frontend/css/properties/media-queries/scope'}
+                        ]
+                      },
+                      { text: 'Шпаргалка',link: '/base/frontend/css/properties/cheatsheet'}
                     ]
                   },
                   { text: 'Методологии',collapsed: true,link: '/base/frontend/css/methodologies/',
